@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Whatsapp Api</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <div style="margin:100px;" class="navbar navbar-inverse navbar-static-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">Whatsapp Api</a>
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="/">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="jumbotron" style="padding:40px;">
+            
+            <div class="qr_img">
+                <h1>Scan QR with your Whatsapp app!</h1>
+                <img src="https://c.tenor.com/tEBoZu1ISJ8AAAAC/spinning-loading.gif" class="image-resposive" id="qr_img">
+            </div>
+            
+
+            <div class="api_key_input" style="display: none;">
+                <h1>Your ApiKey!</h1>
+                <input type="text" value="" class="form-control" id="api_key_input">
+            </div>
+         
+        </div>
+        
+    </body>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        
+
+
+        $(document).on('ready', function(){
+            var socket = io();
+            
+            socket.on("qr_code", function(qr){
+                $("#qr_img").attr('src', qr.data);
+            })
+
+            socket.on("api_key", function(qr){
+                $('.qr_img').hide();
+                $('.api_key_input').fadeIn(1000);
+                $("#api_key_input").attr('value', qr.api_key);
+            })
+        });
+    </script>
+</html>
