@@ -9,7 +9,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - .wwebjs_auth:/app/.wwebjs_auth
+      - .wwebjs_auth:/data/.wwebjs_auth
       - .env:/app/.env
 
   npm:
