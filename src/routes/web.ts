@@ -1,5 +1,5 @@
-const express = require("express");
-const frontCtrl = require("../controllers/front");
+import express from "express";
+import frontCtrl from "../controllers/front";
 
 const web = express.Router();
 

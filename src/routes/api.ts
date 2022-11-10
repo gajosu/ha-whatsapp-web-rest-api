@@ -1,7 +1,8 @@
-const express = require("express");
-const messageCtrl = require("../controllers/sendMessage");
+import express from "express";
+import messageCtrl from "../controllers/sendMessage";
+import { body, query } from 'express-validator';
+
 const api = express.Router();
-const { body, query } = require('express-validator');
 
 api
     .route("/send/text")
@@ -37,4 +38,5 @@ api
     );
 
 
+// default export
 module.exports = api;

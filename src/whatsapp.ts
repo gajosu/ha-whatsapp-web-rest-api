@@ -1,10 +1,11 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+import { Client, LocalAuth } from 'whatsapp-web.js'
+
 const client = new Client({
     authStrategy: new LocalAuth({
         dataPath: '/data',
     }),
     puppeteer: {
-        //chromium path in alpine
+        // chromium path in alpine
         executablePath: '/usr/bin/chromium',
         headless: true,
         args: [
@@ -20,16 +21,16 @@ module.exports.is_authenticated = false;
 client.initialize();
 
 client.on('ready', () => {
-    console.log('Client is ready!');
+    // console.log('Client is ready!');
 });
 
 client.on('authenticated', async (session) => {
-    console.log('AUTHENTICATED');
+    // console.log('AUTHENTICATED');
     module.exports.is_authenticated = true;
 });
 
 client.on('disconnected', async (session) => {
-    console.log('AUTH_FAILURE');
+    // console.log('AUTH_FAILURE');
     module.exports.is_authenticated = false;
     client.destroy();
     client.initialize();
