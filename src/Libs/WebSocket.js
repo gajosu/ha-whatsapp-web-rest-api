@@ -1,6 +1,6 @@
 import { Server } from "socket.io"
 import http from 'http'
-import whatsapp from "./Whatsapp"
+import { EventBus } from '../../src/Libs/EventBus';
 
 export default class WebSocket {
 
@@ -8,7 +8,6 @@ export default class WebSocket {
 
     constructor(
         private http: http.Server,
-        private whatsapp: whatsapp
     ) {
 
     }
@@ -16,7 +15,7 @@ export default class WebSocket {
     public start() {
         this.io = new Server(this.http);
         this.io.on("connection", async (socket) => {
-            // console.log('connected');
+            EventBus.getInstance().dispatch("socket:connection", socket);
         });
     }
 }

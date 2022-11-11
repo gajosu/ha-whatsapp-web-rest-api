@@ -3,7 +3,7 @@ export interface Registry {
 }
 
 export interface Callable {
-    [key: string]: Function;
+    [key: string]: (...args: any[]) => void
 }
 
 export interface Subscriber {
@@ -12,7 +12,7 @@ export interface Subscriber {
 
 export interface IEventBus {
     dispatch<T>(event: string, arg?: T): void;
-    register(event: string, callback: Function): Registry;
+    register(event: string, callback: (...args: any[]) => void): Registry;
 }
 
 export class EventBus implements IEventBus {
@@ -42,7 +42,7 @@ export class EventBus implements IEventBus {
         Object.keys(subscriber).forEach(key => subscriber[key](arg));
     }
 
-    public register(event: string, callback: Function): Registry {
+    public register(event: string, callback: (...args: any[]) => void): Registry {
         const id = this.getNextId();
         if (!this.subscribers[event]) this.subscribers[event] = {};
 
