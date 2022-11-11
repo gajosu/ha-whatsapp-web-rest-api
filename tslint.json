@@ -7,5 +7,11 @@
     "rules": {
         "trailing-comma": [ false ]
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "rules": {
+        "no-console": false
+      },
+      "jsRules": {
+        "no-console": false
+      }
 }
