@@ -17,5 +17,5 @@
     "include": [
         "src/**/*",
         "jest.config.js"    
-    ],
+, "tests/__mocks__"    ],
 }
