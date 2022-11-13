@@ -5,4 +5,10 @@ const mockLogger = {
     debug: jest.fn()
 }
 
+jest.mock('../../src/Libs/Logger', () => {
+    return  jest.fn().mockImplementation(() => {
+            return mockLogger;
+        });
+});
+
 export default mockLogger

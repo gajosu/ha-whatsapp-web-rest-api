@@ -1,18 +1,12 @@
-import Whatsapp from '../../src/Libs/Whatsapp';
-import {Client} from 'whatsapp-web.js';
 import mockLogger from '../stubs/Logger';
 import mockEventBus from '../stubs/EventBus';
+import Whatsapp from '../../src/Libs/Whatsapp';
+import {Client} from 'whatsapp-web.js';
 
 // mock resolve a promise
 const mockInitialize = jest.fn().mockResolvedValue(true);
 const mockOn = jest.fn();
 const mockDestroy = jest.fn();
-
-jest.mock('../../src/Libs/Logger', () => {
-    return  jest.fn().mockImplementation(() => {
-            return mockLogger;
-        });
-});
 
 // mock client
 jest.mock('whatsapp-web.js', () => {
@@ -28,15 +22,6 @@ jest.mock('whatsapp-web.js', () => {
     };
 });
 
-jest.mock('../../src/Libs/EventBus', () => {
-    return {
-        EventBus: {
-            getInstance: jest.fn().mockImplementation(() => {
-                return mockEventBus;
-            })
-        }
-    }
-});
 
 jest.mock('qrcode-terminal');
 
