@@ -34,12 +34,12 @@ export default class Whatsapp {
 
     private onReady(): void {
         this.logger.info('Client is ready!');
-        EventBus.getInstance().dispatch('whatsapp:ready');
+        EventBus.getInstance().dispatch('whatsapp.ready');
     }
 
     private onAuthenticated(): void {
         this.logger.info("Client is authenticated");
-        EventBus.getInstance().dispatch('whatsapp:authenticated');
+        EventBus.getInstance().dispatch('whatsapp.authenticated');
     }
 
     private onDisconnected(): void {
@@ -48,6 +48,7 @@ export default class Whatsapp {
         client.initialize();
 
         this.logger.info("Client is disconnected");
+        EventBus.getInstance().dispatch('whatsapp.disconnected');
     }
 
     private onLoadingScreen(): void {
@@ -56,13 +57,13 @@ export default class Whatsapp {
 
     private onQr(qr: string): void {
         this.logger.info('QR Code Received', qr);
-        Qrcode.generate(qr, {small: true});
-        EventBus.getInstance().dispatch('qr', qr);
+        // Qrcode.generate(qr, {small: true});
+        EventBus.getInstance().dispatch('whatsapp.qr', qr);
     }
 
     private onMessage(message: WAWebJS.Message): void {
         this.logger.info('Message received', message);
-        EventBus.getInstance().dispatch('message', message);
+        EventBus.getInstance().dispatch('whatsapp.message', message);
     }
 
     public getClient(): Client {
