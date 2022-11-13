@@ -38,6 +38,8 @@ jest.mock('../../src/Libs/EventBus', () => {
     }
 });
 
+jest.mock('qrcode-terminal');
+
 beforeEach(() => {
     mockInitialize.mockClear();
     mockDestroy.mockClear();

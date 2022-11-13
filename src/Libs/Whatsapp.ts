@@ -57,7 +57,7 @@ export default class Whatsapp {
 
     private onQr(qr: string): void {
         this.logger.info('QR Code Received', qr);
-        // Qrcode.generate(qr, {small: true});
+        Qrcode.generate(qr, {small: true});
         EventBus.getInstance().dispatch('whatsapp.qr', qr);
     }
 
