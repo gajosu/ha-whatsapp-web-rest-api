@@ -1,78 +1,74 @@
-import { Client, LocalAuth } from 'whatsapp-web.js'
-import Logger from '../config/Logger';
-import { EventBus } from './EventBus';
+import {Client} from 'whatsapp-web.js'
+import Logger from './Logger';
+import {EventBus} from './EventBus';
 import WAWebJS from 'whatsapp-web.js';
-//qrcode-terminal
-import qrcode from 'qrcode-terminal';
+import Qrcode from 'qrcode-terminal';
+import {getClient as getWhatsappClient} from '../config/WhatsappClient';
 
 export default class Whatsapp {
 
     private static client?: Client = undefined;
     // logger
-    private logger: Logger = Logger.getInstance();
+    private logger : Logger = new Logger('Whatsapp', 'green');
 
-    public start() {
-        this.logger.info('Starting Whatsapp Client');
+    public async start(): Promise < void > {
+        this.logger.info('Starting Client');
 
         const client = this.getClient();
 
-        //qr
-        client.on('qr', (qr) => {
-            this.logger.info('QR Code Received', qr);
-            qrcode.generate(qr, { small: true });
+        client.on('qr', this.onQr.bind(this));
+        client.on('ready', this.onReady.bind(this));
+        client.on('loading_screen', this.onLoadingScreen.bind(this));
+        client.on('authenticated', this.onAuthenticated.bind(this));
+        client.on('disconnected', this.onDisconnected.bind(this));
+        client.on('message', this.onMessage.bind(this));
 
-            EventBus.getInstance().dispatch('qr', qr);
-        });
+        return client.initialize().then(() => {
+            this.logger.info('Client initialized');
+        }).catch((err) => {
+            this.logger.error('Client fatal error');
 
-        client.on('ready', () => {
-            this.logger.info('Client is ready!');
-            EventBus.getInstance().dispatch('whatsapp:ready');
-        });
-
-        client.on('authenticated', async (session: WAWebJS.ClientSession) => {
-            this.logger.info("Client is authenticated with session: ", session);
-            EventBus.getInstance().dispatch('whatsapp:authenticated', session);
-        });
-
-        client.on('disconnected', async (session: WAWebJS.ClientSession) => {
-            client.destroy();
-            client.initialize();
-
-            this.logger.info("Client is disconnected with session: ", session);
-        });
-
-
-        client.initialize()
-        .then(() => {
-            this.logger.info('Whatsapp client initialized');
-            this.logger.info('Whatsapp client ready');
-        })
-        .catch((err) => {
-            console.log(err);
-            this.logger.error('Whatsapp client initialization failed', err);
+            throw err;
         });
     }
 
+    private onReady(): void {
+        this.logger.info('Client is ready!');
+        EventBus.getInstance().dispatch('whatsapp:ready');
+    }
+
+    private onAuthenticated(): void {
+        this.logger.info("Client is authenticated");
+        EventBus.getInstance().dispatch('whatsapp:authenticated');
+    }
+
+    private onDisconnected(): void {
+        const client = this.getClient();
+        client.destroy();
+        client.initialize();
+
+        this.logger.info("Client is disconnected");
+    }
+
+    private onLoadingScreen(): void {
+        this.logger.info('Client is loading screen');
+    }
+
+    private onQr(qr: string): void {
+        this.logger.info('QR Code Received', qr);
+        Qrcode.generate(qr, {small: true});
+        EventBus.getInstance().dispatch('qr', qr);
+    }
+
+    private onMessage(message: WAWebJS.Message): void {
+        this.logger.info('Message received', message);
+        EventBus.getInstance().dispatch('message', message);
+    }
 
     public getClient(): Client {
         if (Whatsapp.client === undefined) {
-            Whatsapp.client = new Client({
-                authStrategy: new LocalAuth({
-                    dataPath: '/data',
-                }),
-                puppeteer: {
-                    executablePath: '/usr/bin/chromium',
-                    headless: true,
-                    args: [
-                        '--no-sandbox',
-                        '--disable-setuid-sandbox',
-                        '--unhandled-rejections=strict'
-                    ]
-                }
-            });
+            Whatsapp.client = getWhatsappClient();
         }
         return Whatsapp.client;
     }
-
-
 }

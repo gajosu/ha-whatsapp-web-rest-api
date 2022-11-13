@@ -1,17 +1,17 @@
 
-import Logger from '../config/Logger';
+import Logger from './Logger';
 import Whatsapp from './Whatsapp';
 
 export default class Controller {
 
-    private logger: Logger = Logger.getInstance();
+    private logger: Logger = new Logger();
     constructor(
         private whatsapp: Whatsapp
     ) {
     }
 
     public start() {
-        this.logger.warn('Starting Controller');
+        this.logger.info('Starting Controller');
         this.whatsapp.start();
     }
 }

@@ -9,13 +9,14 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - .wwebjs_auth:/data/.wwebjs_auth
+      - .wwebjs_auth:/data
       - .env:/app/.env
 
   npm:
     image: whatsapp-ha:latest
     volumes:
       - .:/app
+      - .wwebjs_auth:/data
     working_dir: /app
     entrypoint: npm
 
@@ -23,6 +24,7 @@ services:
     image: whatsapp-ha:latest
     volumes:
       - .:/app
+      - .wwebjs_auth:/data
     working_dir: /app
     entrypoint: nodemon
     
