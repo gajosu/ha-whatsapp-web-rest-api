@@ -41,7 +41,9 @@
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
-    "test": "jest",
+    "test-with-coverage": "jest test --coverage",
+    "test": "jest test",
+    "test-watch": "jest test --watch",
     "dev": "nodemon src/index.ts"
   },
   "author": "Gabriel Gonzalez @gajosu",
