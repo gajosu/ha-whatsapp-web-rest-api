@@ -11,6 +11,7 @@ services:
     volumes:
       - .wwebjs_auth:/data
       - .env:/app/.env
+      - .:/app
 
   npm:
     image: whatsapp-ha:latest
@@ -19,12 +20,4 @@ services:
       - .wwebjs_auth:/data
     working_dir: /app
     entrypoint: npm
-
-  nodemon:
-    image: whatsapp-ha:latest
-    volumes:
-      - .:/app
-      - .wwebjs_auth:/data
-    working_dir: /app
-    entrypoint: nodemon
     
