@@ -36,7 +36,6 @@ describe('WebSocket tests', () => {
 
         expect(mockLogger.info).toHaveBeenCalledWith('Starting WebSocket');
         expect(mockOn).toHaveBeenCalledWith('connection', expect.any(Function));
-        expect(mockOn).toHaveBeenCalledWith('disconnect', expect.any(Function));
     });
 
     it('On connection', async () => {
@@ -46,7 +45,8 @@ describe('WebSocket tests', () => {
 
         const mockSocket = {
             id: '123',
-            emit: jest.fn()
+            emit: jest.fn(),
+            on: jest.fn()
         };
 
         const onConnection = mockOn.mock.calls[0][1];
@@ -62,22 +62,28 @@ describe('WebSocket tests', () => {
         const onQr = mockEventBus.register.mock.calls[0][1];
         onQr(mockQr);
         expect(mockSocket.emit).toHaveBeenCalledWith('qr_code', { data: mockQr });
+
+
+        const onDisconnect = mockSocket.on.mock.calls[0][1];
+        onDisconnect('reason');
+        expect(mockLogger.info).toHaveBeenCalledWith('Disconnect from 123, reason: reason');
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('socket.disconnect', mockSocket);
     });
 
-    it('On disconnect', async () => {
-        const http = require('http');
-        const websocket = new WebSocket(http);
-        websocket.start();
+    // it('On disconnect', async () => {
+    //     const http = require('http');
+    //     const websocket = new WebSocket(http);
+    //     websocket.start();
 
-        const mockSocket = {
-            id: '123',
-            emit: jest.fn()
-        };
+    //     const mockSocket = {
+    //         id: '123',
+    //         emit: jest.fn()
+    //     };
 
-        const onDisconnect = mockOn.mock.calls[1][1];
-        onDisconnect(mockSocket);
+    //     const onDisconnect = mockOn.mock.calls[1][1];
+    //     onDisconnect(mockSocket);
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Disconnect from 123');
-    });
+    //     expect(mockLogger.info).toHaveBeenCalledWith('Disconnect from 123');
+    // });
 
 });

@@ -1,6 +1,10 @@
 const mockEventBus = {
     dispatch: jest.fn(),
-    register: jest.fn()
+    register: jest.fn().mockImplementation(() => {
+        return {
+            unregister: jest.fn()
+        };
+    })
 }
 
 jest.mock('../../src/Libs/EventBus', () => {
