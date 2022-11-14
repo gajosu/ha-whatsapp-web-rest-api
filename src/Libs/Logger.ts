@@ -29,7 +29,7 @@ export default class Logger {
         if (this.category) {
             return color.replace('%s', `[${this.category}] ${message}`);
         }
-        
+
         return message;
     }
 
