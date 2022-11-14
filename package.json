@@ -19,7 +19,7 @@
     "socket.io": "^4.2.0",
     "sqlite3": "^5.0.2",
     "typescript-logger": "^5.0.1",
-    "whatsapp-web.js": "git+https://github.com/pedroslopez/whatsapp-web.js.git#main",
+    "whatsapp-web.js": "^1.18.3",
     "winston": "^3.8.2"
   },
   "devDependencies": {
