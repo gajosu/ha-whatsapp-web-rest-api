@@ -32,6 +32,11 @@ export default class Whatsapp {
         });
     }
 
+    public stop(): void {
+        this.logger.info('Stopping Client');
+        this.getClient().destroy();
+    }
+
     private onReady(): void {
         this.logger.info('Client is ready!');
         EventBus.getInstance().dispatch('whatsapp.ready');
