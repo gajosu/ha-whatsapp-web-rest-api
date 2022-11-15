@@ -15,6 +15,7 @@
     "sequelize": "^6.6.5",
     "socket.io": "^4.2.0",
     "sqlite3": "^5.0.2",
+    "true-di": "^3.0.0",
     "ts-command-line-args": "^2.3.1",
     "typescript-logger": "^5.0.1",
     "whatsapp-web.js": "^1.18.3",
