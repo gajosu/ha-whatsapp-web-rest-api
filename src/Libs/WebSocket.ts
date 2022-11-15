@@ -1,18 +1,19 @@
-import { Server, Socket } from "socket.io"
+import {Server, Socket} from "socket.io"
 import http from 'http'
 import Logger from "./Logger";
-import { EventBus } from './EventBus';
+import {EventBus} from './EventBus';
 
-export default class WebSocket {
+export interface IWebSocket {
+    start(): void;
+    stop(): void;
+}
 
-    private io: Server;
+export default class WebSocket implements IWebSocket {
+
+    private io : Server;
     private logger = new Logger('WebSocket', 'magenta');
 
-    constructor(
-        private httpServer: http.Server,
-    ) {
-
-    }
+    constructor(private httpServer : http.Server) {}
 
     public start() {
         this.logger.info("Starting WebSocket");
@@ -25,15 +26,15 @@ export default class WebSocket {
         this.io.close();
     }
 
-    private onConnection(socket: Socket) {
+    private onConnection(socket : Socket) {
         EventBus.getInstance().dispatch("socket.connection", socket);
         this.logger.info("New connection from " + socket.id);
 
-        const qrListener = EventBus.getInstance().register("whatsapp.qr", (qr: string) => {
-            socket.emit("qr_code",  { data: qr });
+        const qrListener = EventBus.getInstance().register("whatsapp.qr", (qr : string) => {
+            socket.emit("qr_code", {data: qr});
         });
 
-        socket.on("disconnect", (reason:string) => {
+        socket.on("disconnect", (reason : string) => {
             this.logger.info("Disconnect from " + socket.id + ", reason: " + reason);
             EventBus.getInstance().dispatch("socket.disconnect", socket);
             qrListener.unregister();
