@@ -8,6 +8,7 @@ import {getClient as getWhatsappClient} from '../config/WhatsappClient';
 export interface IWhatsapp {
     start(): void;
     stop(): void;
+    getClient(): Client;
 }
 export default class Whatsapp implements IWhatsapp {
 

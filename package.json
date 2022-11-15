@@ -41,7 +41,7 @@
     "prestart": "npm run build",
     "start": "node .",
     "test-with-coverage": "jest test --coverage",
-    "test": "jest test",
+    "test": "jest test --detectOpenHandles",
     "test-watch": "jest test --watch",
     "dev": "nodemon src/index.ts"
   },
