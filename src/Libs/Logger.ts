@@ -1,27 +1,34 @@
 import winston from 'winston'
 import { getLogger } from '../config/Winston';
 
-export default class Logger {
+
+export interface ILogger {
+    error(message: string, ...meta: any[]): void;
+    warn(message: string, ...meta: any[]): void;
+    debug(message: string, ...meta: any[]): void;
+}
+
+export default class Logger implements ILogger {
     private logger: winston.Logger;
 
     public constructor(private category?: string, private color?: string) {
         this.logger = getLogger();
     }
 
-    public info(message: string, ...args: any[]) {
-        this.logger.info(this.renderMessage(message), args);
+    public info(message: string, ...meta: any[]) {
+        this.logger.info(this.renderMessage(message), meta);
     }
 
-    public error(message: string, ...args: any[]) {
-        this.logger.error(this.renderMessage(message), args);
+    public error(message: string, ...meta: any[]) {
+        this.logger.error(this.renderMessage(message), meta);
     }
 
-    public warn(message: string, ...args: any[]) {
-        this.logger.warn(this.renderMessage(message), args);
+    public warn(message: string, ...meta: any[]) {
+        this.logger.warn(this.renderMessage(message), meta);
     }
 
-    public debug(message: string, ...args: any[]) {
-        this.logger.debug(this.renderMessage(message), args);
+    public debug(message: string, ...meta: any[]) {
+        this.logger.debug(this.renderMessage(message), meta);
     }
 
     private renderMessage(message: string): string {
