@@ -3,6 +3,8 @@ import { getLogger } from '../config/Winston';
 
 
 export interface ILogger {
+    getCategoryLogger(category: string, color: string): ILogger;
+    info(message: string, ...meta: any[]): void;
     error(message: string, ...meta: any[]): void;
     warn(message: string, ...meta: any[]): void;
     debug(message: string, ...meta: any[]): void;
@@ -13,6 +15,10 @@ export default class Logger implements ILogger {
 
     public constructor(private category?: string, private color?: string) {
         this.logger = getLogger();
+    }
+
+    public getCategoryLogger(category: string, color?: string): ILogger {
+        return new Logger(category, color);
     }
 
     public info(message: string, ...meta: any[]) {

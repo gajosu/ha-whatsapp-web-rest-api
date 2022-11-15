@@ -26,7 +26,7 @@
     "@types/jest": "^29.2.2",
     "@types/node": "^14.18.33",
     "@types/node-fetch": "^2.6.2",
-    "jest": "^29.3.0",
+    "jest": "^29.3.1",
     "nodemon": "^2.0.20",
     "sequelize-cli": "^6.2.0",
     "supertest": "^6.3.1",
@@ -42,7 +42,7 @@
     "start": "node .",
     "test-with-coverage": "jest test --coverage",
     "test": "jest test --detectOpenHandles",
-    "test-watch": "jest test --watch",
+    "test-watch": "jest test --watch --detectOpenHandles",
     "dev": "nodemon src/index.ts"
   },
   "author": "Gabriel Gonzalez @gajosu",
