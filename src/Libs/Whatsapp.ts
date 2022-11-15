@@ -8,6 +8,7 @@ import {getClient as getWhatsappClient} from '../config/WhatsappClient';
 export default class Whatsapp {
 
     private static client?: Client = undefined;
+
     // logger
     private logger : Logger = new Logger('Whatsapp', 'green');
 
@@ -22,6 +23,11 @@ export default class Whatsapp {
         client.on('authenticated', this.onAuthenticated.bind(this));
         client.on('disconnected', this.onDisconnected.bind(this));
         client.on('message', this.onMessage.bind(this));
+        client.on('message_create', this.onMessageCreate.bind(this));
+        client.on('message_ack', this.onMessageAck.bind(this));
+        client.on('message_revoke_everyone', this.onMessageRevokeForEveryone.bind(this));
+        client.on('message_revoke_me', this.onMessageRevokeForMe.bind(this));
+        client.on('change_state', this.onChangeState.bind(this));
 
         return client.initialize().then(() => {
             this.logger.info('Client initialized');
@@ -30,6 +36,8 @@ export default class Whatsapp {
 
             throw err;
         });
+
+
     }
 
     public stop(): void {
@@ -69,6 +77,37 @@ export default class Whatsapp {
     private onMessage(message: WAWebJS.Message): void {
         this.logger.info('Message received', message);
         EventBus.getInstance().dispatch('whatsapp.message', message);
+    }
+
+    private onMessageCreate(message: WAWebJS.Message): void {
+        this.logger.info('Message created', message);
+        EventBus.getInstance().dispatch('whatsapp.message.create', message);
+    }
+
+    private onMessageAck(message: WAWebJS.Message, ack: WAWebJS.MessageAck): void {
+        this.logger.info('Message ack', message.id, ack);
+        EventBus.getInstance().dispatch('whatsapp.message.ack', {
+            message,
+            ack
+        });
+    }
+
+    private onMessageRevokeForEveryone(message: WAWebJS.Message, revokedMessage: WAWebJS.Message): void {
+        this.logger.info('Message revoke for everyone', message.id, revokedMessage.id);
+        EventBus.getInstance().dispatch('whatsapp.message.revoke_for_everyone', {
+            message,
+            revokedMessage
+        });
+    }
+
+    private onMessageRevokeForMe(message: WAWebJS.Message): void {
+        this.logger.info('Message revoke for me', message.id);
+        EventBus.getInstance().dispatch('whatsapp.message.revoke_for_me', message);
+    }
+
+    private onChangeState(state: WAWebJS.WAState): void {
+        this.logger.info('State changed', state);
+        EventBus.getInstance().dispatch('whatsapp.state', state);
     }
 
     public getClient(): Client {
