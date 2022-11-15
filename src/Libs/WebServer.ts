@@ -3,7 +3,6 @@ import Logger from "./Logger";
 
 export interface IWebServer {
     start(): void;
-    stop(): void;
 }
 
 export default class WebServer implements IWebServer {;
