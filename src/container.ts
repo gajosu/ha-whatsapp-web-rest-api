@@ -1,14 +1,15 @@
 import diContainer from 'true-di';
 
 import { getHttpServer } from "./config/HttpServer";
-import {EventBus, IEventBus} from './Libs/EventBus';
-import Logger, {ILogger} from './Libs/Logger';
-import {IWebServer} from './Libs/WebServer';
-import WebSocket, {IWebSocket} from './Libs/WebSocket';
-import Whatsapp, {IWhatsapp} from './Libs/Whatsapp';
-import TextMessageCreator, {ITextMessageCreator} from './Services/Message/TextMessageCreator';
-import MediaUrlMessageCreator, {IMediaUrlMessageCreator} from './Services/Message/MediaUrlMessageCreator';
+import { EventBus, IEventBus } from './Libs/EventBus';
+import Logger, { ILogger } from './Libs/Logger';
+import { IWebServer } from './Libs/WebServer';
+import WebSocket, { IWebSocket } from './Libs/WebSocket';
+import Whatsapp, { IWhatsapp } from './Libs/Whatsapp';
+import TextMessageCreator, { ITextMessageCreator } from './Services/Message/TextMessageCreator';
+import MediaUrlMessageCreator, { IMediaUrlMessageCreator } from './Services/Message/MediaUrlMessageCreator';
 import WebServer from './Libs/WebServer';
+import { getClient as getWhatsappClient } from './config/WhatsappClient';
 
 type IServices = {
     logger: ILogger;
@@ -21,24 +22,25 @@ type IServices = {
 };
 
 const webConfig = getHttpServer();
+const whatsappClient = getWhatsappClient();
 
-export default diContainer < IServices > ({
+export default diContainer<IServices>({
     logger: () =>
         new Logger(),
     eventBus: () =>
-        EventBus.getInstance(),
-    whatsapp: () =>
-        new Whatsapp(),
+        new EventBus(),
+    whatsapp: ({ logger, eventBus }) =>
+        new Whatsapp(whatsappClient, logger, eventBus),
 
-    webServer: () =>
-        new WebServer(webConfig.app),
+    webServer: ({ logger }) =>
+        new WebServer(webConfig.app, logger),
 
-    webSocket: () =>
-        new WebSocket(webConfig.server),
+    webSocket: ({ logger, eventBus }) =>
+        new WebSocket(webConfig.server, logger, eventBus),
 
-    textMessageCreator: ({whatsapp}) =>
+    textMessageCreator: ({ whatsapp }) =>
         new TextMessageCreator(whatsapp),
 
-    mediaUrlMessageCreator: ({whatsapp}) =>
+    mediaUrlMessageCreator: ({ whatsapp }) =>
         new MediaUrlMessageCreator(whatsapp),
 });

@@ -1,7 +1,8 @@
 import mockLogger from '../stubs/Logger';
 import mockEventBus from '../stubs/EventBus';
+
 import Whatsapp from '../../src/Libs/Whatsapp';
-import {Client} from 'whatsapp-web.js';
+import { Client } from 'whatsapp-web.js';
 
 // mock resolve a promise
 const mockInitialize = jest.fn().mockResolvedValue(true);
@@ -50,29 +51,18 @@ jest.mock('whatsapp-web.js', () => {
 jest.mock('qrcode-terminal');
 
 beforeEach(() => {
-    mockInitialize.mockClear();
-    mockDestroy.mockClear();
-    mockOn.mockClear();
-    mockDestroy.mockClear();
-
-    mockLogger.info.mockClear();
-    mockLogger.error.mockClear();
-    mockLogger.debug.mockClear();
-    mockLogger.warn.mockClear();
-
-    mockEventBus.dispatch.mockClear();
-    mockEventBus.register.mockClear();
+    jest.clearAllMocks();
 });
 
 describe('Whatsapp tests', () => {
     it('start client', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         expect(Client).toHaveBeenCalledTimes(1);
         expect(mockLogger.info).toHaveBeenCalledWith('Starting Client');
         expect(mockLogger.info).toHaveBeenCalledWith('Client initialized');
-        
+
         expect(mockInitialize).toHaveBeenCalledTimes(1);
         expect(mockOn).toHaveBeenCalledWith('qr', expect.any(Function));
         expect(mockOn).toHaveBeenCalledWith('ready', expect.any(Function));
@@ -81,7 +71,7 @@ describe('Whatsapp tests', () => {
     })
 
     it('onReady', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onReady = mockOn.mock.calls[1][1];
@@ -92,7 +82,7 @@ describe('Whatsapp tests', () => {
     })
 
     it('onAuthenticated', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onAuthenticated = mockOn.mock.calls[3][1];
@@ -102,8 +92,8 @@ describe('Whatsapp tests', () => {
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.authenticated');
     })
 
-    it('onLoadingScreen', async () => { 
-        const whatsapp = new Whatsapp();
+    it('onLoadingScreen', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onLoadingScreen = mockOn.mock.calls[2][1];
@@ -113,7 +103,7 @@ describe('Whatsapp tests', () => {
     })
 
     it('onQr', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onQr = mockOn.mock.calls[0][1];
@@ -123,7 +113,7 @@ describe('Whatsapp tests', () => {
     })
 
     it('onDisconnected', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onDisconnected = mockOn.mock.calls[4][1];
@@ -134,30 +124,39 @@ describe('Whatsapp tests', () => {
     })
 
     it('onMessage', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onMessage = mockOn.mock.calls[5][1];
-        
 
+        const event = {
+            message: mockMessage
+        }
         onMessage(mockMessage);
         expect(mockLogger.info).toHaveBeenCalledWith('Message received', mockMessage);
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message', mockMessage);
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message', event);
     })
 
     it('onMessageCreate', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
+
+        const mockCreatedMessage = { ...mockMessage, id: { ...mockMessage.id, fromMe: true } };
+        mockCreatedMessage.fromMe = true;
 
         const onMessageCreate = mockOn.mock.calls[6][1];
 
-        onMessageCreate(mockMessage);
-        expect(mockLogger.info).toHaveBeenCalledWith('Message created', mockMessage);
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.create', mockMessage);
+        const event = {
+            message: mockCreatedMessage
+        }
+
+        onMessageCreate(mockCreatedMessage);
+        expect(mockLogger.info).toHaveBeenCalledWith('Message created', mockCreatedMessage);
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.create', event);
     })
 
     it('onMessageAck', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
         const onMessageAck = mockOn.mock.calls[7][1];
 
@@ -170,7 +169,7 @@ describe('Whatsapp tests', () => {
     })
 
     it('onMessageRevokeForEveryone', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onMessageRevokeForEveryone = mockOn.mock.calls[8][1];
@@ -184,35 +183,39 @@ describe('Whatsapp tests', () => {
     })
 
     it('onMessageRevokeForMe', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onMessageRevokeForMe = mockOn.mock.calls[9][1];
 
+        const event = {
+            message: mockMessage,
+        }
+
         onMessageRevokeForMe(mockMessage);
         expect(mockLogger.info).toHaveBeenCalledWith('Message revoke for me', mockMessage.id);
 
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.revoke_for_me', mockMessage);
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.revoke_for_me', event);
     })
 
     it('onChangeState', async () => {
-        const whatsapp = new Whatsapp();
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus);
         await whatsapp.start();
 
         const onChangeState = mockOn.mock.calls[10][1];
 
         onChangeState('state');
         expect(mockLogger.info).toHaveBeenCalledWith('State changed', 'state');
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.state', 'state');
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.state', { "state": "state" });
     })
 
-    
+
 
     it('start client with error', async () => {
         const error = new Error('error');
         mockInitialize.mockRejectedValue(error);
         //should throw error
-        await expect(new Whatsapp().start()).rejects.toThrow(error);
+        await expect(new Whatsapp(new Client({}), mockLogger, mockEventBus).start()).rejects.toThrow(error);
         expect(mockLogger.error).toHaveBeenCalledWith('Client fatal error');
     })
 })

@@ -4,8 +4,9 @@ import { EventBus } from '../../src/Libs/EventBus';
 describe('Event Bus test', () => {
     it('get event', () => {
         let count = 0;
+        const eventBus = new EventBus();
 
-        const registry = EventBus.getInstance().register('hello-world', (name: string|undefined) => {
+        const registry = eventBus.register('hello-world', (name: string | undefined) => {
             if (name) {
                 expect(name).toBe('Luis');
             } else {
@@ -15,11 +16,11 @@ describe('Event Bus test', () => {
             count++;
         });
 
-        EventBus.getInstance().dispatch<string>('hello-world', 'Luis');
-        EventBus.getInstance().dispatch<string>('hello-world');
+        eventBus.dispatch<string>('hello-world', 'Luis');
+        eventBus.dispatch<string>('hello-world');
 
         registry.unregister();
-        EventBus.getInstance().dispatch<string>('hello-world');
+        eventBus.dispatch<string>('hello-world');
 
         expect(count).toBe(2);
     })

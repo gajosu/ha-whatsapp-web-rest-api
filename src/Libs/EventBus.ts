@@ -18,18 +18,9 @@ export interface IEventBus {
 export class EventBus implements IEventBus {
     private subscribers: Subscriber;
     private static nextId = 0;
-    private static instance?: EventBus = undefined;
 
-    private constructor() {
+    public constructor() {
         this.subscribers = {};
-    }
-
-    public static getInstance(): EventBus {
-        if (this.instance === undefined) {
-            this.instance = new EventBus();
-        }
-
-        return this.instance;
     }
 
     public dispatch<T>(event: string, arg?: T): void {
