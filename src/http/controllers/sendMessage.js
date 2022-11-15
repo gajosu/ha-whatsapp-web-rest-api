@@ -1,7 +1,7 @@
 
 import { validationResult } from 'express-validator';
 import { Request, Response } from "express";
-import ws from "../whatsapp";
+import ws from "../../whatsapp";
 import { Location,Buttons,List, MessageMedia } from 'whatsapp-web.js';
 const ctr = {};
 

@@ -6,7 +6,7 @@ import { EventBus } from './EventBus';
 export default class WebSocket {
 
     private io: Server;
-    private logger = new Logger('WebSocket', 'blue');
+    private logger = new Logger('WebSocket', 'magenta');
 
     constructor(
         private httpServer: http.Server,
