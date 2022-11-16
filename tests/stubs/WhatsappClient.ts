@@ -17,9 +17,7 @@ export const mockMessageMedia = {
 
 jest.mock('whatsapp-web.js', () => {
     return {
-        Client: jest.fn().mockImplementation(() => {
-
-        }),
+        Client: jest.fn(),
         LocalAuth: jest.fn(),
         MessageMedia: mockMessageMedia
     }

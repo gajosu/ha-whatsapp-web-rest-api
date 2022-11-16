@@ -3,8 +3,6 @@ import { mockWhatsappClient } from '../../stubs/WhatsappClient'
 import { mockWhatsapp } from '../../stubs/Whatsapp'
 import TextMessageCreator from '../../../src/Services/Message/TextMessageCreator'
 
-afterEach(() => {
-})
 
 beforeEach(() => {
     jest.clearAllMocks()
