@@ -1,20 +1,20 @@
 
-import { mockWhatsappClient } from '../../stubs/WhatsappClient';
-import { mockWhatsapp } from '../../stubs/Whatsapp';
-import TextMessageCreator from '../../../src/Services/Message/TextMessageCreator';
+import { mockWhatsappClient } from '../../stubs/WhatsappClient'
+import { mockWhatsapp } from '../../stubs/Whatsapp'
+import TextMessageCreator from '../../../src/Services/Message/TextMessageCreator'
 
 afterEach(() => {
-});
+})
 
 beforeEach(() => {
-    jest.clearAllMocks();
-});
+    jest.clearAllMocks()
+})
 
 describe('Text message creator test', () => {
-    it('create text message', () => {
-        const creator = new TextMessageCreator(mockWhatsapp);
-        creator.create('123456789', 'test message');
+    it('create text message', async () => {
+        const creator = new TextMessageCreator(mockWhatsapp)
+        await creator.create('123456789', 'test message')
 
-        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', 'test message');
-    });
-});
+        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', 'test message')
+    })
+})
