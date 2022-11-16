@@ -1,23 +1,22 @@
-import express from "express";
-import { ILogger } from "./Logger";
+import express from 'express'
+import { ILogger } from './Logger'
 
 export interface IWebServer {
-    start(): void;
+    start: () => void
 }
 
 export default class WebServer implements IWebServer {
-
-    constructor(private app: express.Application, private logger: ILogger) {
+    constructor (private readonly app: express.Application, private readonly logger: ILogger) {
         this.logger = logger.getCategoryLogger('WebServer', 'yellow')
     }
 
-    public start() {
-        this.setRoutes();
+    public start (): void {
+        this.setRoutes()
     }
 
-    private setRoutes() {
+    private setRoutes (): void {
         this.app.get('/', (req, res) => {
-            res.sendFile('resources/views/index.html', { root: './src/' });
-        });
+            res.sendFile('resources/views/index.html', { root: './src/' })
+        })
     }
 }
