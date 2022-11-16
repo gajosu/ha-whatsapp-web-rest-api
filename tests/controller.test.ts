@@ -1,7 +1,7 @@
 import Controller from '../src/Libs/Controller';
 
 const mockLogger = {
-    getCategoryLogger: jest.fn().mockImplementation(() => mockLogger),
+    getCategoryLogger: jest.fn(),
     info: jest.fn(),
     error: jest.fn(),
     warn: jest.fn(),
