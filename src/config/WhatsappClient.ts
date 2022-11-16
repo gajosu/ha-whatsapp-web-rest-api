@@ -1,9 +1,9 @@
 import { Client, LocalAuth } from 'whatsapp-web.js'
 
-export function getClient(): Client {
+export function getClient (): Client {
     return new Client({
         authStrategy: new LocalAuth({
-            dataPath: '/data',
+            dataPath: '/data'
         }),
         puppeteer: {
             executablePath: '/usr/bin/chromium',
@@ -14,5 +14,5 @@ export function getClient(): Client {
                 '--unhandled-rejections=strict'
             ]
         }
-    });
+    })
 }

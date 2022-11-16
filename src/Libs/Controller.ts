@@ -1,25 +1,23 @@
-import { IWebSocket } from './WebSocket';
-import { IWebServer } from './WebServer';
-import { IWhatsapp } from './Whatsapp';
+import { IWebSocket } from './WebSocket'
+import { IWebServer } from './WebServer'
+import { IWhatsapp } from './Whatsapp'
 
-import Logger from './Logger';
-
+import Logger from './Logger'
 
 export default class Controller {
-
-    private logger: Logger = new Logger();
-    constructor(
-        private whatsapp: IWhatsapp,
-        private webserver: IWebServer,
-        private websocket: IWebSocket
+    private readonly logger: Logger = new Logger()
+    constructor (
+        private readonly whatsapp: IWhatsapp,
+        private readonly webserver: IWebServer,
+        private readonly websocket: IWebSocket
     ) {
     }
 
-    public start() {
-        this.logger.info('Starting Controller');
-        this.whatsapp.start();
+    public start (): void {
+        this.logger.info('Starting Controller')
+        this.whatsapp.start()
 
-        this.webserver.start();
-        this.websocket.start();
+        this.webserver.start()
+        this.websocket.start()
     }
 }

@@ -18,7 +18,6 @@ describe('Event Bus test', () => {
 
         eventBus.dispatch<string>('hello-world', 'Luis');
         eventBus.dispatch<string>('hello-world');
-
         registry.unregister();
         eventBus.dispatch<string>('hello-world');
 

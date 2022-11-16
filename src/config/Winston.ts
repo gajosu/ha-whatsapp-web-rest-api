@@ -1,6 +1,6 @@
 import winston from 'winston'
 
-export function getLogger(): winston.Logger {
+export function getLogger (): winston.Logger {
     return winston.createLogger({
         transports: [
             new winston.transports.Console({
@@ -13,14 +13,14 @@ export function getLogger(): winston.Logger {
                         // pretty winsotn format
                         const {
                             timestamp, level, message, ...args
-                        } = info;
+                        } = info
 
-                        const ts = timestamp.slice(0, 19).replace('T', ' ');
-                        const meta = Object.keys(args).length ? JSON.stringify(args, null, 2) : '';
+                        const ts = timestamp.slice(0, 19).replace('T', ' ')
+                        const meta = (Object.keys(args).length > 0) ? JSON.stringify(args, null, 2) : ''
                         // put color on meta json
-                        const metaColor = meta ? `\x1b[36m${meta}\x1b[0m` : '';
-                        return `${ts} [${level}]: ${message} ${metaColor}`;
-                    }),
+                        const metaColor = meta !== '' ? `\x1b[36m${meta}\x1b[0m` : ''
+                        return `${ts} [${level}]: ${message} ${metaColor}`
+                    })
                 )
             }),
             new winston.transports.File({
@@ -30,7 +30,7 @@ export function getLogger(): winston.Logger {
                     winston.format.timestamp(),
                     winston.format.json()
                 )
-            }),
+            })
         ]
-    });
+    })
 }
