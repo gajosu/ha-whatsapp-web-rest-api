@@ -1,5 +1,4 @@
-import { ILogger } from "../../src/Libs/Logger";
-
+import { ILogger } from '../../src/Libs/Logger'
 
 const mockLogger: ILogger = {
     getCategoryLogger: jest.fn().mockImplementation(() => mockLogger),
@@ -11,8 +10,8 @@ const mockLogger: ILogger = {
 
 jest.mock('../../src/Libs/Logger', () => {
     return jest.fn().mockImplementation(() => {
-        return mockLogger;
-    });
-});
+        return mockLogger
+    })
+})
 
 export default mockLogger
