@@ -117,7 +117,7 @@ describe('Whatsapp tests', () => {
         await whatsapp.start();
 
         const onDisconnected = mockOn.mock.calls[4][1];
-        onDisconnected();
+        await onDisconnected();
 
         expect(mockLogger.info).toHaveBeenCalledWith('Client is disconnected');
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.disconnected');
