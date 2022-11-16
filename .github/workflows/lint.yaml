@@ -8,20 +8,14 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
-      - run: rm -f .yarnclean
-      - run: npm install
-        env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
-          HUSKY_SKIP_INSTALL: true
-      # Alternative: if you use npm instead of yarn
-      # - run: npm ci --no-audit --prefer-offline
-      - uses: tinovyatkin/action-eslint@v1
+      - run: npm ci # or yarn install
+      - uses: sibiraj-s/action-eslint@v2
         with:
-          repo-token: ${{secrets.GITHUB_TOKEN}}
-          check-name: eslint # this is the check name from above 👆 where to post annotations
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
+          eslint-args: '--ignore-path=.gitignore --quiet'
+          extensions: 'ts,tsx'
+          annotations: true
