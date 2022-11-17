@@ -12,5 +12,5 @@ RUN npm install
 # install nodemon
 RUN npm install -g nodemon
 # RUN apk add ttf-freefont chromium
-CMD npm run start
+CMD npm run dev
 
