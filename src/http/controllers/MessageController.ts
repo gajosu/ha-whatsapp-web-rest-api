@@ -1,15 +1,12 @@
 // import { Request, Response } from 'express-serve-static-core'
-import { Request, Response, NextFunction as Next } from 'express'
-import { validationResult } from 'express-validator'
 import { IMediaUrlMessageCreator } from '../../Services/Message/MediaUrlMessageCreator'
 import { ITextMessageCreator } from '../../Services/Message/TextMessageCreator'
+import { Request, Response, NextFunction as Next } from 'express'
+import validator from '../validators/MessageValidator'
 
 export const store = (request: Request, response: Response, next: Next) =>
     async ({ textMessageCreator, mediaUrlMessageCreator }: { textMessageCreator: ITextMessageCreator, mediaUrlMessageCreator: IMediaUrlMessageCreator }) => {
-        const errors = validationResult(request)
-        if (!errors.isEmpty()) {
-            return response.status(422).json({ errors: errors.array() })
-        }
+        await validator(request)
 
         const { to, msg, url } = request.body
 
