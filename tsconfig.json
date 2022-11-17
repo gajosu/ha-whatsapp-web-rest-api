@@ -10,6 +10,7 @@
         "baseUrl": ".",
         "strictNullChecks": true,
         "skipLibCheck": true,
+        "suppressImplicitAnyIndexErrors": true,
         "paths": {
             "*": [
                 "./node_modules/*"

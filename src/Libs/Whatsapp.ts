@@ -2,6 +2,8 @@ import WAWebJS, { Client } from 'whatsapp-web.js'
 import { ILogger } from './Logger'
 import { IEventBus } from './EventBus'
 import Qrcode from 'qrcode-terminal'
+import { exit } from 'process'
+
 export interface IWhatsapp {
     start: () => void
     stop: () => void
@@ -59,10 +61,9 @@ export default class Whatsapp implements IWhatsapp {
 
         return await this.client.initialize().then(() => {
             this.logger.info('Client initialized')
-        }).catch((err) => {
-            this.logger.error('Client fatal error')
-
-            throw err
+        }).catch((err: Error) => {
+            this.logger.error('Client fatal error', err)
+            exit(1)
         })
     }
 
