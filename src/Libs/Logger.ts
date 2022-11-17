@@ -1,5 +1,6 @@
 import winston from 'winston'
 import { getLogger } from '../config/Winston'
+import { formatError } from "pretty-print-error"
 
 export interface ILogger {
     getCategoryLogger: (category: string, color: string) => ILogger
@@ -25,7 +26,11 @@ export default class Logger implements ILogger {
     }
 
     public error (message: string, ...meta: any[]): void {
-        this.logger.error(this.renderMessage(message), meta)
+        if (meta[0] instanceof Error) {
+            this.logger.error(this.renderMessage(message + '\n' + formatError(meta[0])))
+        } else {
+            this.logger.error(this.renderMessage(message), meta)
+        }
     }
 
     public warn (message: string, ...meta: any[]): void {
