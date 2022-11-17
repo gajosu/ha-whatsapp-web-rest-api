@@ -1,15 +1,11 @@
-import { Request, Response } from 'express-serve-static-core'
+// import { Request, Response } from 'express-serve-static-core'
+import { Request, Response, NextFunction as Next } from 'express'
 import { validationResult } from 'express-validator'
-import MediaUrlMessageCreator from '../../Services/Message/MediaUrlMessageCreator'
-import TextMessageCreator from '../../Services/Message/TextMessageCreator'
+import { IMediaUrlMessageCreator } from '../../Services/Message/MediaUrlMessageCreator'
+import { ITextMessageCreator } from '../../Services/Message/TextMessageCreator'
 
-export default class MessageController {
-    public constructor (
-        private readonly textMessageCreator: TextMessageCreator,
-        private readonly mediaUrlMessageCreator: MediaUrlMessageCreator
-    ) { }
-
-    public async store (request: Request, response: Response): Promise<Response> {
+export const store = (request: Request, response: Response, next: Next) =>
+    async ({ textMessageCreator, mediaUrlMessageCreator }: { textMessageCreator: ITextMessageCreator, mediaUrlMessageCreator: IMediaUrlMessageCreator }) => {
         const errors = validationResult(request)
         if (!errors.isEmpty()) {
             return response.status(422).json({ errors: errors.array() })
@@ -19,9 +15,9 @@ export default class MessageController {
 
         try {
             if (url !== undefined) {
-                await this.mediaUrlMessageCreator.create(to, url)
+                await mediaUrlMessageCreator.create(to, url)
             } else {
-                await this.textMessageCreator.create(to, msg)
+                await textMessageCreator.create(to, msg)
             }
         } catch (error) {
             return response.status(422).json({ error: error.message })
@@ -29,4 +25,3 @@ export default class MessageController {
 
         return response.json({ message: 'Message sent' })
     }
-}

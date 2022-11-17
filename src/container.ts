@@ -10,7 +10,7 @@ import TextMessageCreator, { ITextMessageCreator } from './Services/Message/Text
 import MediaUrlMessageCreator, { IMediaUrlMessageCreator } from './Services/Message/MediaUrlMessageCreator'
 import { getClient as getWhatsappClient } from './config/WhatsappClient'
 
-interface IServices {
+export interface IServices {
     logger: ILogger
     eventBus: IEventBus
     whatsapp: IWhatsapp
