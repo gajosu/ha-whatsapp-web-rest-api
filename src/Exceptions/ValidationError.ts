@@ -1,5 +1,3 @@
-// import { ValidationError as ExpressValidationError } from 'express-validator/src/base'
-
 export class ValidationError extends Error {
     constructor (public messages: any[]) {
         super('Validation failed. ')
