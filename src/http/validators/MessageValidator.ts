@@ -1,8 +1,9 @@
-import { Request } from 'express'
-import { validationResult, check, body } from 'express-validator'
+import { Request, Response } from 'express'
+import { check, body } from 'express-validator'
+import Validator from './Validator'
 
-export default async function (request: Request): Promise<void> {
-    await check('to').isString().run(request)
+export default async function (request: Request, response: Response): Promise<void> {
+    await check('to').isNumeric().run(request)
     await check('msg')
         .if(body('url').not().exists())
         .isString()
@@ -12,5 +13,5 @@ export default async function (request: Request): Promise<void> {
         .isURL()
         .run(request)
 
-    validationResult(request).throw()
+    Validator(request, response)
 }
