@@ -10,13 +10,14 @@ const handleErrors = (
     next: any
 ) => ({ logger }: { logger: ILogger }) => {
     if (err instanceof ValidationError) {
+        logger.warn(err.message, err.messages)
         res.status(422).json({ errors: err.messages })
         return
     }
 
     if (err instanceof NotFoundError) {
         logger.warn(err.message)
-        res.status(400).json({ error: err.message })
+        res.status(404).json({ error: err.message })
         return
     }
 
