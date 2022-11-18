@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 import http from 'http'
 import { ILogger } from './Logger'
 import { IEventBus } from './EventBus'
-import { IQRCodeEvent, IMessageEvent, IMessageAckEvent } from './Whatsapp'
+import { IQRCodeEvent, IMessageEvent, IMessageAckEvent, IStateChangeEvent } from './Whatsapp'
 import qrCode from 'qrcode'
 
 export interface IWebSocket {
@@ -24,6 +24,9 @@ export default class WebSocket implements IWebSocket {
         this.eventBus.register('whatsapp.message', this.onMessage.bind(this))
         this.eventBus.register('whatsapp.message.create', this.onCreatedMessage.bind(this))
         this.eventBus.register('whatsapp.message.ack', this.onMessageAck.bind(this))
+        this.eventBus.register('whatsapp.state', this.onChangedState.bind(this))
+        this.eventBus.register('whatsapp.authenticated', this.onAuthenticated.bind(this))
+        this.eventBus.register('whatsapp.disconnected', this.onDisconnected.bind(this))
     }
 
     public stop (): void {
@@ -62,5 +65,20 @@ export default class WebSocket implements IWebSocket {
     private onMessageAck (data: IMessageAckEvent): void {
         this.io.emit('message.ack', data)
         this.logger.info('New message ack')
+    }
+
+    private onChangedState (data: IStateChangeEvent): void {
+        this.io.emit('state.change', data)
+        this.logger.info('New state change')
+    }
+
+    private onAuthenticated (): void {
+        this.io.emit('authenticated')
+        this.logger.info('Authenticated')
+    }
+
+    private onDisconnected (): void {
+        this.io.emit('disconnected')
+        this.logger.info('Disconnected')
     }
 }
