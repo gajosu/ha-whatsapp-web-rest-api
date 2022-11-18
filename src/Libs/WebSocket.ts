@@ -3,6 +3,7 @@ import http from 'http'
 import { ILogger } from './Logger'
 import { IEventBus } from './EventBus'
 import { IQRCodeEvent, IMessageEvent, IMessageAckEvent } from './Whatsapp'
+import qrCode from 'qrcode'
 
 export interface IWebSocket {
     start: () => void
@@ -34,8 +35,11 @@ export default class WebSocket implements IWebSocket {
         this.eventBus.dispatch('socket.connection', socket)
         this.logger.info('New connection from ' + socket.id)
 
-        const qrListener = this.eventBus.register('whatsapp.qr', (event: IQRCodeEvent) => {
-            socket.emit('qr_code', { data: event.qr })
+        const qrListener = this.eventBus.register('whatsapp.qr', (event: IQRCodeEvent): void => {
+            void (async () => {
+                const qrCodeBase64 = await qrCode.toDataURL(event.qr, { width: 300 })
+                socket.emit('qr_code', { data: qrCodeBase64 })
+            })()
         })
 
         socket.on('disconnect', (reason: string) => {
