@@ -26,10 +26,8 @@
             
 
             <div class="api_key_input" style="display: none;">
-                <h1>Your ApiKey!</h1>
-                <input type="text" value="" class="form-control" id="api_key_input">
+                <h1>Authenticated!</h1>
             </div>
-         
         </div>
         
     </body>
@@ -41,15 +39,19 @@
 
         $(document).on('ready', function(){
             var socket = io();
-            
+
             socket.on("qr_code", function(qr){
                 $("#qr_img").attr('src', qr.data);
             })
 
-            socket.on("api_key", function(qr){
+            socket.on("authenticated", function(){
                 $('.qr_img').hide();
                 $('.api_key_input').fadeIn(1000);
-                $("#api_key_input").attr('value', qr.api_key);
+            })
+
+            socket.on("disconnected", function(){
+                $('.qr_img').fadeIn(1000);
+                $('.api_key_input').hide();
             })
         });
     </script>
