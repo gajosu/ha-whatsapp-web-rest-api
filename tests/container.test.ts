@@ -1,3 +1,4 @@
+import { IHttpServer } from './../src/config/HttpServer'
 import { IMediaUrlMessageCreator } from './../src/Services/Message/MediaUrlMessageCreator'
 import { ITextMessageCreator } from './../src/Services/Message/TextMessageCreator'
 import { IWebSocket } from './../src/Libs/WebSocket'
@@ -36,6 +37,7 @@ describe('container', () => {
     it('allows to instantiate all items (prepareAll)', () => {
         const items = prepareAll(container)
 
+        expect(items.app).toBeDefined()
         expect(items.logger).toBeDefined()
         expect(items.eventBus).toBeDefined()
         expect(items.whatsapp).toBeDefined()
@@ -45,6 +47,7 @@ describe('container', () => {
         expect(items.mediaUrlMessageCreator).toBeDefined()
 
         const typecheck: AssertTypeEqual < typeof items, {
+            app: IHttpServer
             logger: ILogger
             eventBus: IEventBus
             whatsapp: IWhatsapp

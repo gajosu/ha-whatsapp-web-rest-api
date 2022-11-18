@@ -1,6 +1,6 @@
 import diContainer from 'true-di'
 
-import { getHttpServer } from './config/HttpServer'
+import { getHttpServer, IHttpServer } from './config/HttpServer'
 import { EventBus, IEventBus } from './Libs/EventBus'
 import Logger, { ILogger } from './Libs/Logger'
 import WebServer, { IWebServer } from './Libs/WebServer'
@@ -11,6 +11,7 @@ import MediaUrlMessageCreator, { IMediaUrlMessageCreator } from './Services/Mess
 import { getClient as getWhatsappClient } from './config/WhatsappClient'
 
 export interface IServices {
+    app: IHttpServer
     logger: ILogger
     eventBus: IEventBus
     whatsapp: IWhatsapp
@@ -24,6 +25,8 @@ const webConfig = getHttpServer()
 const whatsappClient = getWhatsappClient()
 
 export default diContainer<IServices>({
+    app: () =>
+        webConfig,
     logger: () =>
         new Logger(),
     eventBus: () =>
@@ -31,11 +34,11 @@ export default diContainer<IServices>({
     whatsapp: ({ logger, eventBus }) =>
         new Whatsapp(whatsappClient, logger, eventBus),
 
-    webServer: ({ logger }) =>
-        new WebServer(webConfig.app, logger),
+    webServer: ({ app, logger }) =>
+        new WebServer(app.app, logger),
 
-    webSocket: ({ logger, eventBus }) =>
-        new WebSocket(webConfig.server, logger, eventBus),
+    webSocket: ({ app, logger, eventBus }) =>
+        new WebSocket(app.server, logger, eventBus),
 
     textMessageCreator: ({ whatsapp }) =>
         new TextMessageCreator(whatsapp),
