@@ -11,6 +11,10 @@ const fakeResponse = (): Express.Response => ({
     json: jest.fn(returnThis)
 }) as any
 
+beforeEach(() => {
+    jest.clearAllMocks()
+})
+
 describe('handleErrors', () => {
     it('handles ValidationError', () => {
         const res = fakeResponse()
