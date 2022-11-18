@@ -1,6 +1,6 @@
 import winston from 'winston'
 import { getLogger } from '../config/Winston'
-import { formatError } from "pretty-print-error"
+import { formatError } from 'pretty-print-error'
 
 export interface ILogger {
     getCategoryLogger: (category: string, color: string) => ILogger
