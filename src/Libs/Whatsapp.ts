@@ -106,6 +106,11 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onMessage (message: WAWebJS.Message): void {
+        // ignore status messages
+        if (message.id.remote === 'status@broadcast') {
+            return
+        }
+
         this.logger.info('Message received', message)
 
         const event: IMessageEvent = {
