@@ -3,3 +3,4 @@ dist/
 .wwebjs_auth/
 logs/
 jest/
+coverage/
