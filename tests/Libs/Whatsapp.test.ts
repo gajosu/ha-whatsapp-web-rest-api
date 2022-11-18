@@ -137,12 +137,28 @@ describe('Whatsapp tests', () => {
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message', event)
     })
 
+    it('onMessage (ignore if is status broadcast)', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onMessage = mockOn.mock.calls[5][1]
+
+        const event = {
+            message: mockMessage
+        }
+
+        const ignoredMessage = { ...mockMessage, id: { ...mockMessage, id: { ...mockMessage.id, remote: 'status@broadcast' } } }
+
+        onMessage(ignoredMessage)
+        expect(mockLogger.info).not.toHaveBeenCalledWith('Message received', mockMessage)
+        expect(mockEventBus.dispatch).not.toHaveBeenCalledWith('whatsapp.message', event)
+    })
+
     it('onMessageCreate', async () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const mockCreatedMessage = { ...mockMessage, id: { ...mockMessage.id, fromMe: true } }
-        mockCreatedMessage.fromMe = true
+        const mockCreatedMessage = { ...mockMessage, ...{ fromMe: true } }
 
         const onMessageCreate = mockOn.mock.calls[6][1]
 
@@ -153,6 +169,23 @@ describe('Whatsapp tests', () => {
         onMessageCreate(mockCreatedMessage)
         expect(mockLogger.info).toHaveBeenCalledWith('Message created', mockCreatedMessage)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.create', event)
+    })
+
+    it('onMessageCreate (ignore if is not from me)', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const mockCreatedMessage = { ...mockMessage, ...{ fromMe: false } }
+
+        const onMessageCreate = mockOn.mock.calls[6][1]
+
+        const event = {
+            message: mockCreatedMessage
+        }
+
+        onMessageCreate(mockCreatedMessage)
+        expect(mockLogger.info).not.toHaveBeenCalledWith('Message created', mockCreatedMessage)
+        expect(mockEventBus.dispatch).not.toHaveBeenCalledWith('whatsapp.message.create', event)
     })
 
     it('onMessageAck', async () => {
