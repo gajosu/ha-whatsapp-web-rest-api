@@ -3,7 +3,7 @@ import { ILogger } from './Logger'
 import createContext from 'express-async-context'
 import container from '../container'
 import api from '../routes/api'
-
+import ErrorHandler from '../http/middlewares/ErrorHandler'
 export interface IWebServer {
     start: () => void
 }
@@ -19,6 +19,7 @@ export default class WebServer implements IWebServer {
         this.app.use(Context.provider)
         this.app.use(express.json())
         this.setRoutes()
+        this.app.use(Context.consumer(ErrorHandler))
     }
 
     private setRoutes (): void {
