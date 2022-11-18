@@ -18,7 +18,6 @@ export default class WebServer implements IWebServer {
     public start (): void {
         this.app.use(Context.provider)
         this.app.use(express.json())
-
         this.setRoutes()
     }
 

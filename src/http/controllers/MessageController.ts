@@ -6,15 +6,17 @@ import validator from '../validators/MessageValidator'
 
 export const store = (request: Request, response: Response, next: Next) =>
     async ({ textMessageCreator, mediaUrlMessageCreator }: { textMessageCreator: ITextMessageCreator, mediaUrlMessageCreator: IMediaUrlMessageCreator }) => {
-        await validator(request)
+        await validator(request, response)
 
-        const { to, msg, url } = request.body
+        const { to, msg, url }: { to: string, msg: string, url: string } = request.body
+
+        const id = to + '@c.us'
 
         try {
             if (url !== undefined) {
-                await mediaUrlMessageCreator.create(to, url)
+                await mediaUrlMessageCreator.create(id, url)
             } else {
-                await textMessageCreator.create(to, msg)
+                await textMessageCreator.create(id, msg)
             }
         } catch (error) {
             return response.status(422).json({ error: error.message })
