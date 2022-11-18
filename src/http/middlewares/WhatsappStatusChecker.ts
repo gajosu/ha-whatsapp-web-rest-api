@@ -18,6 +18,8 @@ const statusChecker = (
                 message: 'Whatsapp is not connected',
                 status: 503
             })
+
+            logger.error('Whatsapp is not connected')
         })
     } catch (error) {
         next(error)
