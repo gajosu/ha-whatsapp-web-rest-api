@@ -1,3 +1,4 @@
+
 import mockLogger from '../stubs/Logger'
 import mockEventBus from '../stubs/EventBus'
 
@@ -209,10 +210,15 @@ describe('Whatsapp tests', () => {
     })
 
     it('start client with error', async () => {
+        const exitMock = jest.spyOn(process, 'exit').mockImplementation(() => undefined as never)
+
         const error = new Error('error')
         mockInitialize.mockRejectedValue(error)
-        // should throw error
-        await expect(new Whatsapp(new Client({}), mockLogger, mockEventBus).start()).rejects.toThrow(error)
-        expect(mockLogger.error).toHaveBeenCalledWith('Client fatal error')
+
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        expect(mockLogger.error).toHaveBeenCalledWith('Client fatal error', error)
+        expect(exitMock).toHaveBeenCalledWith(1)
     })
 })
