@@ -1,24 +1,31 @@
+import { IEventPublisher } from './../Services/HomeAssistant/EventPublisher'
 import { IEventBus } from './EventBus'
 import getConfig from '../config/GlobalConfig'
-import fetch from 'node-fetch'
 import { ILogger } from './Logger'
+import { IMessageAckEvent, IMessageEvent, IStateChangeEvent } from './Whatsapp'
 
 export interface IHomeAssistant {
     start: () => void
 }
 
-export class HomeAssistant implements IHomeAssistant {
+export default class HomeAssistant implements IHomeAssistant {
     private readonly supervisorToken: string | undefined = getConfig<string>('supervisorToken', undefined)
 
-    public constructor (private readonly logger: ILogger, private readonly eventBus: IEventBus) {
+    public constructor (
+        private readonly logger: ILogger,
+        private readonly eventBus: IEventBus,
+        private readonly eventPublisher: IEventPublisher
+    ) {
         this.logger = logger.getCategoryLogger('HomeAssistant', 'blue')
     }
 
     public start (): void {
         if (this.supervisorToken === undefined) {
-            this.logger.info('Home Assistant integration disabled')
+            this.logger.warn('Home Assistant integration disabled')
             return
         }
+
+        this.logger.info('Home Assistant integration enabled')
 
         this.eventBus.register('whatsapp.message', this.onMessage.bind(this))
         this.eventBus.register('whatsapp.message.create', this.onCreatedMessage.bind(this))
@@ -28,16 +35,37 @@ export class HomeAssistant implements IHomeAssistant {
         this.eventBus.register('whatsapp.disconnected', this.onDisconnected.bind(this))
     }
 
-    private async sendEvent (event: string, data: any): Promise<void> {
-        await fetch(`http://supervisor/core/api/events/${event}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.supervisorToken}`
-            },
-            body: JSON.stringify(data)
-        }).catch((err) => {
-            this.logger.error('Error sending event to Home Assistant', err)
-        })
+    private async onMessage (data: IMessageEvent): Promise<void> {
+        this.logger.info('onMessage', data.message.id)
+        await this.sendToHomeAssistant('message_received', data)
+    }
+
+    private async onCreatedMessage (data: IMessageEvent): Promise<void> {
+        this.logger.info('onCreatedMessage', data.message.id)
+        await this.sendToHomeAssistant('message_sent', data)
+    }
+
+    private async onMessageAck (data: IMessageAckEvent): Promise<void> {
+        this.logger.info('onMessageAck', data)
+        await this.sendToHomeAssistant('message_ack', data)
+    }
+
+    private async onChangedState (data: IStateChangeEvent): Promise<void> {
+        this.logger.info('onChangedState', data)
+        await this.sendToHomeAssistant('state', data)
+    }
+
+    private async onAuthenticated (): Promise<void> {
+        this.logger.info('onAuthenticated')
+        await this.sendToHomeAssistant('authenticated', {})
+    }
+
+    private async onDisconnected (): Promise<void> {
+        this.logger.info('onDisconnected')
+        await this.sendToHomeAssistant('disconnected', {})
+    }
+
+    private async sendToHomeAssistant (event: string, data: any): Promise<void> {
+        await this.eventPublisher.publish('whatsapp_' + event, data, this.supervisorToken as string)
     }
 }

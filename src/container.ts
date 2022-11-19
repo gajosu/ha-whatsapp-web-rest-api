@@ -9,6 +9,8 @@ import Whatsapp, { IWhatsapp } from './Libs/Whatsapp'
 import TextMessageCreator, { ITextMessageCreator } from './Services/Message/TextMessageCreator'
 import MediaUrlMessageCreator, { IMediaUrlMessageCreator } from './Services/Message/MediaUrlMessageCreator'
 import { getClient as getWhatsappClient } from './config/WhatsappClient'
+import EventPublisher, { IEventPublisher } from './Services/HomeAssistant/EventPublisher'
+import HomeAssistant, { IHomeAssistant } from './Libs/HomeAssistant'
 
 export interface IServices {
     app: IHttpServer
@@ -19,6 +21,8 @@ export interface IServices {
     webSocket: IWebSocket
     textMessageCreator: ITextMessageCreator
     mediaUrlMessageCreator: IMediaUrlMessageCreator
+    haEventPublisher: IEventPublisher
+    HomeAssistant: IHomeAssistant
 }
 
 const webConfig = getHttpServer()
@@ -27,10 +31,13 @@ const whatsappClient = getWhatsappClient()
 export default diContainer<IServices>({
     app: () =>
         webConfig,
+
     logger: () =>
         new Logger(),
+
     eventBus: () =>
         new EventBus(),
+
     whatsapp: ({ logger, eventBus }) =>
         new Whatsapp(whatsappClient, logger, eventBus),
 
@@ -44,5 +51,11 @@ export default diContainer<IServices>({
         new TextMessageCreator(whatsapp),
 
     mediaUrlMessageCreator: ({ whatsapp }) =>
-        new MediaUrlMessageCreator(whatsapp)
+        new MediaUrlMessageCreator(whatsapp),
+
+    haEventPublisher: ({ logger }) =>
+        new EventPublisher(logger),
+
+    HomeAssistant: ({ logger, eventBus, haEventPublisher }) =>
+        new HomeAssistant(logger, eventBus, haEventPublisher)
 })
