@@ -22,7 +22,7 @@ export interface IServices {
     textMessageCreator: ITextMessageCreator
     mediaUrlMessageCreator: IMediaUrlMessageCreator
     haEventPublisher: IEventPublisher
-    HomeAssistant: IHomeAssistant
+    homeAssistant: IHomeAssistant
 }
 
 const webConfig = getHttpServer()
@@ -56,6 +56,6 @@ export default diContainer<IServices>({
     haEventPublisher: ({ logger }) =>
         new EventPublisher(logger),
 
-    HomeAssistant: ({ logger, eventBus, haEventPublisher }) =>
+    homeAssistant: ({ logger, eventBus, haEventPublisher }) =>
         new HomeAssistant(logger, eventBus, haEventPublisher)
 })
