@@ -25,7 +25,7 @@ describe('Home assistant', () => {
     })
 
     it('not start ha service', async () => {
-        mockConfig.mockReturnValue(undefined)
+        mockConfig.mockReturnValue(null)
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
