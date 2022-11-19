@@ -1,4 +1,4 @@
-import { IEventPublisher } from './../src/Services/HomeAssistant/EventPublisher';
+import { IEventPublisher } from './../src/Services/HomeAssistant/EventPublisher'
 import { IHttpServer } from './../src/config/HttpServer'
 import { IMediaUrlMessageCreator } from './../src/Services/Message/MediaUrlMessageCreator'
 import { ITextMessageCreator } from './../src/Services/Message/TextMessageCreator'
@@ -9,7 +9,7 @@ import container from '../src/container'
 import { IEventBus } from '../src/Libs/EventBus'
 import { IWhatsapp } from '../src/Libs/Whatsapp'
 import { IWebServer } from '../src/Libs/WebServer'
-import { IHomeAssistant } from '../src/Libs/HomeAssistant';
+import { IHomeAssistant } from '../src/Libs/HomeAssistant'
 
 jest.mock('../src/config/HttpServer', () => {
     return {
@@ -48,7 +48,7 @@ describe('container', () => {
         expect(items.textMessageCreator).toBeDefined()
         expect(items.mediaUrlMessageCreator).toBeDefined()
         expect(items.haEventPublisher).toBeDefined()
-        expect(items.HomeAssistant).toBeDefined()
+        expect(items.homeAssistant).toBeDefined()
 
         const typecheck: AssertTypeEqual < typeof items, {
             app: IHttpServer
@@ -58,9 +58,9 @@ describe('container', () => {
             webServer: IWebServer
             webSocket: IWebSocket
             textMessageCreator: ITextMessageCreator
-            mediaUrlMessageCreator: IMediaUrlMessageCreator,
-            haEventPublisher: IEventPublisher,
-            HomeAssistant: IHomeAssistant
+            mediaUrlMessageCreator: IMediaUrlMessageCreator
+            haEventPublisher: IEventPublisher
+            homeAssistant: IHomeAssistant
         } > = true
 
         expect(typecheck).toBe(true)

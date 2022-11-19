@@ -4,6 +4,7 @@ import { IWebSocket } from './WebSocket'
 import { IWebServer } from './WebServer'
 import { IWhatsapp } from './Whatsapp'
 import { ILogger } from './Logger'
+import { IHomeAssistant } from './HomeAssistant'
 
 export default class Controller {
     constructor (
@@ -11,7 +12,8 @@ export default class Controller {
         private readonly logger: ILogger,
         private readonly whatsapp: IWhatsapp,
         private readonly webserver: IWebServer,
-        private readonly websocket: IWebSocket
+        private readonly websocket: IWebSocket,
+        private readonly homeAssistant: IHomeAssistant
     ) {
     }
 
@@ -20,6 +22,7 @@ export default class Controller {
         this.whatsapp.start()
         this.webserver.start()
         this.websocket.start()
+        this.homeAssistant.start()
 
         const port = getConfig<number>('port', 3000)
         const httpLogger = this.logger.getCategoryLogger('HttpServer', 'yellow')

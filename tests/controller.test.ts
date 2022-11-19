@@ -36,6 +36,10 @@ const mockWebSocket = {
     stop: jest.fn()
 }
 
+const mockHomeAssistant = {
+    start: jest.fn()
+}
+
 jest.mock('../src/config/GlobalConfig', () => {
     return jest.fn().mockImplementation(() => {
         return 3000
@@ -48,7 +52,7 @@ describe('controller', () => {
     })
 
     it('start services', () => {
-        const controller = new Controller(mockApp, mockLogger, mockWhatsapp, mockWebServer, mockWebSocket)
+        const controller = new Controller(mockApp, mockLogger, mockWhatsapp, mockWebServer, mockWebSocket, mockHomeAssistant)
         controller.start()
 
         expect(mockServer).toHaveBeenCalledWith(3000, expect.any(Function))
@@ -56,5 +60,7 @@ describe('controller', () => {
         expect(mockWhatsapp.start).toBeCalledTimes(1)
         expect(mockWebServer.start).toBeCalledTimes(1)
         expect(mockWebSocket.start).toBeCalledTimes(1)
+        expect(mockHomeAssistant.start).toBeCalledTimes(1)
+        expect(mockApp.server.listen).toBeCalledWith(3000, expect.any(Function))
     })
 })
