@@ -9,7 +9,7 @@ export interface IHomeAssistant {
 }
 
 export default class HomeAssistant implements IHomeAssistant {
-    private readonly supervisorToken: string | undefined = getConfig<string>('supervisorToken', undefined)
+    private readonly supervisorToken: string | null = getConfig<string | null>('supervisorToken')
 
     public constructor (
         private readonly logger: ILogger,
@@ -20,7 +20,7 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     public start (): void {
-        if (this.supervisorToken === undefined) {
+        if (this.supervisorToken === null) {
             this.logger.warn('Home Assistant integration disabled')
             return
         }
