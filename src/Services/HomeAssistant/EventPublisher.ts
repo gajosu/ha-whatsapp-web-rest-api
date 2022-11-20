@@ -26,6 +26,7 @@ export default class EventPublisher implements IEventPublisher {
             }
         }).catch((err) => {
             this.logger.error('Error sending event to Home Assistant', err)
+            this.logger.error(`with token ${supervisorToken}`)
         })
     }
 }
