@@ -29,13 +29,6 @@ jest.mock('../src/config/HttpServer', () => {
     }
 })
 
-// mock home assistant because it calls global settings
-jest.mock('../src/Libs/HomeAssistant', () => {
-    return jest.fn().mockImplementation(() => ({
-        start: jest.fn()
-    }))
-})
-
 type AssertTypeEqual<T1, T2> = T1 extends T2 ? (T2 extends T1 ? true : never) : never
 
 describe('container', () => {

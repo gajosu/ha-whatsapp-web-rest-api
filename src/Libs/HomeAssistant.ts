@@ -1,6 +1,5 @@
 import { IEventPublisher } from './../Services/HomeAssistant/EventPublisher'
 import { IEventBus } from './EventBus'
-import getConfig from '../config/GlobalConfig'
 import { ILogger } from './Logger'
 import { IMessageAckEvent, IMessageEvent, IStateChangeEvent } from './Whatsapp'
 
@@ -9,7 +8,7 @@ export interface IHomeAssistant {
 }
 
 export default class HomeAssistant implements IHomeAssistant {
-    private readonly supervisorToken: string | null = getConfig<string | null>('supervisorToken')
+    private readonly supervisorToken: string | undefined = process.env.SUPERVISOR_TOKEN
 
     public constructor (
         private readonly logger: ILogger,
@@ -20,7 +19,7 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     public start (): void {
-        if (this.supervisorToken === null) {
+        if (this.supervisorToken === undefined) {
             this.logger.warn('Home Assistant integration disabled')
             return
         }

@@ -1,4 +1,3 @@
-import mockConfig from '../stubs/GlobalConfig'
 import mockLogger from '../stubs/Logger'
 import mockEventBus from '../stubs/EventBus'
 import mockEventPublisher from '../stubs/HaEventPublisher'
@@ -9,8 +8,15 @@ describe('Home assistant', () => {
         jest.clearAllMocks()
     })
 
+    it('not start ha service', async () => {
+        const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
+        ha.start()
+
+        expect(mockLogger.warn).toHaveBeenCalledWith('Home Assistant integration disabled')
+    })
+
     it('start ha service', async () => {
-        mockConfig.mockReturnValue('token')
+        process.env.SUPERVISOR_TOKEN = 'token'
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
@@ -24,17 +30,8 @@ describe('Home assistant', () => {
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.disconnected', expect.any(Function))
     })
 
-    it('not start ha service', async () => {
-        mockConfig.mockReturnValue(null)
-
-        const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
-        ha.start()
-
-        expect(mockLogger.warn).toHaveBeenCalledWith('Home Assistant integration disabled')
-    })
-
     it('onMessage', async () => {
-        mockConfig.mockReturnValue('token')
+        process.env.SUPERVISOR_TOKEN = 'token'
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
@@ -47,7 +44,7 @@ describe('Home assistant', () => {
     })
 
     it('onCreatedMessage', async () => {
-        mockConfig.mockReturnValue('token')
+        process.env.SUPERVISOR_TOKEN = 'token'
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
@@ -60,7 +57,7 @@ describe('Home assistant', () => {
     })
 
     it('onMessageAck', async () => {
-        mockConfig.mockReturnValue('token')
+        process.env.SUPERVISOR_TOKEN = 'token'
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
@@ -74,7 +71,7 @@ describe('Home assistant', () => {
     })
 
     it('onState', async () => {
-        mockConfig.mockReturnValue('token')
+        process.env.SUPERVISOR_TOKEN = 'token'
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
@@ -88,7 +85,7 @@ describe('Home assistant', () => {
     })
 
     it('onAuthenticated', async () => {
-        mockConfig.mockReturnValue('token')
+        process.env.SUPERVISOR_TOKEN = 'token'
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
@@ -100,7 +97,7 @@ describe('Home assistant', () => {
     })
 
     it('onDisconnected', async () => {
-        mockConfig.mockReturnValue('token')
+        process.env.SUPERVISOR_TOKEN = 'token'
 
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
