@@ -107,11 +107,11 @@ export default class Whatsapp implements IWhatsapp {
 
     private onMessage (message: WAWebJS.Message): void {
         // ignore status messages
-        if (message.id.remote === 'status@broadcast') {
+        if (message.isStatus) {
             return
         }
 
-        this.logger.info('Message received', message)
+        this.logger.info('Message received', message.id)
 
         const event: IMessageEvent = {
             message
@@ -124,7 +124,7 @@ export default class Whatsapp implements IWhatsapp {
         if (!message.fromMe) {
             return
         }
-        this.logger.info('Message created', message)
+        this.logger.info('Message created', message.id)
 
         const event: IMessageEvent = {
             message

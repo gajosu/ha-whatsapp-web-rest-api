@@ -133,7 +133,7 @@ describe('Whatsapp tests', () => {
             message: mockMessage
         }
         onMessage(mockMessage)
-        expect(mockLogger.info).toHaveBeenCalledWith('Message received', mockMessage)
+        expect(mockLogger.info).toHaveBeenCalledWith('Message received', mockMessage.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message', event)
     })
 
@@ -150,7 +150,7 @@ describe('Whatsapp tests', () => {
         const ignoredMessage = { ...mockMessage, id: { ...mockMessage, id: { ...mockMessage.id, remote: 'status@broadcast' } } }
 
         onMessage(ignoredMessage)
-        expect(mockLogger.info).not.toHaveBeenCalledWith('Message received', mockMessage)
+        expect(mockLogger.info).not.toHaveBeenCalledWith('Message received', mockMessage.id)
         expect(mockEventBus.dispatch).not.toHaveBeenCalledWith('whatsapp.message', event)
     })
 
@@ -167,7 +167,7 @@ describe('Whatsapp tests', () => {
         }
 
         onMessageCreate(mockCreatedMessage)
-        expect(mockLogger.info).toHaveBeenCalledWith('Message created', mockCreatedMessage)
+        expect(mockLogger.info).toHaveBeenCalledWith('Message created', mockCreatedMessage.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.create', event)
     })
 

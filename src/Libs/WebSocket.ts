@@ -53,17 +53,20 @@ export default class WebSocket implements IWebSocket {
     }
 
     private onMessage (data: IMessageEvent): void {
-        this.io.emit('message', data)
+        this.io.emit('message', data.message.rawData)
         this.logger.info('New message')
     }
 
     private onCreatedMessage (data: IMessageEvent): void {
-        this.io.emit('message.create', data)
+        this.io.emit('message.create', data.message.rawData)
         this.logger.info('New message create')
     }
 
     private onMessageAck (data: IMessageAckEvent): void {
-        this.io.emit('message.ack', data)
+        this.io.emit('message.ack', {
+            message: data.message.rawData,
+            ack: data.ack
+        })
         this.logger.info('New message ack')
     }
 

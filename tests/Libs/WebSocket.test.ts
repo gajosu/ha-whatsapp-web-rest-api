@@ -75,10 +75,10 @@ describe('WebSocket tests', () => {
         const websocket = new WebSocket(http, new Logger(), mockEventBus)
         websocket.start()
 
-        const mockMessage = 'mockMessage'
+        const mockData = { message: { id: 'id', rawData: { id: 'id' } } }
         const onMessage = mockEventBus.register.mock.calls.find((call) => call[0] === 'whatsapp.message')[1]
-        onMessage(mockMessage)
-        expect(mockEmit).toHaveBeenCalledWith('message', mockMessage)
+        onMessage(mockData)
+        expect(mockEmit).toHaveBeenCalledWith('message', mockData.message.rawData)
     })
 
     it('onCreatedMessage', async () => {
@@ -86,10 +86,10 @@ describe('WebSocket tests', () => {
         const websocket = new WebSocket(http, new Logger(), mockEventBus)
         websocket.start()
 
-        const mockMessage = 'mockMessage'
+        const mockData = { message: { id: 'id', rawData: { id: 'id' } } }
         const onCreatedMessage = mockEventBus.register.mock.calls.find((call) => call[0] === 'whatsapp.message.create')[1]
-        onCreatedMessage(mockMessage)
-        expect(mockEmit).toHaveBeenCalledWith('message.create', mockMessage)
+        onCreatedMessage(mockData)
+        expect(mockEmit).toHaveBeenCalledWith('message.create', mockData.message.rawData)
     })
 
     it('onMessageAck', async () => {
@@ -97,9 +97,9 @@ describe('WebSocket tests', () => {
         const websocket = new WebSocket(http, new Logger(), mockEventBus)
         websocket.start()
 
-        const mockMessage = 'mockMessage'
+        const mockMessage = { message: { id: 'id', rawData: { id: 'id' } }, ack: 1 }
         const onMessageAck = mockEventBus.register.mock.calls.find((call) => call[0] === 'whatsapp.message.ack')[1]
         onMessageAck(mockMessage)
-        expect(mockEmit).toHaveBeenCalledWith('message.ack', mockMessage)
+        expect(mockEmit).toHaveBeenCalledWith('message.ack', { message: mockMessage.message.rawData, ack: mockMessage.ack })
     })
 })

@@ -36,17 +36,22 @@ export default class HomeAssistant implements IHomeAssistant {
 
     private async onMessage (data: IMessageEvent): Promise<void> {
         this.logger.info('onMessage', data.message.id)
-        await this.sendToHomeAssistant('message_received', data)
+        await this.sendToHomeAssistant('message_received', data.message.rawData)
     }
 
     private async onCreatedMessage (data: IMessageEvent): Promise<void> {
         this.logger.info('onCreatedMessage', data.message.id)
-        await this.sendToHomeAssistant('message_sent', data)
+        await this.sendToHomeAssistant('message_sent', data.message.rawData)
     }
 
     private async onMessageAck (data: IMessageAckEvent): Promise<void> {
-        this.logger.info('onMessageAck', data)
-        await this.sendToHomeAssistant('message_ack', data)
+        const event = {
+            message: data.message.rawData,
+            ack: data.ack
+        }
+
+        this.logger.info('onMessageAck', event)
+        await this.sendToHomeAssistant('message_ack', event)
     }
 
     private async onChangedState (data: IStateChangeEvent): Promise<void> {

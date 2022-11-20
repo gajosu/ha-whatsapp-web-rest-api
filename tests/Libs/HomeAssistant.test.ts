@@ -37,10 +37,10 @@ describe('Home assistant', () => {
         ha.start()
 
         const onMessage = mockEventBus.register.mock.calls[0][1]
-        await onMessage({ message: { id: 'id' } })
+        await onMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
         expect(mockLogger.info).toHaveBeenCalledWith('onMessage', 'id')
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_received', { message: { id: 'id' } }, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_received', { id: 'id' }, 'token')
     })
 
     it('onCreatedMessage', async () => {
@@ -50,10 +50,10 @@ describe('Home assistant', () => {
         ha.start()
 
         const onCreatedMessage = mockEventBus.register.mock.calls[1][1]
-        await onCreatedMessage({ message: { id: 'id' } })
+        await onCreatedMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
         expect(mockLogger.info).toHaveBeenCalledWith('onCreatedMessage', 'id')
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_sent', { message: { id: 'id' } }, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_sent', { id: 'id' }, 'token')
     })
 
     it('onMessageAck', async () => {
@@ -62,9 +62,10 @@ describe('Home assistant', () => {
         const ha = new HomeAssistant(mockLogger, mockEventBus, mockEventPublisher)
         ha.start()
 
-        const event = { message: { id: 'id' }, ack: 1 }
         const onMessageAck = mockEventBus.register.mock.calls[2][1]
-        await onMessageAck(event)
+        await onMessageAck({ message: { id: 'id', rawData: { id: 'id' } }, ack: 1 })
+
+        const event = { message: { id: 'id' }, ack: 1 }
 
         expect(mockLogger.info).toHaveBeenCalledWith('onMessageAck', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_ack', event, 'token')
