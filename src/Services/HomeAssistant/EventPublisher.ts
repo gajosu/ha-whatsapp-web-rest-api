@@ -21,12 +21,12 @@ export default class EventPublisher implements IEventPublisher {
         }).then((response) => {
             if (response.status !== 200) {
                 this.logger.error(`Error publishing event ${event} to Home Assistant: ${response.statusText}`)
+                this.logger.error(`with token ${supervisorToken}`)
             } else {
                 this.logger.info(`Event ${event} published to Home Assistant`)
             }
         }).catch((err) => {
             this.logger.error('Error sending event to Home Assistant', err)
-            this.logger.error(`with token ${supervisorToken}`)
         })
     }
 }
