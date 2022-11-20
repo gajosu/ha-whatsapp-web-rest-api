@@ -9,13 +9,17 @@ export const store = (request: Request, response: Response, next: Next) =>
         try {
             await validator(request, response)
 
-            const { to, msg, url }: { to: string, msg: string, url: string } = request.body
-            const id = to + '@c.us'
+            const { msg, url }: { msg: string, url: string } = request.body
+            let { to }: { to: string } = request.body
+
+            if (!to.includes('@')) {
+                to = to + '@c.us'
+            }
 
             if (url !== undefined) {
-                await mediaUrlMessageCreator.create(id, url)
+                await mediaUrlMessageCreator.create(to, url)
             } else {
-                await textMessageCreator.create(id, msg)
+                await textMessageCreator.create(to, msg)
             }
 
             return response.json({ message: 'Message sent' })
