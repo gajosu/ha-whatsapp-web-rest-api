@@ -27,6 +27,8 @@ export interface IServices {
 
 const webConfig = getHttpServer()
 const whatsappClient = getWhatsappClient()
+const haToken = process.env.SUPERVISOR_TOKEN
+const haBaseUrl = process.env.HA_BASE_URL
 
 export default diContainer<IServices>({
     app: () =>
@@ -54,7 +56,7 @@ export default diContainer<IServices>({
         new MediaUrlMessageCreator(whatsapp),
 
     haEventPublisher: ({ logger }) =>
-        new EventPublisher(logger),
+        new EventPublisher(logger, haToken, haBaseUrl),
 
     homeAssistant: ({ logger, eventBus, haEventPublisher }) =>
         new HomeAssistant(logger, eventBus, haEventPublisher)
