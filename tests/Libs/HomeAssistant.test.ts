@@ -40,7 +40,7 @@ describe('Home assistant', () => {
         await onMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
         expect(mockLogger.info).toHaveBeenCalledWith('onMessage', 'id')
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_received', { id: 'id' }, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_received', { id: 'id' })
     })
 
     it('onCreatedMessage', async () => {
@@ -53,7 +53,7 @@ describe('Home assistant', () => {
         await onCreatedMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
         expect(mockLogger.info).toHaveBeenCalledWith('onCreatedMessage', 'id')
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_sent', { id: 'id' }, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_sent', { id: 'id' })
     })
 
     it('onMessageAck', async () => {
@@ -68,7 +68,7 @@ describe('Home assistant', () => {
         const event = { message: { id: 'id' }, ack: 1 }
 
         expect(mockLogger.info).toHaveBeenCalledWith('onMessageAck', event)
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_ack', event, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_ack', event)
     })
 
     it('onState', async () => {
@@ -82,7 +82,7 @@ describe('Home assistant', () => {
         await onState(event)
 
         expect(mockLogger.info).toHaveBeenCalledWith('onChangedState', event)
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_state', event, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_state', event)
     })
 
     it('onAuthenticated', async () => {
@@ -94,7 +94,7 @@ describe('Home assistant', () => {
         await onAuthenticated()
 
         expect(mockLogger.info).toHaveBeenCalledWith('onAuthenticated')
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_authenticated', {}, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_authenticated', {})
     })
 
     it('onDisconnected', async () => {
@@ -106,6 +106,6 @@ describe('Home assistant', () => {
         await onDisconnected()
 
         expect(mockLogger.info).toHaveBeenCalledWith('onDisconnected')
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_disconnected', {}, 'token')
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_disconnected', {})
     })
 })
