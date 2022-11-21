@@ -4,14 +4,17 @@ services:
   app:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     image: whatsapp-ha:latest
     ports:
       - 3000:3000
     volumes:
       - .wwebjs_auth:/data
-      - .env:/app/.env
       - .:/app
+
+    # environment:
+    #   - SUPERVISOR_TOKEN=token
+    #   - HA_BASE_URL=https://localhost:8123
 
   npm:
     image: whatsapp-ha:latest
