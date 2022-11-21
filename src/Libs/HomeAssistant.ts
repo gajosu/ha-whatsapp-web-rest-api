@@ -8,8 +8,6 @@ export interface IHomeAssistant {
 }
 
 export default class HomeAssistant implements IHomeAssistant {
-    private readonly supervisorToken: string | undefined = process.env.SUPERVISOR_TOKEN
-
     public constructor (
         private readonly logger: ILogger,
         private readonly eventBus: IEventBus,
@@ -19,7 +17,7 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     public start (): void {
-        if (this.supervisorToken === undefined) {
+        if (process.env.SUPERVISOR_TOKEN === undefined) {
             this.logger.warn('Home Assistant integration disabled')
             return
         }
@@ -70,6 +68,6 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     private async sendToHomeAssistant (event: string, data: any): Promise<void> {
-        await this.eventPublisher.publish('whatsapp_' + event, data, this.supervisorToken as string)
+        await this.eventPublisher.publish('whatsapp_' + event, data)
     }
 }
