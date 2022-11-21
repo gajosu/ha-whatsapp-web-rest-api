@@ -8,6 +8,6 @@ RUN  apt-get update \
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm run build
-CMD node .
+RUN npm install -g nodemon
+CMD npm run dev
 
