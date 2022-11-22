@@ -4,15 +4,15 @@ name: Build
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'main'
-      - 'dev'
+    # branches:
+    #   - 'main'
+    #   - 'dev'
     tags:
       - 'v*.*.*'
-  pull_request:
-    branches:
-      - 'main'
-      - 'dev'
+  # pull_request:
+  #   branches:
+  #     - 'main'
+  #     - 'dev'
 
 # permissions are needed if pushing to ghcr.io
 permissions: 
