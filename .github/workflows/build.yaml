@@ -65,3 +65,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.whatsapp_api.outputs.tags }}
           labels: ${{ steps.whatsapp_api.outputs.labels }}
+          #use cache
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
