@@ -1,7 +1,7 @@
 import { IEventPublisher } from './../Services/HomeAssistant/EventPublisher'
 import { IEventBus } from './EventBus'
 import { ILogger } from './Logger'
-import { IMessageAckEvent, IMessageEvent, IStateChangeEvent, IAuthFailureEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent } from './Whatsapp'
+import { IMessageAckEvent, IMessageEvent, IStateChangeEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent } from './Whatsapp'
 
 export interface IHomeAssistant {
     start: () => void
