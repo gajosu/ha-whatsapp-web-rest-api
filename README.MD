@@ -9,7 +9,7 @@ _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
 
 ## **What is this app?**
 
-This add-on is a wrapper for the [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) library. It allows you to send and receive messages from WhatsApp using a REST API.
+This app is a wrapper for the [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) library. It allows you to send and receive messages from WhatsApp using a REST API.
 
 <br>
 
