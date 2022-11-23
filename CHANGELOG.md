@@ -2,6 +2,16 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.1.0 - 2022-11-23
+
+- Add cache to build docker image workflow (#13)
+- Add changelog file
+- Add dependabot auto merge workflow
+- Add contribution guides
+- Add issue template
+- Bump socket.io from 4.5.3 to 4.5.4 (#14)
+- Add new Home Assistant events (#16)
+
 ## v2.0.1 - 2022-11-22
 
 - Bump @typescript-eslint/eslint-plugin from 5.43.0 to 5.44.0 (#8)
