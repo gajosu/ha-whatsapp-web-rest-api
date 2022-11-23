@@ -27,7 +27,6 @@ describe('Home assistant', () => {
 
         expect(mockLogger.info).toHaveBeenCalledWith('Home Assistant integration enabled')
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.authenticated', expect.any(Function))
-        expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.auth_failure', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.disconnected', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.create', expect.any(Function))
@@ -51,22 +50,6 @@ describe('Home assistant', () => {
 
         expect(mockLogger.info).toHaveBeenCalledWith('onAuthenticated')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_authenticated', {})
-    })
-
-    it('onAuthFailure', async () => {
-        process.env.SUPERVISOR_TOKEN = 'token'
-
-        mockStartHomeAssistant()
-
-        const event = {
-            message: 'message'
-        }
-
-        const onAuthFailure = findCallback(mockEventBus.register.mock, 'whatsapp.auth_failure')
-        await onAuthFailure(event)
-
-        expect(mockLogger.info).toHaveBeenCalledWith('onAuthFailure')
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_auth_failure', event)
     })
 
     it('onDisconnected', async () => {

@@ -25,7 +25,6 @@ export default class HomeAssistant implements IHomeAssistant {
         this.logger.info('Home Assistant integration enabled')
 
         this.eventBus.register('whatsapp.authenticated', this.onAuthenticated.bind(this))
-        this.eventBus.register('whatsapp.auth_failure', this.onAuthFailure.bind(this))
         this.eventBus.register('whatsapp.disconnected', this.onDisconnected.bind(this))
         this.eventBus.register('whatsapp.message', this.onMessage.bind(this))
         this.eventBus.register('whatsapp.message.create', this.onCreatedMessage.bind(this))
@@ -42,11 +41,6 @@ export default class HomeAssistant implements IHomeAssistant {
     private async onAuthenticated (): Promise<void> {
         this.logger.info('onAuthenticated')
         await this.sendToHomeAssistant('authenticated', {})
-    }
-
-    private async onAuthFailure (data: IAuthFailureEvent): Promise<void> {
-        this.logger.info('onAuthFailure')
-        await this.sendToHomeAssistant('auth_failure', data)
     }
 
     private async onDisconnected (): Promise<void> {
