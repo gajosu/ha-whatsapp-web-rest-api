@@ -10,6 +10,10 @@ export interface IWhatsapp {
     getClient: () => Client
 }
 
+export interface IAuthFailureEvent {
+    message: string
+}
+
 export interface IQRCodeEvent {
     qr: string
 }
@@ -32,6 +36,14 @@ export interface IMessageRevokeForMeEvent {
     message: WAWebJS.Message
 }
 
+export interface IGroupNotificationEvent {
+    notification: WAWebJS.GroupNotification
+}
+
+export interface ICallEvent {
+    call: WAWebJS.Call
+}
+
 export interface IStateChangeEvent {
     state: WAWebJS.WAState
 }
@@ -51,12 +63,17 @@ export default class Whatsapp implements IWhatsapp {
         this.client.on('ready', this.onReady.bind(this))
         this.client.on('loading_screen', this.onLoadingScreen.bind(this))
         this.client.on('authenticated', this.onAuthenticated.bind(this))
+        this.client.on('auth_failure', this.onAuthFailure.bind(this))
         this.client.on('disconnected', this.onDisconnected.bind(this))
         this.client.on('message', this.onMessage.bind(this))
         this.client.on('message_create', this.onMessageCreate.bind(this))
         this.client.on('message_ack', this.onMessageAck.bind(this))
         this.client.on('message_revoke_everyone', this.onMessageRevokeForEveryone.bind(this))
         this.client.on('message_revoke_me', this.onMessageRevokeForMe.bind(this))
+        this.client.on('group_join', this.onGroupJoin.bind(this))
+        this.client.on('group_leave', this.onGroupLeave.bind(this))
+        this.client.on('group_update', this.onGroupUpdate.bind(this))
+        this.client.on('incoming_call', this.onCall.bind(this))
         this.client.on('change_state', this.onChangeState.bind(this))
 
         return await this.client.initialize().then(() => {
@@ -82,12 +99,25 @@ export default class Whatsapp implements IWhatsapp {
         this.eventBus.dispatch('whatsapp.authenticated')
     }
 
-    private async onDisconnected (): Promise<void> {
+    private onAuthFailure (message: string): void {
+        const event: IAuthFailureEvent = {
+            message
+        }
+
+        this.logger.error('Client authentication failure', event)
+        this.eventBus.dispatch('whatsapp.auth_failure', event)
+    }
+
+    private async onDisconnected (reason: WAWebJS.WAState): Promise<void> {
         await this.client.destroy()
         await this.client.initialize()
 
-        this.logger.info('Client is disconnected')
-        this.eventBus.dispatch('whatsapp.disconnected')
+        const event: IStateChangeEvent = {
+            state: reason
+        }
+
+        this.logger.info('Client is disconnected', reason)
+        this.eventBus.dispatch('whatsapp.disconnected', event)
     }
 
     private onLoadingScreen (): void {
@@ -163,6 +193,46 @@ export default class Whatsapp implements IWhatsapp {
         }
 
         this.eventBus.dispatch('whatsapp.message.revoke_for_me', event)
+    }
+
+    private onGroupJoin (notification: WAWebJS.GroupNotification): void {
+        this.logger.info('Group join', notification.id)
+
+        const event: IGroupNotificationEvent = {
+            notification
+        }
+
+        this.eventBus.dispatch('whatsapp.group.join', event)
+    }
+
+    private onGroupLeave (notification: WAWebJS.GroupNotification): void {
+        this.logger.info('Group leave', notification.id)
+
+        const event: IGroupNotificationEvent = {
+            notification
+        }
+
+        this.eventBus.dispatch('whatsapp.group.leave', event)
+    }
+
+    private onGroupUpdate (notification: WAWebJS.GroupNotification): void {
+        this.logger.info('Group update', notification.id)
+
+        const event: IGroupNotificationEvent = {
+            notification
+        }
+
+        this.eventBus.dispatch('whatsapp.group.update', event)
+    }
+
+    private onCall (call: WAWebJS.Call): void {
+        this.logger.info('Call', call.id)
+
+        const event: ICallEvent = {
+            call
+        }
+
+        this.eventBus.dispatch('whatsapp.call', event)
     }
 
     private onChangeState (state: WAWebJS.WAState): void {
