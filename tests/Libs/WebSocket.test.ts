@@ -22,7 +22,7 @@ jest.mock('socket.io', () => {
 
 jest.mock('http')
 
-const mockStartWebSocket = () => {
+const mockStartWebSocket = (): void => {
     const http = httpServer.createServer()
     const websocket = new WebSocket(http, new Logger(), mockEventBus)
     websocket.start()
