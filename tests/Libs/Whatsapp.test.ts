@@ -1,9 +1,9 @@
 
 import mockLogger from '../stubs/Logger'
 import mockEventBus from '../stubs/EventBus'
-
 import Whatsapp from '../../src/Libs/Whatsapp'
 import { Client } from 'whatsapp-web.js'
+import { findCallback } from '../utils/Utils'
 
 // mock resolve a promise
 const mockInitialize = jest.fn().mockResolvedValue(true)
@@ -32,6 +32,34 @@ const mockMessage = {
     mentionedIds: [
         'ID'
     ]
+}
+
+const mockGroupNotification = {
+    id: {
+        fromMe: false,
+        remote: '1',
+        id: '1',
+        _serialized: 'false_1_1'
+    },
+    author: 'AUTHOR',
+    body: 'BODY',
+    recipientIds: [
+        'ID'
+    ],
+    timestamp: 1591482682,
+    type: 'add'
+}
+
+const mockCall = {
+    id: '1',
+    from: 'PARTICIPANT',
+    timestamp: 1591482682,
+    isVideo: false,
+    isGroup: false,
+    fromMe: false,
+    canHandleLocally: false,
+    webClientShouldHandle: false,
+    participants: {}
 }
 
 // mock client
@@ -66,57 +94,80 @@ describe('Whatsapp tests', () => {
         expect(mockInitialize).toHaveBeenCalledTimes(1)
         expect(mockOn).toHaveBeenCalledWith('qr', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('ready', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('loading_screen', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('authenticated', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('auth_failure', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('disconnected', expect.any(Function))
-    })
-
-    it('onReady', async () => {
-        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
-        await whatsapp.start()
-
-        const onReady = mockOn.mock.calls[1][1]
-        onReady()
-
-        expect(mockLogger.info).toHaveBeenCalledWith('Client is ready!')
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.ready')
-    })
-
-    it('onAuthenticated', async () => {
-        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
-        await whatsapp.start()
-
-        const onAuthenticated = mockOn.mock.calls[3][1]
-        onAuthenticated()
-
-        expect(mockLogger.info).toHaveBeenCalledWith('Client is authenticated')
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.authenticated')
-    })
-
-    it('onLoadingScreen', async () => {
-        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
-        await whatsapp.start()
-
-        const onLoadingScreen = mockOn.mock.calls[2][1]
-        onLoadingScreen()
-
-        expect(mockLogger.info).toHaveBeenCalledWith('Client is loading screen')
+        expect(mockOn).toHaveBeenCalledWith('message', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('message_create', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('message_ack', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('message_revoke_everyone', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('message_revoke_me', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('group_join', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('group_leave', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('group_update', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('call', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('change_state', expect.any(Function))
     })
 
     it('onQr', async () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onQr = mockOn.mock.calls[0][1]
+        const onQr = findCallback(mockOn.mock, 'qr')
         onQr('qr')
 
         expect(mockLogger.info).toHaveBeenCalledWith('QR Code Received', 'qr')
+    })
+
+    it('onReady', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onReady = findCallback(mockOn.mock, 'ready')
+        onReady()
+
+        expect(mockLogger.info).toHaveBeenCalledWith('Client is ready!')
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.ready')
+    })
+
+    it('onLoadingScreen', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onLoadingScreen = findCallback(mockOn.mock, 'loading_screen')
+        onLoadingScreen()
+
+        expect(mockLogger.info).toHaveBeenCalledWith('Client is loading screen')
+    })
+
+    it('onAuthenticated', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onAuthenticated = findCallback(mockOn.mock, 'authenticated')
+        onAuthenticated()
+
+        expect(mockLogger.info).toHaveBeenCalledWith('Client is authenticated')
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.authenticated')
+    })
+
+    it('onAuthFailure', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onAuthFailure = findCallback(mockOn.mock, 'auth_failure')
+        onAuthFailure('error')
+
+        expect(mockLogger.error).toHaveBeenCalledWith('Client authentication failure', 'error')
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.auth_failure', 'error')
     })
 
     it('onDisconnected', async () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onDisconnected = mockOn.mock.calls[4][1]
+        const onDisconnected = findCallback(mockOn.mock, 'disconnected')
         await onDisconnected()
 
         expect(mockLogger.info).toHaveBeenCalledWith('Client is disconnected')
@@ -127,7 +178,7 @@ describe('Whatsapp tests', () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onMessage = mockOn.mock.calls[5][1]
+        const onMessage = findCallback(mockOn.mock, 'message')
 
         const event = {
             message: mockMessage
@@ -141,7 +192,7 @@ describe('Whatsapp tests', () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onMessage = mockOn.mock.calls[5][1]
+        const onMessage = findCallback(mockOn.mock, 'message')
 
         const event = {
             message: mockMessage
@@ -160,7 +211,7 @@ describe('Whatsapp tests', () => {
 
         const mockCreatedMessage = { ...mockMessage, ...{ fromMe: true } }
 
-        const onMessageCreate = mockOn.mock.calls[6][1]
+        const onMessageCreate = findCallback(mockOn.mock, 'message_create')
 
         const event = {
             message: mockCreatedMessage
@@ -177,7 +228,7 @@ describe('Whatsapp tests', () => {
 
         const mockCreatedMessage = { ...mockMessage, ...{ fromMe: false } }
 
-        const onMessageCreate = mockOn.mock.calls[6][1]
+        const onMessageCreate = findCallback(mockOn.mock, 'message_create')
 
         const event = {
             message: mockCreatedMessage
@@ -191,7 +242,7 @@ describe('Whatsapp tests', () => {
     it('onMessageAck', async () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
-        const onMessageAck = mockOn.mock.calls[7][1]
+        const onMessageAck = findCallback(mockOn.mock, 'message_ack')
 
         onMessageAck(mockMessage, 1)
         expect(mockLogger.info).toHaveBeenCalledWith('Message ack', mockMessage.id, 1)
@@ -205,7 +256,7 @@ describe('Whatsapp tests', () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onMessageRevokeForEveryone = mockOn.mock.calls[8][1]
+        const onMessageRevokeForEveryone = findCallback(mockOn.mock, 'message_revoke_everyone')
 
         onMessageRevokeForEveryone(mockMessage, mockMessage)
         expect(mockLogger.info).toHaveBeenCalledWith('Message revoke for everyone', mockMessage.id, mockMessage.id)
@@ -219,7 +270,7 @@ describe('Whatsapp tests', () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onMessageRevokeForMe = mockOn.mock.calls[9][1]
+        const onMessageRevokeForMe = findCallback(mockOn.mock, 'message_revoke_me')
 
         const event = {
             message: mockMessage
@@ -231,11 +282,63 @@ describe('Whatsapp tests', () => {
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.revoke_for_me', event)
     })
 
+    it('onGroupJoin', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onGroupJoin = findCallback(mockOn.mock, 'group_join')
+        onGroupJoin(mockGroupNotification)
+
+        expect(mockLogger.info).toHaveBeenCalledWith('Group join', mockGroupNotification.id)
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.group.join', {
+            notification: mockGroupNotification
+        })
+    })
+
+    it('onGroupLeave', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onGroupLeave = findCallback(mockOn.mock, 'group_leave')
+        onGroupLeave(mockGroupNotification)
+
+        expect(mockLogger.info).toHaveBeenCalledWith('Group leave', mockGroupNotification.id)
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.group.leave', {
+            notification: mockGroupNotification
+        })
+    })
+
+    it('onGroupUpdate', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onGroupUpdate = findCallback(mockOn.mock, 'group_update')
+        onGroupUpdate(mockGroupNotification)
+
+        expect(mockLogger.info).toHaveBeenCalledWith('Group update', mockGroupNotification.id)
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.group.update', {
+            notification: mockGroupNotification
+        })
+    })
+
+    it('onCall', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onCall = findCallback(mockOn.mock, 'call')
+        onCall(mockCall)
+
+        expect(mockLogger.info).toHaveBeenCalledWith('Call', mockCall.id)
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.call', {
+            call: mockCall
+        })
+    })
+
     it('onChangeState', async () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onChangeState = mockOn.mock.calls[10][1]
+        const onChangeState = findCallback(mockOn.mock, 'change_state')
 
         onChangeState('state')
         expect(mockLogger.info).toHaveBeenCalledWith('State changed', 'state')
