@@ -159,8 +159,8 @@ describe('Whatsapp tests', () => {
         const onAuthFailure = findCallback(mockOn.mock, 'auth_failure')
         onAuthFailure('error')
 
-        expect(mockLogger.error).toHaveBeenCalledWith('Client authentication failure', 'error')
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.auth_failure', 'error')
+        expect(mockLogger.error).toHaveBeenCalledWith('Client authentication failure', { message: 'error' })
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.auth_failure', { message: 'error' })
     })
 
     it('onDisconnected', async () => {
@@ -168,10 +168,10 @@ describe('Whatsapp tests', () => {
         await whatsapp.start()
 
         const onDisconnected = findCallback(mockOn.mock, 'disconnected')
-        await onDisconnected()
+        await onDisconnected('reason')
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Client is disconnected')
-        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.disconnected')
+        expect(mockLogger.info).toHaveBeenCalledWith('Client is disconnected', 'reason')
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.disconnected', { state: 'reason' })
     })
 
     it('onMessage', async () => {

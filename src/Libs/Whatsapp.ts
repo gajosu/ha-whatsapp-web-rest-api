@@ -10,6 +10,10 @@ export interface IWhatsapp {
     getClient: () => Client
 }
 
+export interface IAuthFailureEvent {
+    message: string
+}
+
 export interface IQRCodeEvent {
     qr: string
 }
@@ -96,8 +100,12 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onAuthFailure (message: string): void {
-        this.logger.error('Client authentication failure', message)
-        this.eventBus.dispatch('whatsapp.auth_failure', message)
+        const event: IAuthFailureEvent = {
+            message
+        }
+
+        this.logger.error('Client authentication failure', event)
+        this.eventBus.dispatch('whatsapp.auth_failure', event)
     }
 
     private async onDisconnected (reason: WAWebJS.WAState): Promise<void> {
@@ -108,7 +116,7 @@ export default class Whatsapp implements IWhatsapp {
             state: reason
         }
 
-        this.logger.info('Client is disconnected reason: ' + reason)
+        this.logger.info('Client is disconnected', reason)
         this.eventBus.dispatch('whatsapp.disconnected', event)
     }
 
