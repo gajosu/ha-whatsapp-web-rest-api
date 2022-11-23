@@ -34,7 +34,7 @@ export default class HomeAssistant implements IHomeAssistant {
         this.eventBus.register('whatsapp.group.join', this.onGroupJoin.bind(this))
         this.eventBus.register('whatsapp.group.leave', this.onGroupLeave.bind(this))
         this.eventBus.register('whatsapp.group.update', this.onGroupUpdate.bind(this))
-        this.eventBus.register('whatsapp.call', this.onCall.bind(this))
+        this.eventBus.register('whatsapp.incoming_call', this.onCall.bind(this))
         this.eventBus.register('whatsapp.state', this.onChangedState.bind(this))
     }
 

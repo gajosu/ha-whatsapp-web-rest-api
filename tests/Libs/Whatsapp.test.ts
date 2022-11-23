@@ -106,7 +106,7 @@ describe('Whatsapp tests', () => {
         expect(mockOn).toHaveBeenCalledWith('group_join', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('group_leave', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('group_update', expect.any(Function))
-        expect(mockOn).toHaveBeenCalledWith('call', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('incoming_call', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('change_state', expect.any(Function))
     })
 
@@ -325,7 +325,7 @@ describe('Whatsapp tests', () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onCall = findCallback(mockOn.mock, 'call')
+        const onCall = findCallback(mockOn.mock, 'incoming_call')
         onCall(mockCall)
 
         expect(mockLogger.info).toHaveBeenCalledWith('Call', mockCall.id)

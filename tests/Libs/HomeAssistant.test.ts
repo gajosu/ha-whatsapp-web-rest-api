@@ -36,7 +36,6 @@ describe('Home assistant', () => {
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.group.join', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.group.leave', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.group.update', expect.any(Function))
-        expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.call', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.state', expect.any(Function))
     })
 
@@ -183,23 +182,6 @@ describe('Home assistant', () => {
 
         expect(mockLogger.info).toHaveBeenCalledWith('onGroupUpdate', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_group_update', event)
-    })
-
-    it('onCall', async () => {
-        process.env.SUPERVISOR_TOKEN = 'token'
-
-        mockStartHomeAssistant()
-
-        const onCall = findCallback(mockEventBus.register.mock, 'whatsapp.call')
-
-        const event = {
-            call: {}
-        }
-
-        await onCall(event)
-
-        expect(mockLogger.info).toHaveBeenCalledWith('onCall', event)
-        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_call', event)
     })
 
     it('onState', async () => {
