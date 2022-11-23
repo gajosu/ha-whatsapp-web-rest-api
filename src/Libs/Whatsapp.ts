@@ -73,7 +73,7 @@ export default class Whatsapp implements IWhatsapp {
         this.client.on('group_join', this.onGroupJoin.bind(this))
         this.client.on('group_leave', this.onGroupLeave.bind(this))
         this.client.on('group_update', this.onGroupUpdate.bind(this))
-        this.client.on('call', this.onCall.bind(this))
+        this.client.on('incoming_call', this.onCall.bind(this))
         this.client.on('change_state', this.onChangeState.bind(this))
 
         return await this.client.initialize().then(() => {
