@@ -101,21 +101,25 @@ describe('WebSocket tests', () => {
         mockStartWebSocket()
 
         const onAuthFailure = findCallback(mockEventBus.register.mock, 'whatsapp.auth_failure')
-        onAuthFailure('message')
+        onAuthFailure({
+            message: 'message'
+        })
 
         expect(mockEmit).toHaveBeenCalledWith('auth_failure', { message: 'message' })
         expect(mockLogger.info).toHaveBeenCalledWith('Auth failure')
     })
 
-    // it('onDisconnected', async () => {
-    //     mockStartWebSocket()
+    it('onDisconnected', async () => {
+        mockStartWebSocket()
 
-    //     const onDisconnected = findCallback(mockEventBus.register.mock, 'whatsapp.disconnected')
-    //     onDisconnected('reason')
+        const onDisconnected = findCallback(mockEventBus.register.mock, 'whatsapp.disconnected')
+        onDisconnected({
+            state: 'reason'
+        })
 
-    //     expect(mockEmit).toHaveBeenCalledWith('disconnected', { reason: 'reason' })
-    //     expect(mockLogger.info).toHaveBeenCalledWith('Disconnected')
-    // })
+        expect(mockEmit).toHaveBeenCalledWith('disconnected', { state: 'reason' })
+        expect(mockLogger.info).toHaveBeenCalledWith('Disconnected')
+    })
 
     it('onMessage', async () => {
         mockStartWebSocket()
@@ -207,5 +211,14 @@ describe('WebSocket tests', () => {
         const onCall = findCallback(mockEventBus.register.mock, 'whatsapp.call')
         onCall(mockData)
         expect(mockEmit).toHaveBeenCalledWith('call', mockData)
+    })
+
+    it('onStateChange', async () => {
+        mockStartWebSocket()
+
+        const mockData = { state: 'state' }
+        const onStateChange = findCallback(mockEventBus.register.mock, 'whatsapp.state')
+        onStateChange(mockData)
+        expect(mockEmit).toHaveBeenCalledWith('state.change', mockData)
     })
 })

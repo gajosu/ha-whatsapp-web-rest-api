@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 import http from 'http'
 import { ILogger } from './Logger'
 import { IEventBus } from './EventBus'
-import { IQRCodeEvent, IMessageEvent, IMessageAckEvent, IStateChangeEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent } from './Whatsapp'
+import { IQRCodeEvent, IMessageEvent, IMessageAckEvent, IStateChangeEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent, IAuthFailureEvent } from './Whatsapp'
 import qrCode from 'qrcode'
 
 export interface IWebSocket {
@@ -123,8 +123,8 @@ export default class WebSocket implements IWebSocket {
         this.logger.info('Authenticated')
     }
 
-    private onAuthFailure (message: string): void {
-        this.io.emit('auth_failure', { message })
+    private onAuthFailure (data: IAuthFailureEvent): void {
+        this.io.emit('auth_failure', data)
         this.logger.info('Auth failure')
     }
 
