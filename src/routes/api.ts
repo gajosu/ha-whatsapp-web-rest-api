@@ -72,11 +72,55 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(store)
     )
 
-    router.route('/chats/group').post(
+    router.route('/chats/groups').post(
         context.consumer(store)
     )
 
-    router.route('/chats/group/:id/leave').put(
+    router.route('/chats/groups/:id').put(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/invite-code').get(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/invite-code/regenerate').put(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/leave').put(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/participants').get(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/participants').post(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/participants').delete(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/participants/promote').put(
+        context.consumer(store)
+    )
+
+    router.route('/chats/groups/:id/participants/demote').put(
+        context.consumer(store)
+    )
+
+    router.route('/contacts').get(
+        context.consumer(store)
+    )
+
+    router.route('/contacts/block').put(
+        context.consumer(store)
+    )
+
+    router.route('/contacts/unblock').put(
         context.consumer(store)
     )
 

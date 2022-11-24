@@ -11,6 +11,8 @@ import MediaUrlMessageCreator, { IMediaUrlMessageCreator } from './Services/Mess
 import { getClient as getWhatsappClient } from './config/WhatsappClient'
 import EventPublisher, { IEventPublisher } from './Services/HomeAssistant/EventPublisher'
 import HomeAssistant, { IHomeAssistant } from './Libs/HomeAssistant'
+import ChatDeleter, { IChatDeleter } from './Services/Chat/ChatDeleter'
+import ChatFinder, { IChatFinder } from './Services/Chat/ChatFinder'
 
 export interface IServices {
     app: IHttpServer
@@ -23,6 +25,8 @@ export interface IServices {
     mediaUrlMessageCreator: IMediaUrlMessageCreator
     haEventPublisher: IEventPublisher
     homeAssistant: IHomeAssistant
+    chatFinder: IChatFinder
+    chatDeleter: IChatDeleter
 }
 
 const webConfig = getHttpServer()
@@ -59,5 +63,11 @@ export default diContainer<IServices>({
         new EventPublisher(logger, haToken, haBaseUrl),
 
     homeAssistant: ({ logger, eventBus, haEventPublisher }) =>
-        new HomeAssistant(logger, eventBus, haEventPublisher)
+        new HomeAssistant(logger, eventBus, haEventPublisher),
+
+    chatFinder: ({ whatsapp }) =>
+        new ChatFinder(whatsapp),
+
+    chatDeleter: ({ chatFinder }) =>
+        new ChatDeleter(chatFinder)
 })
