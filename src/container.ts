@@ -1,3 +1,7 @@
+import ChatStateSender, { IChatStateSender } from './Services/Chat/ChatStateSender'
+import ChatReader, { IChatReader } from './Services/Chat/ChatReader'
+import ChatPin, { IChatPin } from './Services/Chat/ChatPin'
+import ChatMute, { IChatMute } from './Services/Chat/ChatMute'
 import diContainer from 'true-di'
 
 import { getHttpServer, IHttpServer } from './config/HttpServer'
@@ -13,6 +17,8 @@ import EventPublisher, { IEventPublisher } from './Services/HomeAssistant/EventP
 import HomeAssistant, { IHomeAssistant } from './Libs/HomeAssistant'
 import ChatDeleter, { IChatDeleter } from './Services/Chat/ChatDeleter'
 import ChatFinder, { IChatFinder } from './Services/Chat/ChatFinder'
+import ChatGetter, { IChatGetter } from './Services/Chat/ChatGetter'
+import ChatArchive, { IChatArchive } from './Services/Chat/ChatArchive'
 
 export interface IServices {
     app: IHttpServer
@@ -25,7 +31,13 @@ export interface IServices {
     mediaUrlMessageCreator: IMediaUrlMessageCreator
     haEventPublisher: IEventPublisher
     homeAssistant: IHomeAssistant
+    chatGetter: IChatGetter
     chatFinder: IChatFinder
+    chatArchive: IChatArchive
+    chatMute: IChatMute
+    chatPin: IChatPin
+    chatReader: IChatReader
+    chatStateSender: IChatStateSender
     chatDeleter: IChatDeleter
 }
 
@@ -65,8 +77,26 @@ export default diContainer<IServices>({
     homeAssistant: ({ logger, eventBus, haEventPublisher }) =>
         new HomeAssistant(logger, eventBus, haEventPublisher),
 
+    chatGetter: ({ whatsapp }) =>
+        new ChatGetter(whatsapp),
+
     chatFinder: ({ whatsapp }) =>
         new ChatFinder(whatsapp),
+
+    chatArchive: ({ chatFinder }) =>
+        new ChatArchive(chatFinder),
+
+    chatMute: ({ chatFinder }) =>
+        new ChatMute(chatFinder),
+
+    chatPin: ({ chatFinder }) =>
+        new ChatPin(chatFinder),
+
+    chatReader: ({ chatFinder }) =>
+        new ChatReader(chatFinder),
+
+    chatStateSender: ({ chatFinder }) =>
+        new ChatStateSender(chatFinder),
 
     chatDeleter: ({ chatFinder }) =>
         new ChatDeleter(chatFinder)
