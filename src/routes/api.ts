@@ -29,14 +29,6 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatController.unarchiveChat)
     )
 
-    router.route('/chats/:id/mute').put(
-        context.consumer(ChatController.muteChat)
-    )
-
-    router.route('/chats/:id/unmute').put(
-        context.consumer(ChatController.unmuteChat)
-    )
-
     router.route('/chats/:id/pin').put(
         context.consumer(ChatController.pinChat)
     )

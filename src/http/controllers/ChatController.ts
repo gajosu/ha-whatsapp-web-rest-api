@@ -22,16 +22,6 @@ export const unarchiveChat = (request: Request, response: Response, next: Next) 
         await chatArchive.unarchive(request.params.id)
             .then(() => response.status(204).send(), next)
 
-export const muteChat = (request: Request, response: Response, next: Next) =>
-    async ({ chatMute }: { chatMute: IChatMute }) =>
-        await chatMute.mute(request.params.id)
-            .then(() => response.status(204).send(), next)
-
-export const unmuteChat = (request: Request, response: Response, next: Next) =>
-    async ({ chatMute }: { chatMute: IChatMute }) =>
-        await chatMute.unmute(request.params.id)
-            .then(() => response.status(204).send(), next)
-
 export const pinChat = (request: Request, response: Response, next: Next) =>
     async ({ chatPin }: { chatPin: IChatPin }) =>
         await chatPin.pin(request.params.id)

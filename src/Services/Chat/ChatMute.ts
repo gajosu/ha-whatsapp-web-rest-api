@@ -9,7 +9,10 @@ export default class ChatMute implements IChatMute {
 
     public async mute (id: string): Promise<void> {
         const chat = await this.chatFinder.find(id)
-        await chat.mute()
+        // await chat.mute()
+        const unmuteDate = new Date()
+        unmuteDate.setSeconds(unmuteDate.getSeconds() + 20)
+        await chat.mute(unmuteDate)
     }
 
     public async unmute (id: string): Promise<void> {
