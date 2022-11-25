@@ -1,17 +1,9 @@
-import mockLogger from './stubs/Logger'
-import WebServer from '../src/Libs/WebServer'
 import request from 'supertest'
-import container from '../src/container'
-
-jest.mock('../src/config/GlobalConfig', () => {
-    return jest.fn().mockImplementation((key: string, defaultValue: any) => {
-        return defaultValue
-    })
-})
+import testServer from '../../utils/TestWebServer'
 
 const mockTextSender = jest.fn()
 
-jest.mock('../src/Services/Message/TextMessageCreator', () => {
+jest.mock('../../../src/Services/Message/TextMessageCreator', () => {
     return jest.fn().mockImplementation(() => {
         return {
             create: mockTextSender
@@ -21,7 +13,7 @@ jest.mock('../src/Services/Message/TextMessageCreator', () => {
 
 const mockFileSender = jest.fn()
 
-jest.mock('../src/Services/Message/MediaUrlMessageCreator', () => {
+jest.mock('../../../src/Services/Message/MediaUrlMessageCreator', () => {
     return jest.fn().mockImplementation(() => {
         return {
             create: mockFileSender
@@ -29,24 +21,13 @@ jest.mock('../src/Services/Message/MediaUrlMessageCreator', () => {
     })
 })
 
-const app = container.app.app
-const webServer = new WebServer(app, mockLogger)
-webServer.start()
-
 describe('Express App', () => {
     afterAll(() => {
         jest.restoreAllMocks()
     })
 
     it('send text message', async () => {
-        // overrride whatsapp client in container
-        container.whatsapp.getClient = jest.fn().mockImplementation(() => {
-            return {
-                getState: jest.fn().mockResolvedValue('CONNECTED')
-            }
-        })
-
-        await request(app)
+        await request(testServer.app)
             .post('/api/messages')
             .send({
                 to: '5511999999999',
@@ -58,14 +39,7 @@ describe('Express App', () => {
     })
 
     it('send file message', async () => {
-        // overrride whatsapp client in container
-        container.whatsapp.getClient = jest.fn().mockImplementation(() => {
-            return {
-                getState: jest.fn().mockResolvedValue('CONNECTED')
-            }
-        })
-
-        await request(app)
+        await request(testServer.app)
             .post('/api/messages')
             .send({
                 to: '5511999999999',
