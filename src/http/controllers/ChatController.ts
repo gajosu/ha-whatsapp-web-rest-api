@@ -33,13 +33,13 @@ export const unmuteChat = (request: Request, response: Response, next: Next) =>
             .then(() => response.status(204).send(), next)
 
 export const pinChat = (request: Request, response: Response, next: Next) =>
-    async ({ pinChat }: { pinChat: IChatPin }) =>
-        await pinChat.pin(request.params.id)
+    async ({ chatPin }: { chatPin: IChatPin }) =>
+        await chatPin.pin(request.params.id)
             .then(() => response.status(204).send(), next)
 
 export const unpinChat = (request: Request, response: Response, next: Next) =>
-    async ({ pinChat }: { pinChat: IChatPin }) =>
-        await pinChat.unpin(request.params.id)
+    async ({ chatPin }: { chatPin: IChatPin }) =>
+        await chatPin.unpin(request.params.id)
             .then(() => response.status(204).send(), next)
 
 export const markChatAsRead = (request: Request, response: Response, next: Next) =>
