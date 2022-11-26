@@ -11,7 +11,8 @@ export const mockWhatsappClient = {
     sendMessage: mockSendMessage,
     getChatById: jest.fn(),
     getChats: jest.fn(),
-    archive: jest.fn()
+    archive: jest.fn(),
+    getState: jest.fn()
 }
 
 export const mockMessageMedia = {
