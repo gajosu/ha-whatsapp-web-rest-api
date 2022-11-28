@@ -2,6 +2,10 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.1.1 - 2022-11-28
+
+- Bump whatsapp-web.js from 1.18.3 to 1.18.4 by @dependabot
+
 ## v2.1.0 - 2022-11-23
 
 - Add cache to build docker image workflow (#13)
