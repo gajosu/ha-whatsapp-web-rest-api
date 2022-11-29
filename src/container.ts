@@ -111,8 +111,8 @@ export default diContainer<IServices>({
     chatDeleter: ({ chatFinder }) =>
         new ChatDeleter(chatFinder),
 
-    messageGetter: ({ whatsapp, chatFinder }) =>
-        new MessageGetter(whatsapp, chatFinder),
+    messageGetter: ({ chatFinder }) =>
+        new MessageGetter(chatFinder),
 
     messageFinder: ({ chatFinder }) =>
         new MessageFinder(chatFinder),

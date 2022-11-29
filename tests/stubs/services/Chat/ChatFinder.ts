@@ -29,7 +29,8 @@ export const mockChat = {
     markUnread: jest.fn(),
     sendStateTyping: jest.fn(),
     sendStateRecording: jest.fn(),
-    clearState: jest.fn()
+    clearState: jest.fn(),
+    fetchMessages: jest.fn()
 }
 
 jest.mock('../../../../src/Services/Chat/ChatFinder', () => {

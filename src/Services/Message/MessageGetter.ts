@@ -1,5 +1,4 @@
 import { IChatFinder } from './../Chat/ChatFinder'
-import { IWhatsapp } from '../../Libs/Whatsapp'
 import { Message } from 'whatsapp-web.js'
 
 export interface IMessageGetter {
@@ -8,7 +7,6 @@ export interface IMessageGetter {
 
 export default class MessageGetter implements IMessageGetter {
     public constructor (
-        private readonly whatsapp: IWhatsapp,
         private readonly chatFinder: IChatFinder
     ) {}
 
