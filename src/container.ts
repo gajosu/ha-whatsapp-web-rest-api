@@ -1,3 +1,7 @@
+import MessageStar, { IMessageStar } from './Services/Message/MessageStar'
+import MessageReact, { IMessageReact } from './Services/Message/MessageReact'
+import MessageDeleter, { IMessageDeleter } from './Services/Message/MessageDeleter'
+import MessageGetter, { IMessageGetter } from './Services/Message/MessageGetter'
 import ChatStateSender, { IChatStateSender } from './Services/Chat/ChatStateSender'
 import ChatReader, { IChatReader } from './Services/Chat/ChatReader'
 import ChatPin, { IChatPin } from './Services/Chat/ChatPin'
@@ -19,6 +23,7 @@ import ChatDeleter, { IChatDeleter } from './Services/Chat/ChatDeleter'
 import ChatFinder, { IChatFinder } from './Services/Chat/ChatFinder'
 import ChatGetter, { IChatGetter } from './Services/Chat/ChatGetter'
 import ChatArchive, { IChatArchive } from './Services/Chat/ChatArchive'
+import MessageFinder, { IMessageFinder } from './Services/Message/MessageFinder'
 
 export interface IServices {
     app: IHttpServer
@@ -39,6 +44,11 @@ export interface IServices {
     chatReader: IChatReader
     chatStateSender: IChatStateSender
     chatDeleter: IChatDeleter
+    messageGetter: IMessageGetter
+    messageFinder: IMessageFinder
+    messageDeleter: IMessageDeleter
+    messageReact: IMessageReact
+    messageStar: IMessageStar
 }
 
 const webConfig = getHttpServer()
@@ -99,5 +109,20 @@ export default diContainer<IServices>({
         new ChatStateSender(chatFinder),
 
     chatDeleter: ({ chatFinder }) =>
-        new ChatDeleter(chatFinder)
+        new ChatDeleter(chatFinder),
+
+    messageGetter: ({ whatsapp, chatFinder }) =>
+        new MessageGetter(whatsapp, chatFinder),
+
+    messageFinder: ({ chatFinder }) =>
+        new MessageFinder(chatFinder),
+
+    messageDeleter: ({ messageFinder }) =>
+        new MessageDeleter(messageFinder),
+
+    messageReact: ({ messageFinder }) =>
+        new MessageReact(messageFinder),
+
+    messageStar: ({ messageFinder }) =>
+        new MessageStar(messageFinder)
 })

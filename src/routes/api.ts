@@ -3,6 +3,7 @@ import { IServices } from '../container'
 import { ContextManager } from 'express-async-context/lib/types'
 import { store } from '../http/controllers/MessageController'
 import * as ChatController from '../http/controllers/ChatController'
+import * as ChatMessageController from '../http/controllers/ChatMessageController'
 import WhatsappStatusChecker from '../http/middlewares/WhatsappStatusChecker'
 
 export default function (context: ContextManager<IServices>): express.Router {
@@ -17,7 +18,7 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatController.index)
     )
 
-    router.route('/chats').delete(
+    router.route('/chats/:id').delete(
         context.consumer(ChatController.deleteChat)
     )
 
@@ -57,13 +58,25 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatController.sendClearState)
     )
 
-    // router.route('/chats/:id/messages').get(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/:id/messages').get(
+        context.consumer(ChatMessageController.index)
+    )
 
-    // router.route('/chats/:id/messages').delete(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/:id/messages/:messageId/star').put(
+        context.consumer(ChatMessageController.index)
+    )
+
+    router.route('/chats/:id/messages/:messageId/unstar').put(
+        context.consumer(ChatMessageController.index)
+    )
+
+    router.route('/chats/:id/messages/:messageId/react').put(
+        context.consumer(ChatMessageController.react)
+    )
+
+    router.route('/chats/:id/messages/:messageId').delete(
+        context.consumer(ChatMessageController.destroy)
+    )
 
     // router.route('/chats/groups').post(
     //     context.consumer(store)
