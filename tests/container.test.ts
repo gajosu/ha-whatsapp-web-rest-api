@@ -1,3 +1,4 @@
+import { IMessageDeleter } from './../src/Services/Message/MessageDeleter'
 import { IChatDeleter } from './../src/Services/Chat/ChatDeleter'
 import { IChatStateSender } from './../src/Services/Chat/ChatStateSender'
 import { IChatReader } from './../src/Services/Chat/ChatReader'
@@ -18,6 +19,10 @@ import { IWhatsapp } from '../src/Libs/Whatsapp'
 import { IWebServer } from '../src/Libs/WebServer'
 import { IHomeAssistant } from '../src/Libs/HomeAssistant'
 import { IChatGetter } from '../src/Services/Chat/ChatGetter'
+import { IMessageGetter } from '../src/Services/Message/MessageGetter'
+import { IMessageFinder } from '../src/Services/Message/MessageFinder'
+import { IMessageStar } from '../src/Services/Message/MessageStar'
+import { IMessageReact } from '../src/Services/Message/MessageReact'
 
 jest.mock('../src/config/HttpServer', () => {
     return {
@@ -68,6 +73,13 @@ describe('container', () => {
         expect(items.chatStateSender).toBeDefined()
         expect(items.chatDeleter).toBeDefined()
 
+        // message services
+        expect(items.messageGetter).toBeDefined()
+        expect(items.messageFinder).toBeDefined()
+        expect(items.messageStar).toBeDefined()
+        expect(items.messageReact).toBeDefined()
+        expect(items.messageDeleter).toBeDefined()
+
         const typecheck: AssertTypeEqual < typeof items, {
             app: IHttpServer
             logger: ILogger
@@ -87,6 +99,11 @@ describe('container', () => {
             chatReader: IChatReader
             chatStateSender: IChatStateSender
             chatDeleter: IChatDeleter
+            messageGetter: IMessageGetter
+            messageFinder: IMessageFinder
+            messageStar: IMessageStar
+            messageReact: IMessageReact
+            messageDeleter: IMessageDeleter
         } > = true
 
         expect(typecheck).toBe(true)
