@@ -63,11 +63,11 @@ export default function (context: ContextManager<IServices>): express.Router {
     )
 
     router.route('/chats/:id/messages/:messageId/star').put(
-        context.consumer(ChatMessageController.index)
+        context.consumer(ChatMessageController.star)
     )
 
     router.route('/chats/:id/messages/:messageId/unstar').put(
-        context.consumer(ChatMessageController.index)
+        context.consumer(ChatMessageController.unstar)
     )
 
     router.route('/chats/:id/messages/:messageId/react').put(
