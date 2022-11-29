@@ -22,16 +22,10 @@ export const unstar = (request: Request, response: Response, next: Next) =>
             .then(() => response.status(204).send(), next)
 
 export const react = (request: Request, response: Response, next: Next) =>
-    async ({ messageReact }: { messageReact: IMessageReact }) => {
-        try {
-            await ChatMessageValidator(request, response)
-            await messageReact.react(request.params.id, request.params.messageId, request.body.reaction)
-
-            return response.status(204).send()
-        } catch (error) {
-            next(error)
-        }
-    }
+    async ({ messageReact }: { messageReact: IMessageReact }) =>
+        await ChatMessageValidator(request, response)
+            .then(async () => await messageReact.react(request.params.id, request.params.messageId, request.body.reaction ?? ''))
+            .then(() => response.status(204).send(), next)
 
 export const destroy = (request: Request, response: Response, next: Next) =>
     async ({ messageDeleter }: { messageDeleter: IMessageDeleter }) =>
