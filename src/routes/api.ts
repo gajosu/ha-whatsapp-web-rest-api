@@ -7,10 +7,16 @@ import * as ChatMessageController from '../http/controllers/ChatMessageControlle
 import * as GroupChatController from '../http/controllers/GroupChatController'
 import * as ContactController from '../http/controllers/ContactController'
 import * as MeController from '../http/controllers/MeController'
+import * as ServiceStatusController from '../http/controllers/ServiceStatusController'
 import WhatsappStatusChecker from '../http/middlewares/WhatsappStatusChecker'
 
 export default function (context: ContextManager<IServices>): express.Router {
     const router = express.Router()
+
+    router.route('/status').get(
+        context.consumer(ServiceStatusController.getStatus)
+    )
+
     router.use(context.consumer(WhatsappStatusChecker))
 
     router.route('/messages').post(
@@ -160,10 +166,6 @@ export default function (context: ContextManager<IServices>): express.Router {
     router.route('/me/text-status').put(
         context.consumer(MeController.updateTextStatus)
     )
-
-    // router.route('/status').get(
-    //     context.consumer(store)
-    // )
 
     return router
 }
