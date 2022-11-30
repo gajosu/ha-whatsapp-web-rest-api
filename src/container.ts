@@ -1,3 +1,5 @@
+import GroupChatUpdater, { IGroupChatUpdater } from './Services/GroupChat/GroupChatUpdater'
+import GroupChatCreator, { IGroupChatCreator } from './Services/GroupChat/GroupChatCreator'
 import MessageStar, { IMessageStar } from './Services/Message/MessageStar'
 import MessageReact, { IMessageReact } from './Services/Message/MessageReact'
 import MessageDeleter, { IMessageDeleter } from './Services/Message/MessageDeleter'
@@ -24,6 +26,8 @@ import ChatFinder, { IChatFinder } from './Services/Chat/ChatFinder'
 import ChatGetter, { IChatGetter } from './Services/Chat/ChatGetter'
 import ChatArchive, { IChatArchive } from './Services/Chat/ChatArchive'
 import MessageFinder, { IMessageFinder } from './Services/Message/MessageFinder'
+import GroupChatFinder, { IGroupChatFinder } from './Services/GroupChat/GroupChatFinder'
+import GroupChatInvite, { IGroupChatInvite } from './Services/GroupChat/GroupChatInvite'
 
 export interface IServices {
     app: IHttpServer
@@ -36,6 +40,7 @@ export interface IServices {
     mediaUrlMessageCreator: IMediaUrlMessageCreator
     haEventPublisher: IEventPublisher
     homeAssistant: IHomeAssistant
+    // chat
     chatGetter: IChatGetter
     chatFinder: IChatFinder
     chatArchive: IChatArchive
@@ -44,11 +49,17 @@ export interface IServices {
     chatReader: IChatReader
     chatStateSender: IChatStateSender
     chatDeleter: IChatDeleter
+    // message
     messageGetter: IMessageGetter
     messageFinder: IMessageFinder
     messageDeleter: IMessageDeleter
     messageReact: IMessageReact
     messageStar: IMessageStar
+    // Group Chat
+    groupChatCreator: IGroupChatCreator
+    groupChatFinder: IGroupChatFinder
+    groupChatInvite: IGroupChatInvite
+    groupChatUpdater: IGroupChatUpdater
 }
 
 const webConfig = getHttpServer()
@@ -124,5 +135,17 @@ export default diContainer<IServices>({
         new MessageReact(messageFinder),
 
     messageStar: ({ messageFinder }) =>
-        new MessageStar(messageFinder)
+        new MessageStar(messageFinder),
+
+    groupChatCreator: ({ whatsapp }) =>
+        new GroupChatCreator(whatsapp),
+
+    groupChatFinder: ({ whatsapp }) =>
+        new GroupChatFinder(whatsapp),
+
+    groupChatInvite: ({ whatsapp, groupChatFinder }) =>
+        new GroupChatInvite(whatsapp, groupChatFinder),
+
+    groupChatUpdater: ({ groupChatFinder }) =>
+        new GroupChatUpdater(groupChatFinder)
 })

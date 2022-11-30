@@ -3,9 +3,13 @@ import { check } from 'express-validator'
 import Validator from './Validator'
 
 export default async function (request: Request, response: Response): Promise<void> {
-    await check('reaction')
-        .matches(/(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/)
-        .optional()
+    await check('name')
+        .isString()
+        .run(request)
+
+    await check('participants')
+        .isArray()
+        .custom((participants: string[]) => participants.every(participant => participant.match(/^[0-9]+@c.us$/)))
         .run(request)
 
     Validator(request, response)

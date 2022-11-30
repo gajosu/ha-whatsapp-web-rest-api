@@ -1,9 +1,10 @@
 import express from 'express'
 import { IServices } from '../container'
 import { ContextManager } from 'express-async-context/lib/types'
-import { store } from '../http/controllers/MessageController'
+import * as MessageController from '../http/controllers/MessageController'
 import * as ChatController from '../http/controllers/ChatController'
 import * as ChatMessageController from '../http/controllers/ChatMessageController'
+import * as GroupChatController from '../http/controllers/GroupChatController'
 import WhatsappStatusChecker from '../http/middlewares/WhatsappStatusChecker'
 
 export default function (context: ContextManager<IServices>): express.Router {
@@ -11,7 +12,7 @@ export default function (context: ContextManager<IServices>): express.Router {
     router.use(context.consumer(WhatsappStatusChecker))
 
     router.route('/messages').post(
-        context.consumer(store)
+        context.consumer(MessageController.store)
     )
 
     router.route('/chats').get(
@@ -78,19 +79,23 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatMessageController.destroy)
     )
 
-    // router.route('/chats/groups').post(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups').post(
+        context.consumer(GroupChatController.store)
+    )
 
-    // router.route('/chats/groups/:id').put(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id').put(
+        context.consumer(GroupChatController.update)
+    )
 
-    // router.route('/chats/groups/:id/invite-code').get(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id/invite-code').get(
+        context.consumer(GroupChatController.getInvitationCode)
+    )
 
     // router.route('/chats/groups/:id/invite-code/regenerate').put(
+    //     context.consumer(store)
+    // )
+
+    // router.route('/chats/groups/accept-invite/:inviteCode').put(
     //     context.consumer(store)
     // )
 
@@ -143,6 +148,10 @@ export default function (context: ContextManager<IServices>): express.Router {
     // )
 
     // router.route('/me/status').put(
+    //     context.consumer(store)
+    // )
+
+    // router.route('/status').get(
     //     context.consumer(store)
     // )
 
