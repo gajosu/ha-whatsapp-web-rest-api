@@ -1,3 +1,5 @@
+import ContactBlock, { IContactBlock } from './Services/Contact/ContactBlock'
+import ContactFinder, { IContactFinder } from './Services/Contact/ContactFinder'
 import GroupParticipant, { IGroupParticipant } from './Services/GroupChat/GroupParticipant'
 import GroupChatUpdater, { IGroupChatUpdater } from './Services/GroupChat/GroupChatUpdater'
 import GroupChatCreator, { IGroupChatCreator } from './Services/GroupChat/GroupChatCreator'
@@ -29,6 +31,7 @@ import ChatArchive, { IChatArchive } from './Services/Chat/ChatArchive'
 import MessageFinder, { IMessageFinder } from './Services/Message/MessageFinder'
 import GroupChatFinder, { IGroupChatFinder } from './Services/GroupChat/GroupChatFinder'
 import GroupChatInvite, { IGroupChatInvite } from './Services/GroupChat/GroupChatInvite'
+import ContactGetter, { IContactGetter } from './Services/Contact/ContactGetter'
 
 export interface IServices {
     app: IHttpServer
@@ -62,6 +65,10 @@ export interface IServices {
     groupChatInvite: IGroupChatInvite
     groupChatUpdater: IGroupChatUpdater
     groupChatParticipant: IGroupParticipant
+    // Contact
+    contactFinder: IContactFinder
+    contactGetter: IContactGetter
+    contactBlock: IContactBlock
 }
 
 const webConfig = getHttpServer()
@@ -152,5 +159,14 @@ export default diContainer<IServices>({
         new GroupChatUpdater(groupChatFinder),
 
     groupChatParticipant: ({ groupChatFinder }) =>
-        new GroupParticipant(groupChatFinder)
+        new GroupParticipant(groupChatFinder),
+
+    contactFinder: ({ whatsapp }) =>
+        new ContactFinder(whatsapp),
+
+    contactGetter: ({ whatsapp }) =>
+        new ContactGetter(whatsapp),
+
+    contactBlock: ({ contactFinder }) =>
+        new ContactBlock(contactFinder)
 })

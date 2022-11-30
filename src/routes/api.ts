@@ -5,6 +5,7 @@ import * as MessageController from '../http/controllers/MessageController'
 import * as ChatController from '../http/controllers/ChatController'
 import * as ChatMessageController from '../http/controllers/ChatMessageController'
 import * as GroupChatController from '../http/controllers/GroupChatController'
+import * as ContactController from '../http/controllers/ContactController'
 import WhatsappStatusChecker from '../http/middlewares/WhatsappStatusChecker'
 
 export default function (context: ContextManager<IServices>): express.Router {
@@ -123,17 +124,25 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(GroupChatController.demoteParticipants)
     )
 
-    // router.route('/contacts').get(
-    //     context.consumer(store)
-    // )
+    router.route('/contacts').get(
+        context.consumer(ContactController.index)
+    )
 
-    // router.route('/contacts/block').put(
-    //     context.consumer(store)
-    // )
+    router.route('/contacts/:id').get(
+        context.consumer(ContactController.show)
+    )
 
-    // router.route('/contacts/unblock').put(
-    //     context.consumer(store)
-    // )
+    router.route('/contacts/:id/block').put(
+        context.consumer(ContactController.block)
+    )
+
+    router.route('/contacts/:id/unblock').put(
+        context.consumer(ContactController.unblock)
+    )
+
+    router.route('/contacts/:id/common-groups').get(
+        context.consumer(ContactController.commonGroups)
+    )
 
     // router.route('/me/available').put(
     //     context.consumer(store)
