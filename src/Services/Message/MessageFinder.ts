@@ -14,7 +14,7 @@ export default class MessageFinder implements IMessageFinder {
     public async find (chatId: string, messageId: string): Promise<Message> {
         const chat = await this.chatFinder.find(chatId)
         const messages = await chat.fetchMessages({ limit: Infinity })
-        const message = messages.find(message => message.id.id === messageId)
+        const message = messages.find(msg => msg.id.id === messageId)
 
         if (message === undefined) {
             throw new NotFoundError(`Message (${messageId})`)

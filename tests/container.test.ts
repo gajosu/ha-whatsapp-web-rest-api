@@ -23,6 +23,17 @@ import { IMessageGetter } from '../src/Services/Message/MessageGetter'
 import { IMessageFinder } from '../src/Services/Message/MessageFinder'
 import { IMessageStar } from '../src/Services/Message/MessageStar'
 import { IMessageReact } from '../src/Services/Message/MessageReact'
+import { IGroupChatCreator } from '../src/Services/GroupChat/GroupChatCreator'
+import { IGroupChatFinder } from '../src/Services/GroupChat/GroupChatFinder'
+import { IGroupChatInvite } from '../src/Services/GroupChat/GroupChatInvite'
+import { IGroupChatUpdater } from '../src/Services/GroupChat/GroupChatUpdater'
+import { IContactFinder } from '../src/Services/Contact/ContactFinder'
+import { IContactGetter } from '../src/Services/Contact/ContactGetter'
+import { IContactBlock } from '../src/Services/Contact/ContactBlock'
+import { IDisplayNameUpdater } from '../src/Services/Me/DisplayNameUpdater'
+import { IStatusSender } from '../src/Services/Me/StatusSender'
+import { ITextStatusUpdater } from '../src/Services/Me/TextStatusUpdater'
+import { IGroupParticipant } from '../src/Services/GroupChat/GroupParticipant'
 
 jest.mock('../src/config/HttpServer', () => {
     return {
@@ -80,6 +91,23 @@ describe('container', () => {
         expect(items.messageReact).toBeDefined()
         expect(items.messageDeleter).toBeDefined()
 
+        // group chat
+        expect(items.groupChatCreator).toBeDefined()
+        expect(items.groupChatFinder).toBeDefined()
+        expect(items.groupChatInvite).toBeDefined()
+        expect(items.groupChatUpdater).toBeDefined()
+        expect(items.groupChatParticipant).toBeDefined()
+
+        // contact
+        expect(items.contactFinder).toBeDefined()
+        expect(items.contactGetter).toBeDefined()
+        expect(items.contactBlock).toBeDefined()
+
+        // me
+        expect(items.meDisplayNameUpdater).toBeDefined()
+        expect(items.meStatusSender).toBeDefined()
+        expect(items.meTextStatusUpdater).toBeDefined()
+
         const typecheck: AssertTypeEqual < typeof items, {
             app: IHttpServer
             logger: ILogger
@@ -91,6 +119,7 @@ describe('container', () => {
             mediaUrlMessageCreator: IMediaUrlMessageCreator
             haEventPublisher: IEventPublisher
             homeAssistant: IHomeAssistant
+
             chatGetter: IChatGetter
             chatFinder: IChatFinder
             chatArchive: IChatArchive
@@ -99,11 +128,26 @@ describe('container', () => {
             chatReader: IChatReader
             chatStateSender: IChatStateSender
             chatDeleter: IChatDeleter
+
             messageGetter: IMessageGetter
             messageFinder: IMessageFinder
             messageStar: IMessageStar
             messageReact: IMessageReact
             messageDeleter: IMessageDeleter
+
+            groupChatCreator: IGroupChatCreator
+            groupChatFinder: IGroupChatFinder
+            groupChatInvite: IGroupChatInvite
+            groupChatUpdater: IGroupChatUpdater
+            groupChatParticipant: IGroupParticipant
+
+            contactFinder: IContactFinder
+            contactGetter: IContactGetter
+            contactBlock: IContactBlock
+
+            meDisplayNameUpdater: IDisplayNameUpdater
+            meStatusSender: IStatusSender
+            meTextStatusUpdater: ITextStatusUpdater
         } > = true
 
         expect(typecheck).toBe(true)

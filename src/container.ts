@@ -32,6 +32,9 @@ import MessageFinder, { IMessageFinder } from './Services/Message/MessageFinder'
 import GroupChatFinder, { IGroupChatFinder } from './Services/GroupChat/GroupChatFinder'
 import GroupChatInvite, { IGroupChatInvite } from './Services/GroupChat/GroupChatInvite'
 import ContactGetter, { IContactGetter } from './Services/Contact/ContactGetter'
+import DisplayNameUpdater, { IDisplayNameUpdater } from './Services/Me/DisplayNameUpdater'
+import StatusSender, { IStatusSender } from './Services/Me/StatusSender'
+import TextStatusUpdater, { ITextStatusUpdater } from './Services/Me/TextStatusUpdater'
 
 export interface IServices {
     app: IHttpServer
@@ -69,6 +72,10 @@ export interface IServices {
     contactFinder: IContactFinder
     contactGetter: IContactGetter
     contactBlock: IContactBlock
+    // Me
+    meDisplayNameUpdater: IDisplayNameUpdater
+    meStatusSender: IStatusSender
+    meTextStatusUpdater: ITextStatusUpdater
 }
 
 const webConfig = getHttpServer()
@@ -168,5 +175,14 @@ export default diContainer<IServices>({
         new ContactGetter(whatsapp),
 
     contactBlock: ({ contactFinder }) =>
-        new ContactBlock(contactFinder)
+        new ContactBlock(contactFinder),
+
+    meDisplayNameUpdater: ({ whatsapp }) =>
+        new DisplayNameUpdater(whatsapp),
+
+    meStatusSender: ({ whatsapp }) =>
+        new StatusSender(whatsapp),
+
+    meTextStatusUpdater: ({ whatsapp }) =>
+        new TextStatusUpdater(whatsapp)
 })

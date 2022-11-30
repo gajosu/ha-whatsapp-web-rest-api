@@ -6,6 +6,7 @@ import * as ChatController from '../http/controllers/ChatController'
 import * as ChatMessageController from '../http/controllers/ChatMessageController'
 import * as GroupChatController from '../http/controllers/GroupChatController'
 import * as ContactController from '../http/controllers/ContactController'
+import * as MeController from '../http/controllers/MeController'
 import WhatsappStatusChecker from '../http/middlewares/WhatsappStatusChecker'
 
 export default function (context: ContextManager<IServices>): express.Router {
@@ -144,21 +145,21 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ContactController.commonGroups)
     )
 
-    // router.route('/me/available').put(
-    //     context.consumer(store)
-    // )
+    router.route('/me/available').put(
+        context.consumer(MeController.sendAvailableStatus)
+    )
 
-    // router.route('/me/unavailable').put(
-    //     context.consumer(store)
-    // )
+    router.route('/me/unavailable').put(
+        context.consumer(MeController.sendUnavailableStatus)
+    )
 
-    // router.route('/me/display-name').put(
-    //     context.consumer(store)
-    // )
+    router.route('/me/display-name').put(
+        context.consumer(MeController.updateDisplayName)
+    )
 
-    // router.route('/me/status').put(
-    //     context.consumer(store)
-    // )
+    router.route('/me/text-status').put(
+        context.consumer(MeController.updateTextStatus)
+    )
 
     // router.route('/status').get(
     //     context.consumer(store)
