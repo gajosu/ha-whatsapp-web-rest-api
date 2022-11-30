@@ -12,7 +12,9 @@ export const mockWhatsappClient = {
     getChatById: jest.fn(),
     getChats: jest.fn(),
     archive: jest.fn(),
-    getState: jest.fn()
+    getState: jest.fn(),
+    createGroup: jest.fn(),
+    acceptInvite: jest.fn()
 }
 
 export const mockMessageMedia = {

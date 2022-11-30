@@ -1,53 +1,58 @@
-import { NotFoundError } from './../../../src/Exceptions/NotFoundError'
-import { mockFinder as mockChatFinder, mockChat } from '../../stubs/services/Chat/ChatFinder'
-import MessageFinder from '../../../src/Services/Message/MessageFinder'
+import { mockWhatsappClient } from '../../stubs/WhatsappClient'
+import { mockWhatsapp } from '../../stubs/Whatsapp'
+import GroupChatFinder from '../../../src/Services/GroupChat/GroupChatFinder'
 
-const mockMessage = {
+export const mockGroupChat = {
     id: {
-        id: '1234567890',
-        fromMe: true,
-        remote: '',
-        _serialized: ''
+        server: 'c.us',
+        user: '554199999999',
+        _serialized: '554199999999@c.us'
     },
-    fromMe: true,
-    to: '',
-    body: 'Test',
-    type: 'chat',
-    isGroupMsg: false,
-    isMedia: false,
-    isNotification: false,
-    isPSA: false,
-    isStarred: false,
-    isStatus: false,
-    isEphemeral: false,
-    chat: mockChat
+    archived: false,
+    isGroup: true,
+    isReadOnly: false,
+    isMuted: false,
+    muteExpiration: 0,
+    name: 'Test',
+    timestamp: 0,
+    unreadCount: 0,
+    owner: '554199999999',
+    createdAt: 0,
+    description: 'Test',
+    participants: [
+        {
+            id: {
+                server: 'c.us',
+                user: '554199',
+                _serialized: '554199@c.us'
+            },
+            isAdmin: false,
+            isSuperAdmin: false
+        }
+    ]
 }
 
-mockChatFinder.find.mockResolvedValue(mockChat)
-
-describe('Message finder service', () => {
+describe('Group chat finder service', () => {
     afterEach(() => {
         jest.clearAllMocks()
         jest.restoreAllMocks()
     })
 
-    it('find a message', async () => {
-        mockChat.fetchMessages.mockResolvedValue([mockMessage])
+    it('find a group chat', async () => {
+        mockWhatsappClient.getChatById.mockResolvedValue(mockGroupChat)
+        const finder = new GroupChatFinder(mockWhatsapp)
+        const chat = await finder.find('123')
 
-        const finder = new MessageFinder(mockChatFinder)
-        const message = await finder.find('chatId', mockMessage.id.id)
-
-        expect(message).toBeDefined()
-        expect(mockChat.fetchMessages).toBeCalledTimes(1)
-        expect(mockChat.fetchMessages).toBeCalledWith({ limit: Infinity })
-        expect(message).toEqual(mockMessage)
+        expect(mockWhatsappClient.getChatById).toBeCalledWith('123')
+        expect(chat).toEqual(mockGroupChat)
     })
 
-    it('message not found', async () => {
-        mockChat.fetchMessages.mockResolvedValue([])
+    it('group chat is not a group', async () => {
+        const chat = { ...mockGroupChat, isGroup: false }
 
-        const finder = new MessageFinder(mockChatFinder)
+        mockWhatsappClient.getChatById.mockResolvedValue(chat)
+        const finder = new GroupChatFinder(mockWhatsapp)
 
-        await expect(finder.find('chatId', mockMessage.id.id)).rejects.toThrow(NotFoundError)
+        await expect(finder.find('123')).rejects.toThrowError('The Group Chat (123) is not found.')
     })
 })

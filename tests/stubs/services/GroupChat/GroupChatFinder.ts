@@ -9,7 +9,7 @@ export const mockGroupChat = {
         _serialized: '554199999999@c.us'
     },
     archived: false,
-    isGroup: false,
+    isGroup: true,
     isReadOnly: false,
     isMuted: false,
     muteExpiration: 0,
