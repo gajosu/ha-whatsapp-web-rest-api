@@ -1,3 +1,4 @@
+import GroupParticipant, { IGroupParticipant } from './Services/GroupChat/GroupParticipant'
 import GroupChatUpdater, { IGroupChatUpdater } from './Services/GroupChat/GroupChatUpdater'
 import GroupChatCreator, { IGroupChatCreator } from './Services/GroupChat/GroupChatCreator'
 import MessageStar, { IMessageStar } from './Services/Message/MessageStar'
@@ -60,6 +61,7 @@ export interface IServices {
     groupChatFinder: IGroupChatFinder
     groupChatInvite: IGroupChatInvite
     groupChatUpdater: IGroupChatUpdater
+    groupChatParticipant: IGroupParticipant
 }
 
 const webConfig = getHttpServer()
@@ -147,5 +149,8 @@ export default diContainer<IServices>({
         new GroupChatInvite(whatsapp, groupChatFinder),
 
     groupChatUpdater: ({ groupChatFinder }) =>
-        new GroupChatUpdater(groupChatFinder)
+        new GroupChatUpdater(groupChatFinder),
+
+    groupChatParticipant: ({ groupChatFinder }) =>
+        new GroupParticipant(groupChatFinder)
 })

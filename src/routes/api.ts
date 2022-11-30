@@ -83,6 +83,10 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(GroupChatController.store)
     )
 
+    router.route('/chats/groups/:id').get(
+        context.consumer(GroupChatController.show)
+    )
+
     router.route('/chats/groups/:id').put(
         context.consumer(GroupChatController.update)
     )
@@ -91,37 +95,33 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(GroupChatController.getInvitationCode)
     )
 
-    // router.route('/chats/groups/:id/invite-code/regenerate').put(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id/invite-code/revoke').put(
+        context.consumer(GroupChatController.revokeInvitationCode)
+    )
 
-    // router.route('/chats/groups/accept-invite/:inviteCode').put(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/accept-invite/:inviteCode').put(
+        context.consumer(GroupChatController.acceptInvitationCode)
+    )
 
-    // router.route('/chats/groups/:id/leave').put(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id/leave').put(
+        context.consumer(GroupChatController.leave)
+    )
 
-    // router.route('/chats/groups/:id/participants').get(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id/participants').post(
+        context.consumer(GroupChatController.addParticipants)
+    )
 
-    // router.route('/chats/groups/:id/participants').post(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id/participants').delete(
+        context.consumer(GroupChatController.removeParticipants)
+    )
 
-    // router.route('/chats/groups/:id/participants').delete(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id/participants/promote').put(
+        context.consumer(GroupChatController.promoteParticipants)
+    )
 
-    // router.route('/chats/groups/:id/participants/promote').put(
-    //     context.consumer(store)
-    // )
-
-    // router.route('/chats/groups/:id/participants/demote').put(
-    //     context.consumer(store)
-    // )
+    router.route('/chats/groups/:id/participants/demote').put(
+        context.consumer(GroupChatController.demoteParticipants)
+    )
 
     // router.route('/contacts').get(
     //     context.consumer(store)
