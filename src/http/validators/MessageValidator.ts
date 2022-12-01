@@ -5,7 +5,9 @@ import Validator from './Validator'
 export default async function (request: Request, response: Response): Promise<void> {
     await oneOf([
         check('to').isNumeric(),
-        check('to').matches(/^.+@.+/)
+        check('to').matches(/^.+@.+/),
+        check('id').isNumeric(),
+        check('id').matches(/^.+@.+/)
     ]).run(request)
     await check('msg')
         .if(body('url').not().exists())
