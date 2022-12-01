@@ -2,7 +2,7 @@ export const mockContactFinder = {
     find: jest.fn()
 }
 
-export const mockCotact = {
+export const mockContact = {
     number: '123456789',
     isBusiness: false,
     id: {

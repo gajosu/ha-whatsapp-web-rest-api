@@ -6,15 +6,15 @@ export interface IContactBlock {
 }
 
 export default class ContactBlock implements IContactBlock {
-    constructor (private readonly whatsapp: IContactFinder) {}
+    constructor (private readonly finder: IContactFinder) {}
 
     async block (contactId: string): Promise<boolean> {
-        const contact = await this.whatsapp.find(contactId)
+        const contact = await this.finder.find(contactId)
         return await contact.block()
     }
 
     async unblock (contactId: string): Promise<boolean> {
-        const contact = await this.whatsapp.find(contactId)
+        const contact = await this.finder.find(contactId)
         return await contact.unblock()
     }
 }

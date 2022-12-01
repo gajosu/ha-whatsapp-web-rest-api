@@ -19,7 +19,8 @@ export const mockWhatsappClient = {
     setDisplayName: jest.fn(),
     setStatus: jest.fn(),
     sendPresenceAvailable: jest.fn(),
-    sendPresenceUnavailable: jest.fn()
+    sendPresenceUnavailable: jest.fn(),
+    getContacts: jest.fn()
 }
 
 export const mockMessageMedia = {
