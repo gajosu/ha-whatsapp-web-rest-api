@@ -103,15 +103,15 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(GroupChatController.getInvitationCode)
     )
 
-    router.route('/chats/groups/:id/invite-code/revoke').put(
+    router.route('/chats/groups/:id/invite-code').delete(
         context.consumer(GroupChatController.revokeInvitationCode)
     )
 
-    router.route('/chats/groups/accept-invite/:inviteCode').put(
+    router.route('/chats/groups/accept-invite/:inviteCode').post(
         context.consumer(GroupChatController.acceptInvitationCode)
     )
 
-    router.route('/chats/groups/:id/leave').put(
+    router.route('/chats/groups/:id').delete(
         context.consumer(GroupChatController.leave)
     )
 

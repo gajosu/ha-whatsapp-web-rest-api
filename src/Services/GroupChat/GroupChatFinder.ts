@@ -1,6 +1,6 @@
 import { NotFoundError } from '../../Exceptions/NotFoundError'
 import { IWhatsapp } from '../../Libs/Whatsapp'
-import { Chat, GroupChat } from 'whatsapp-web.js'
+import { GroupChat } from 'whatsapp-web.js'
 
 export interface IGroupChatFinder {
     find: (groupId: string) => Promise<GroupChat>

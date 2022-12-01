@@ -12,12 +12,12 @@ export const store = (request: Request, response: Response, next: Next) =>
     async ({ groupChatCreator }: { groupChatCreator: IGroupChatCreator }) =>
         await GroupChatCreatorValidator(request, response)
             .then(async () => await groupChatCreator.create(request.body.name, request.body.participants))
-            .then((group) => response.status(201).send(group), next)
+            .then((group) => response.status(201).json(group), next)
 
 export const show = (request: Request, response: Response, next: Next) =>
     async ({ groupChatFinder }: { groupChatFinder: IGroupChatFinder }) =>
         await groupChatFinder.find(request.params.id)
-            .then((group) => response.status(200).send(group), next)
+            .then((group) => response.status(200).json(group), next)
 
 export const update = (request: Request, response: Response, next: Next) =>
     async ({ groupChatUpdater }: { groupChatUpdater: IGroupChatUpdater }) =>
@@ -37,7 +37,7 @@ export const revokeInvitationCode = (request: Request, response: Response, next:
 
 export const acceptInvitationCode = (request: Request, response: Response, next: Next) =>
     async ({ groupChatInvite }: { groupChatInvite: IGroupChatInvite }) =>
-        await groupChatInvite.acceptInvite(request.body.code)
+        await groupChatInvite.acceptInvite(request.params.inviteCode)
             .then((groupId) => response.status(200).send({ groupId }), next)
 
 export const leave = (request: Request, response: Response, next: Next) =>

@@ -45,5 +45,7 @@ export const mockGroupChat = {
 }
 
 jest.mock('../../../../src/Services/GroupChat/GroupChatFinder', () => {
-    return mockGroupChat
+    return jest.fn().mockImplementation(() => {
+        return mockGroupChatFinder
+    })
 })
