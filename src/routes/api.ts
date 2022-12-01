@@ -19,6 +19,9 @@ export default function (context: ContextManager<IServices>): express.Router {
 
     router.use(context.consumer(WhatsappStatusChecker))
 
+    /**
+     * @deprecated Use /chats/:id/messages instead
+     */
     router.route('/messages').post(
         context.consumer(MessageController.store)
     )
@@ -71,6 +74,10 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatMessageController.index)
     )
 
+    router.route('/chats/:id/messages').post(
+        context.consumer(ChatMessageController.store)
+    )
+
     router.route('/chats/:id/messages/:messageId/star').put(
         context.consumer(ChatMessageController.star)
     )
@@ -81,6 +88,10 @@ export default function (context: ContextManager<IServices>): express.Router {
 
     router.route('/chats/:id/messages/:messageId/react').put(
         context.consumer(ChatMessageController.react)
+    )
+
+    router.route('/chats/:id/messages/:messageId/unreact').put(
+        context.consumer(ChatMessageController.unreact)
     )
 
     router.route('/chats/:id/messages/:messageId').delete(
