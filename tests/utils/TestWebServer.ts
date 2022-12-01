@@ -1,6 +1,6 @@
-import mockLogger from '../stubs/Logger'
 import WebServer from '../../src/Libs/WebServer'
 import container from '../../src/container'
+import Logger from '../../src/Libs/Logger'
 
 jest.mock('../../src/config/GlobalConfig', () => {
     return jest.fn().mockImplementation((key: string, defaultValue: any) => {
@@ -15,7 +15,7 @@ container.whatsapp.getClient = jest.fn().mockImplementation(() => {
 })
 
 const app = container.app.app
-const webServer = new WebServer(app, mockLogger)
+const webServer = new WebServer(app, new Logger())
 webServer.start()
 
 export default {
