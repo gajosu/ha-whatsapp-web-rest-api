@@ -72,31 +72,571 @@ So, if you want to send a message to a user with number `123456789` and country 
 
 <br>
 
-### **Send text message**
+# Endpoints
+# IMPORTANT
 
-`POST /api/messages`
+The `POST /api/messages` endpoint will be removed in future releases, please use `POST /api/chats/id:/messages`  instead
 
+
+## Chats
+
+### **Get Chats**
+
+Return a list of chats
+
+`GET` `/api/chats`
+
+Response: `200`
+```json
+[
+  {
+    "id": {
+      "server": "c.us",
+      "user": "123456789",
+      "_serialized": "123456789@c.us"
+    },
+    "name": "Jhon",
+    "isGroup": false,
+    "isReadOnly": false,
+    "unreadCount": 0,
+    "timestamp": 1669914773,
+    "pinned": false,
+    "isMuted": false,
+    "muteExpiration": 0
+  },
+
+  ...
+]
+```
+
+### **Delete Chat**
+
+`DELETE` `/api/chats/{id}`
+
+Response: `204` No Content
+
+### **Archive Chat**
+
+`PUT` `/api/chats/{id}/archive`
+
+Response: `204` No Content
+
+### **Unarchive Chat**
+
+`PUT` `/api/chats/{id}/archive`
+
+Response: `204` No Content
+
+### **Pin Chat**
+
+`PUT` `/api/chats/{id}/pin`
+
+Response: `204` No Content
+
+### **Unpin Chat**
+
+`PUT` `/api/chats/{id}/unpin`
+
+Response: `204` No Content
+
+### **Mark Chat as Read**
+
+`PUT` `/api/chats/{id}/read`
+
+Response: `204` No Content
+
+### **Mark Chat as Unread**
+
+`PUT` `/api/chats/{id}/unread`
+
+Response: `204` No Content
+
+### **Send typing status**
+
+`PUT` `/api/chats/{id}/send-typing`
+
+Response: `204` No Content
+
+### **Send recording status**
+
+`PUT` `/api/chats/{id}/send-recording`
+
+Response: `204` No Content
+
+### **Clear typing or recording status**
+
+`PUT` `/api/chats/{id}/clear-status`
+
+Response: `204` No Content
+
+## Messages
+
+### **Get Messages**
+
+`GET` `/api/chats/{id}/messages`
+
+Response: `200`
+```json
+[
+  {
+    "id": {
+      "fromMe": true,
+      "remote": "123456789@c.us",
+      "id": "132E527E5E536E",
+      "_serialized": "true_123456789@c.us_132E527E5E536E"
+    },
+    "ack": 3,
+    "hasMedia": false,
+    "body": "Hello",
+    "type": "chat",
+    "timestamp": 1669914773,
+    "from": "123456789@c.us",
+    "to": "987654321@c.us",
+    "deviceType": "web",
+    "isForwarded": false,
+    "forwardingScore": 0,
+    "isStatus": false,
+    "isStarred": false,
+    "fromMe": true,
+    "hasQuotedMsg": false,
+    "vCards": [],
+    "mentionedIds": [],
+    "isGif": false,
+    "isEphemeral": false,
+    "links": []
+  }
+
+  ...
+]
+```
+
+### **Star Message**
+
+`PUT` `/api/chats/{id}/messages/{messageId}/star`
+
+Response: `204` No Content
+
+### **Unstar Message**
+
+`PUT` `/api/chats/{id}/messages/{messageId}/unstar`
+
+Response: `204` No Content
+
+### **React to Message**
+
+`PUT` `/api/chats/{id}/messages/{messageId}/react`
+
+Request Body:
 ```json
 {
-    "to": "34123456789@c.us",
-    "msg": "Hello world"
+  "reaction": "❤️"
 }
 ```
 
-<br>
+Response: `204` No Content
 
-### **Send media message**
+### **Unreact to Message**
 
-You can send images, audios and documents.
+`PUT` `/api/chats/{id}/messages/{messageId}/unreact`
 
-`POST /api/messages`
+Response: `204` No Content
+
+### **Delete Message**
+Delete a message for everyone in the chat
+
+`DELETE` `/api/chats/{id}/messages/{messageId}`
+Response: `204` No Content
+
+
+## Groups
+
+### **Create a group**
+
+`POST` `/api/chats/groups`
+
+Request Body:
+```json
+{
+  "name": "Group Name",
+  "participants": [
+    "123456789@c.us",
+    "987654321@c.us"
+  ]
+}
+```
+
+Response: `201` Created
+```json
+{
+  "gid" : "12345678899@g.us",
+   /** participants that were not added to the group. 
+    * Keys represent the ID for participant that was not added and its value is a status code
+    * that represents the reason why participant could not be added. */
+  "missingParticipants": []
+}
+```
+
+### **Get Group Info**
+
+`GET` `/api/chats/groups/{id}`
+
+Response: `200`
+```json
+{
+  "groupMetadata": {
+    "id": {
+      "server": "g.us",
+      "user": "123456789",
+      "_serialized": "123456789@g.us"
+    },
+    "creation": 1669762493,
+    "owner": {
+      "server": "c.us",
+      "user": "123456789",
+      "_serialized": "123456789@c.us"
+    },
+    "subject": "My group",
+    "subjectTime": 1669762493,
+    "descTime": 0,
+    "restrict": false,
+    "announce": false,
+    "noFrequentlyForwarded": false,
+    "ephemeralDuration": 0,
+    "membershipApprovalMode": false,
+    "size": 2,
+    "support": false,
+    "suspended": false,
+    "terminated": false,
+    "uniqueShortNameMap": {},
+    "isParentGroup": false,
+    "isParentGroupClosed": false,
+    "defaultSubgroup": false,
+    "lastActivityTimestamp": 0,
+    "lastSeenActivityTimestamp": 0,
+    "incognito": false,
+    "participants": [
+      {
+        "id": {
+          "server": "c.us",
+          "user": "123456789",
+          "_serialized": "123456789@c.us"
+        },
+        "isAdmin": true,
+        "isSuperAdmin": false
+      },
+      {
+        "id": {
+          "server": "c.us",
+          "user": "987654321",
+          "_serialized": "987654321@c.us"
+        },
+        "isAdmin": false,
+        "isSuperAdmin": false
+      }
+    ],
+    "pendingParticipants": [],
+    "pastParticipants": [
+      {
+        "id": {
+          "server": "c.us",
+          "user": "1234",
+          "_serialized": "1234@c.us"
+        },
+        "leaveTs": 1669765815,
+        "leaveReason": "Left"
+      }
+    ],
+    "membershipApprovalRequests": []
+  },
+  "id": {
+    "server": "g.us",
+    "user": "123456789",
+    "_serialized": "123456789@g.us"
+  },
+  "name": "My Group",
+  "isGroup": true,
+  "isReadOnly": false,
+  "unreadCount": 0,
+  "timestamp": 1669762493,
+  "pinned": false,
+  "isMuted": false,
+  "muteExpiration": 0
+}
+
+```
+
+### **Update Group Info**
+
+`PUT` `/api/chats/groups/{id}`
+
+Request Body:
+```json
+{
+  "name": "New Group Name",
+  "description": "New Group Description",
+}
+```
+
+Response: `204` No Content
+
+### **Get invite code**
+
+`GET` `/api/chats/groups/{id}/invite-code`
+
+Response: `200`
+```json
+{
+  "code": "1d243d3d3d3",
+  "url": "https://chat.whatsapp.com/1d243d3d3d3"
+}
+```
+
+### **Revoke invite code**
+Revoke the invite code for the group, so that it can't be used anymore
+
+`DELETE` `/api/chats/groups/{id}/invite-code`
+
+Response: `204` No Content
+
+### **Accept invite code**
+Accept an invite code for a group
+
+`POST` `/api/chats/groups/accept-invite/{code}`
+
+Response: `200`
+```json
+{
+  "groupId": "121122121@g.us"
+}
+```
+
+### **Add participants to group**
+Add 1 or more participants to a group
+
+`POST` `/api/chats/groups/{id}/participants`
+
+Request Body:
+```json
+{
+  "participants": [
+    "123456789@c.us",
+  ]
+}
+```
+
+Response: `204` No Content
+
+### **Remove participants from group**
+Remove 1 or more participants from a group
+
+`DELETE` `/api/chats/groups/{id}/participants`
+
+Request Body:
+```json
+{
+  "participants": [
+    "123456789@c.us",
+  ]
+}
+```
+
+Response: `204` No Content
+
+
+## Promote participants
+Promote 1 or more participants to admin in a group
+
+`PUT` `/api/chats/groups/{id}/promote`
+
+Request Body:
+```json
+{
+  "participants": [
+    "123456789@c.us",
+  ]
+}
+```
+
+Response: `204` No Content
+
+
+## Demote participants
+Demote 1 or more participants from admin in a group
+
+`PUT` `/api/chats/groups/{id}/demote`
+
+Request Body:
+```json
+{
+  "participants": [
+    "123456789@c.us",
+  ]
+}
+```
+
+Response: `204` No Content
+
+### **Leave group**
+
+`DELETE` `/api/chats/groups/{id}`
+
+Response: `204` No Content
+
+
+## **Contacts**
+
+### **Get contacts**
+
+`GET` `/api/contacts`
+
+Response: `200`
+```json
+[
+  {
+    "id": {
+      "server": "g.us",
+      "user": "123456789",
+      "_serialized": "123456789@g.us"
+    },
+    "number": null,
+    "isBusiness": false,
+    "isEnterprise": false,
+    "labels": [],
+    "name": "Jhon",
+    "type": "in",
+    "isMe": false,
+    "isUser": false,
+    "isGroup": true,
+    "isWAContact": false,
+    "isMyContact": false,
+    "isBlocked": false
+  },
+  {
+    "id": {
+      "server": "c.us",
+      "user": "11111111",
+      "_serialized": "11111111@c.us"
+    },
+    "number": "11111111",
+    "isBusiness": false,
+    "isEnterprise": false,
+    "labels": [],
+    "name": "Jhon Doe",
+    "shortName": "Jhon",
+    "type": "in",
+    "verifiedLevel": 0,
+    "verifiedName": "Jhon Doe",
+    "isMe": false,
+    "isUser": true,
+    "isGroup": false,
+    "isWAContact": true,
+    "isMyContact": true,
+    "isBlocked": false
+  },
+  ...
+]
+```
+
+### **Get contact**
+
+`GET` `/api/contacts/{id}`
 
 ```json
 {
-    "to": "34123456789@c.us",
-    "url": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+  "id": {
+    "server": "g.us",
+    "user": "123456789",
+    "_serialized": "123456789@g.us"
+  },
+  "number": null,
+  "isBusiness": false,
+  "isEnterprise": false,
+  "labels": [],
+  "name": "Jhon",
+  "type": "in",
+  "isMe": false,
+  "isUser": false,
+  "isGroup": true,
+  "isWAContact": false,
+  "isMyContact": false,
+  "isBlocked": false
 }
 ```
+
+### **Block contact**
+
+`POST` `/api/contacts/{id}/block`
+
+Response: `204` No Content
+
+### **Unblock contact**
+
+`PUT` `/api/contacts/{id}/unblock`
+
+Response: `204` No Content
+
+### **Get common groups**
+
+`GET` `/api/contacts/{id}/common-groups`
+
+Response: `200`
+```json
+[
+  {
+    "id": {
+      "server": "g.us",
+      "user": "123456789",
+      "_serialized": "123456789@g.us"
+    },
+  },
+]
+```
+
+## User
+
+### **Send Available Presence**
+send available presence to all contacts
+
+`PUT` `/api/me/available`
+
+Response: `204` No Content
+
+
+## **Send unavailable presence**
+send unavailable presence to all contacts
+
+`PUT` `/api/me/unavailable`
+
+Response: `204` No Content
+
+
+## **Update Display Name**
+
+`PUT` `/api/me/display-name`
+
+Request Body:
+```json
+{
+  "name": "New Display Name"
+}
+```
+
+Response: `204` No Content
+
+
+## **Update Text Status**
+
+`PUT` `/api/me/text-status`
+
+Request Body:
+```json
+{
+  "text": "New Text Status"
+}
+```
+
+Response: `204` No Content
+
 
 ## **Reciving messages in HA**
 The add-on will send events to Home Assistant when a message is received.
