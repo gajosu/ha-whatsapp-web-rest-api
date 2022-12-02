@@ -2,6 +2,11 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.2.1 - 2022-12-02
+
+- Update docs (#21)
+- Add message sender options in chat message controller (#22)
+
 ## v2.2.0 - 2022-12-01
 
 - Bump @typescript-eslint/eslint-plugin from 5.44.0 to 5.45.0 (#18) by @dependabot
