@@ -7,6 +7,36 @@ _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
 ![Supports armv7 Architecture][armv7-shield]
 ![Supports i386 Architecture][i386-shield]
 
+## Content Table
+- [What is this app?](#what-is-this-app)
+- [Installation for Supervisor users](#installation-for-supervisor-users)
+- [Installation for Docker users](#installation-for-docker-users)
+- [How to get a User ID](#how-to-get-a-user-id)
+- [Api documentation](#api-documentation)
+  - [Chats](#chats)
+    - [Get Chats](#get-chats)
+    - [Delete Chat](#delete-chat)
+    - [Archive Chat](#archive-chat)
+    - [Unarchive Chat](#unarchive-chat)
+    - [Pin Chat](#pin-chat)
+    - [Unpin Chat](#unpin-chat)
+    - [Mark Chat as Read](#mark-chat-as-read)
+    - [Mark Chat as Unread](#mark-chat-as-unread)
+    - [Send typing status](#send-typing-status)
+    - [Send recording status](#send-recording-status)
+    - [Clear typing or recording status](#clear-typing-or-recording-status)
+
+  - [Messages](#messages)
+    - [Get Messages](#get-messages)
+    - [Star Message
+
+Get Messages
+Star Message
+Unstar Message
+React to Message
+Unreact to Message
+Delete Message
+
 ## **What is this app?**
 
 This app is a wrapper for the [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) library. It allows you to send and receive messages from WhatsApp using a REST API.
@@ -58,9 +88,7 @@ whatsapp:
 
 <br>
 
-## **Api documentation**
-
-### **How to get a User ID**
+## **How to get a User ID**
 
 The user id is made from three parts:
 
@@ -69,6 +97,9 @@ The user id is made from three parts:
 - And a static part: @c.us (for users) @g.us (for groups)
 
 So, if you want to send a message to a user with number `123456789` and country code `34`, the user id will be `34123456789@c.us` (the `@c.us` part is static)
+<br>
+
+## **Api documentation**
 
 <br>
 
