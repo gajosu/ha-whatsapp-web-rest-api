@@ -62,6 +62,21 @@ jest.mock('../../../src/Services/Message/MessageDeleter', () => {
     })
 })
 
+const options = {
+    linkPreview: undefined,
+    sendAudioAsVoice: undefined,
+    sendVideoAsGif: undefined,
+    sendMediaAsSticker: undefined,
+    sendMediaAsDocument: undefined,
+    caption: undefined,
+    quotedMessageId: undefined,
+    mentions: undefined,
+    sendSeen: undefined,
+    stickerName: undefined,
+    stickerAuthor: undefined,
+    stickerCategories: undefined
+}
+
 describe('ChatMessageController', () => {
     afterEach(() => {
         jest.restoreAllMocks()
@@ -87,7 +102,25 @@ describe('ChatMessageController', () => {
             .expect(200, mockMessage.rawData)
 
         expect(mockTextSender).toBeCalledTimes(1)
-        expect(mockTextSender).toBeCalledWith('1234567890@c.us', 'Test')
+        expect(mockTextSender).toBeCalledWith('1234567890@c.us', 'Test', expect.any(Object))
+    })
+
+    it('send text message to chat with options', async () => {
+        mockTextSender.mockResolvedValue(mockMessage)
+
+        await request(testServer.app)
+            .post('/api/chats/1234567890/messages')
+            .send({
+                msg: 'Test',
+                options: {
+                    quotedMessageId: '1234567890',
+                    sendAudioAsVoice: true
+                }
+            })
+            .expect(200, mockMessage.rawData)
+
+        expect(mockTextSender).toBeCalledTimes(1)
+        expect(mockTextSender).toBeCalledWith('1234567890@c.us', 'Test', { ...options, quotedMessageId: '1234567890', sendAudioAsVoice: true })
     })
 
     it('send file message to chat', async () => {
@@ -99,7 +132,29 @@ describe('ChatMessageController', () => {
             .expect(200, mockMessage.rawData)
 
         expect(mockFileSender).toBeCalledTimes(1)
-        expect(mockFileSender).toBeCalledWith('1234567890@c.us', 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png')
+        expect(mockFileSender).toBeCalledWith('1234567890@c.us', 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png', expect.any(Object))
+    })
+
+    it('send file message to chat with options', async () => {
+        mockFileSender.mockResolvedValue(mockMessage)
+
+        await request(testServer.app)
+            .post('/api/chats/1234567890/messages')
+            .send({
+                url: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+                options: {
+                    quotedMessageId: '1234567890',
+                    sendAudioAsVoice: true
+                }
+            })
+            .expect(200, mockMessage.rawData)
+
+        expect(mockFileSender).toBeCalledTimes(1)
+        expect(mockFileSender).toBeCalledWith(
+            '1234567890@c.us',
+            'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+            { ...options, quotedMessageId: '1234567890', sendAudioAsVoice: true }
+        )
     })
 
     it('star a message', async () => {
