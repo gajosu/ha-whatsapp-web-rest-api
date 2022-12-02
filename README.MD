@@ -28,8 +28,9 @@ _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
 
   - [Messages](#messages)
     - [Get Messages](#get-messages)
-    - [Send text message](#send-text-message)
-    - [Send media message](#send-media-message)
+    - [Send Message](#send-message)
+      - [Send text message](#send-text-message)
+      - [Send media message](#send-media-message)
     - [Star Message](#star-message)
     - [Unstar Message](#unstar-message)
     - [React to Message](#react-to-message)
@@ -281,26 +282,38 @@ Response: `200`
   ...
 ]
 ```
+### **Send Message**
+You can send a message to a user or a group
 
-### **Send text message**
+you can also send additional options, see the all options in the official documentation [here](https://docs.wwebjs.dev/global.html#MessageSendOptions)
+<br>
+
+
+#### **Send text message**
 
 `POST /api/chat/{id}/messages`
 
+Request Body:
 ```json
 {
-    "msg": "Hello world"
+    "msg": "Hello world",
 }
 ```
 
-### **Send media message**
+#### **Send media message**
 
 You can send images, audios and documents.
 
 `POST /api/chat/{id}/messages`
 
+Request Body:
 ```json
 {
-    "url": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+    "url": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+    "options": {
+        "caption": "Google logo",
+        "sendMediaAsDocument": true
+    }
 }
 ```
 ### **Star Message**
