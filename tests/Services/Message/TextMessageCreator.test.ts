@@ -12,6 +12,6 @@ describe('Text message creator test', () => {
         const creator = new TextMessageCreator(mockWhatsapp)
         await creator.create('123456789', 'test message')
 
-        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', 'test message')
+        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', 'test message', undefined)
     })
 })

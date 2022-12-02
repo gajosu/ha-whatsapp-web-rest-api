@@ -9,6 +9,6 @@ describe('Text message creator test', () => {
         await creator.create('123456789', 'https://www.google.com')
 
         expect(mockMessageMedia.fromUrl).toBeCalledWith('https://www.google.com', { unsafeMime: true })
-        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', true)
+        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', true, undefined)
     })
 })

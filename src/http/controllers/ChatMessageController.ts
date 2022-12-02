@@ -28,10 +28,25 @@ export const store = (request: Request, response: Response, next: Next) =>
                 chat = chat + '@c.us'
             }
 
+            const options = {
+                linkPreview: request.body.options?.linkPreview,
+                sendAudioAsVoice: request.body.options?.sendAudioAsVoice,
+                sendVideoAsGif: request.body.options?.sendVideoAsGif,
+                sendMediaAsSticker: request.body.options?.sendMediaAsSticker,
+                sendMediaAsDocument: request.body.options?.sendMediaAsDocument,
+                caption: request.body.options?.caption,
+                quotedMessageId: request.body.options?.quotedMessageId,
+                mentions: request.body.options?.mentions,
+                sendSeen: request.body.options?.sendSeen,
+                stickerName: request.body.options?.stickerName,
+                stickerAuthor: request.body.options?.stickerAuthor,
+                stickerCategories: request.body.options?.stickerCategories
+            }
+
             if (url !== undefined) {
-                message = await mediaUrlMessageCreator.create(chat, url)
+                message = await mediaUrlMessageCreator.create(chat, url, options)
             } else {
-                message = await textMessageCreator.create(chat, msg)
+                message = await textMessageCreator.create(chat, msg, options)
             }
 
             return response.json(message.rawData)
