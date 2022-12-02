@@ -7,6 +7,77 @@ _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
 ![Supports armv7 Architecture][armv7-shield]
 ![Supports i386 Architecture][i386-shield]
 
+## Content Table
+- [What is this app?](#what-is-this-app)
+- [Installation for Supervisor users](#installation-for-supervisor-users)
+- [Installation for Docker users](#installation-for-docker-users)
+- [How to get a User ID](#how-to-get-a-user-id)
+- [Api documentation](#api-documentation)
+  - [Chats](#chats)
+    - [Get Chats](#get-chats)
+    - [Delete Chat](#delete-chat)
+    - [Archive Chat](#archive-chat)
+    - [Unarchive Chat](#unarchive-chat)
+    - [Pin Chat](#pin-chat)
+    - [Unpin Chat](#unpin-chat)
+    - [Mark Chat as Read](#mark-chat-as-read)
+    - [Mark Chat as Unread](#mark-chat-as-unread)
+    - [Send typing status](#send-typing-status)
+    - [Send recording status](#send-recording-status)
+    - [Clear typing or recording status](#clear-typing-or-recording-status)
+
+  - [Messages](#messages)
+    - [Get Messages](#get-messages)
+    - [Send text message](#send-text-message)
+    - [Send media message](#send-media-message)
+    - [Star Message](#star-message)
+    - [Unstar Message](#unstar-message)
+    - [React to Message](#react-to-message)
+    - [Unreact to Message](#unreact-to-message)
+    - [Delete Message](#delete-message)
+
+  - [Groups](#groups)
+    - [Create a group](#create-a-group)
+    - [Get Group Info](#get-group-info)
+    - [Update Group Info](#update-group-info)
+    - [Get invite code](#get-invite-code)
+    - [Revoke invite code](#revoke-invite-code)
+    - [Accept invite code](#accept-invite-code)
+    - [Add participants to group](#add-participants-to-group)
+    - [Remove participants from group](#remove-participants-from-group)
+    - [Promote participants](#promote-participants)
+    - [Demote participants](#demote-participants)
+    - [Leave group](#leave-group)
+
+  - [Contacts](#contacts)
+    - [Get Contacts](#get-contacts)
+    - [Get contact](#get-contact)
+    - [Block contact](#block-contact)
+    - [Unblock contact](#unblock-contact)
+    - [Get common groups](#get-common-groups)
+
+  - [User](#user)
+    - [Send Available Presence](#send-available-presence)
+    - [Send Unavailable Presence](#send-unavailable-presence)
+    - [Update Display Name](#update-display-name)
+    - [Update Text Status](#update-text-status)
+
+  - [WhatsApp Status](#whatsapp-status)
+    - [Get Status](#get-status)
+
+- [Reciving messages in HA](#reciving-messages-in-ha)
+  - [Events](#events)
+
+- [Schemas](#schemas)
+- [More details](#more-details)
+- [Support](#support)
+- [Contributing](#contributing)
+- [Credits](#credits)
+- [Disclaimer](#disclaimer)
+- [License](#license)
+
+<br>
+
 ## **What is this app?**
 
 This app is a wrapper for the [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) library. It allows you to send and receive messages from WhatsApp using a REST API.
@@ -58,9 +129,7 @@ whatsapp:
 
 <br>
 
-## **Api documentation**
-
-### **How to get a User ID**
+## **How to get a User ID**
 
 The user id is made from three parts:
 
@@ -69,6 +138,9 @@ The user id is made from three parts:
 - And a static part: @c.us (for users) @g.us (for groups)
 
 So, if you want to send a message to a user with number `123456789` and country code `34`, the user id will be `34123456789@c.us` (the `@c.us` part is static)
+<br>
+
+## **Api documentation**
 
 <br>
 
@@ -210,6 +282,27 @@ Response: `200`
 ]
 ```
 
+### **Send text message**
+
+`POST /api/chat/{id}/messages`
+
+```json
+{
+    "msg": "Hello world"
+}
+```
+
+### **Send media message**
+
+You can send images, audios and documents.
+
+`POST /api/chat/{id}/messages`
+
+```json
+{
+    "url": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+}
+```
 ### **Star Message**
 
 `PUT` `/api/chats/{id}/messages/{messageId}/star`
@@ -443,7 +536,7 @@ Request Body:
 Response: `204` No Content
 
 
-## Promote participants
+## **Promote participants**
 Promote 1 or more participants to admin in a group
 
 `PUT` `/api/chats/groups/{id}/promote`
@@ -460,7 +553,7 @@ Request Body:
 Response: `204` No Content
 
 
-## Demote participants
+## **Demote participants**
 Demote 1 or more participants from admin in a group
 
 `PUT` `/api/chats/groups/{id}/demote`
@@ -637,6 +730,20 @@ Request Body:
 
 Response: `204` No Content
 
+## **WhatsApp Status**
+
+### **Get Status**
+Returns the whatsapp status of the user
+
+`GET` `/api/status`
+
+Response: `200`
+```json
+{
+  "status": "CONNECTED",
+}
+```
+
 
 ## **Reciving messages in HA**
 The add-on will send events to Home Assistant when a message is received.
@@ -659,6 +766,7 @@ The add-on will send events to Home Assistant when a message is received.
 | `whatsapp_state` | Triggered when the state of the connection changes. | { state : [WA State Schema Schema](#wa-state-schema-enum) } |
 
 
+## Schemas
 ### Message Schema
 <!-- Table -->
 | Key | Description | Type |
