@@ -1,4 +1,4 @@
-# **Whatsapp web api rest**
+# **Home Assistant Whatsapp web api rest**
 _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
 
 ![Supports aarch64 Architecture][aarch64-shield]
