@@ -117,7 +117,7 @@ describe('Whatsapp tests', () => {
         const onQr = findCallback(mockOn.mock, 'qr')
         onQr('qr')
 
-        expect(mockLogger.info).toHaveBeenCalledWith('QR Code Received', 'qr')
+        expect(mockLogger.debug).toHaveBeenCalledWith('QR Code Received', 'qr')
     })
 
     it('onReady', async () => {
@@ -184,7 +184,7 @@ describe('Whatsapp tests', () => {
             message: mockMessage
         }
         onMessage(mockMessage)
-        expect(mockLogger.info).toHaveBeenCalledWith('Message received', mockMessage.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message received', mockMessage.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message', event)
     })
 
@@ -201,7 +201,7 @@ describe('Whatsapp tests', () => {
         const ignoredMessage = { ...mockMessage, id: { ...mockMessage, id: { ...mockMessage.id, remote: 'status@broadcast' } } }
 
         onMessage(ignoredMessage)
-        expect(mockLogger.info).not.toHaveBeenCalledWith('Message received', mockMessage.id)
+        expect(mockLogger.debug).not.toHaveBeenCalledWith('Message received', mockMessage.id)
         expect(mockEventBus.dispatch).not.toHaveBeenCalledWith('whatsapp.message', event)
     })
 
@@ -218,7 +218,7 @@ describe('Whatsapp tests', () => {
         }
 
         onMessageCreate(mockCreatedMessage)
-        expect(mockLogger.info).toHaveBeenCalledWith('Message created', mockCreatedMessage.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message created', mockCreatedMessage.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.create', event)
     })
 
@@ -235,7 +235,7 @@ describe('Whatsapp tests', () => {
         }
 
         onMessageCreate(mockCreatedMessage)
-        expect(mockLogger.info).not.toHaveBeenCalledWith('Message created', mockCreatedMessage)
+        expect(mockLogger.debug).not.toHaveBeenCalledWith('Message created', mockCreatedMessage)
         expect(mockEventBus.dispatch).not.toHaveBeenCalledWith('whatsapp.message.create', event)
     })
 
@@ -245,7 +245,7 @@ describe('Whatsapp tests', () => {
         const onMessageAck = findCallback(mockOn.mock, 'message_ack')
 
         onMessageAck(mockMessage, 1)
-        expect(mockLogger.info).toHaveBeenCalledWith('Message ack', mockMessage.id, 1)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message ack', mockMessage.id, 1)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.ack', {
             message: mockMessage,
             ack: 1
@@ -259,7 +259,7 @@ describe('Whatsapp tests', () => {
         const onMessageRevokeForEveryone = findCallback(mockOn.mock, 'message_revoke_everyone')
 
         onMessageRevokeForEveryone(mockMessage, mockMessage)
-        expect(mockLogger.info).toHaveBeenCalledWith('Message revoke for everyone', mockMessage.id, mockMessage.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message revoke for everyone', mockMessage.id, mockMessage.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.revoke_for_everyone', {
             message: mockMessage,
             revokedMessage: mockMessage
@@ -277,7 +277,7 @@ describe('Whatsapp tests', () => {
         }
 
         onMessageRevokeForMe(mockMessage)
-        expect(mockLogger.info).toHaveBeenCalledWith('Message revoke for me', mockMessage.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message revoke for me', mockMessage.id)
 
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.revoke_for_me', event)
     })
@@ -289,7 +289,7 @@ describe('Whatsapp tests', () => {
         const onGroupJoin = findCallback(mockOn.mock, 'group_join')
         onGroupJoin(mockGroupNotification)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Group join', mockGroupNotification.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Group join', mockGroupNotification.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.group.join', {
             notification: mockGroupNotification
         })
@@ -302,7 +302,7 @@ describe('Whatsapp tests', () => {
         const onGroupLeave = findCallback(mockOn.mock, 'group_leave')
         onGroupLeave(mockGroupNotification)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Group leave', mockGroupNotification.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Group leave', mockGroupNotification.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.group.leave', {
             notification: mockGroupNotification
         })
@@ -315,7 +315,7 @@ describe('Whatsapp tests', () => {
         const onGroupUpdate = findCallback(mockOn.mock, 'group_update')
         onGroupUpdate(mockGroupNotification)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Group update', mockGroupNotification.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Group update', mockGroupNotification.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.group.update', {
             notification: mockGroupNotification
         })
@@ -328,7 +328,7 @@ describe('Whatsapp tests', () => {
         const onCall = findCallback(mockOn.mock, 'incoming_call')
         onCall(mockCall)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Call', mockCall.id)
+        expect(mockLogger.debug).toHaveBeenCalledWith('Call', mockCall.id)
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.call', {
             call: mockCall
         })
@@ -341,7 +341,7 @@ describe('Whatsapp tests', () => {
         const onChangeState = findCallback(mockOn.mock, 'change_state')
 
         onChangeState('state')
-        expect(mockLogger.info).toHaveBeenCalledWith('State changed', 'state')
+        expect(mockLogger.debug).toHaveBeenCalledWith('State changed', 'state')
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.state', { state: 'state' })
     })
 

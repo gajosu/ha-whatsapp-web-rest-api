@@ -94,7 +94,7 @@ describe('WebSocket tests', () => {
         onAuthenticated()
 
         expect(mockEmit).toHaveBeenCalledWith('authenticated')
-        expect(mockLogger.info).toHaveBeenCalledWith('Authenticated')
+        expect(mockLogger.debug).toHaveBeenCalledWith('Authenticated')
     })
 
     it('onAuthFailure', async () => {
@@ -106,7 +106,7 @@ describe('WebSocket tests', () => {
         })
 
         expect(mockEmit).toHaveBeenCalledWith('auth_failure', { message: 'message' })
-        expect(mockLogger.info).toHaveBeenCalledWith('Auth failure')
+        expect(mockLogger.debug).toHaveBeenCalledWith('Auth failure')
     })
 
     it('onDisconnected', async () => {
@@ -118,7 +118,7 @@ describe('WebSocket tests', () => {
         })
 
         expect(mockEmit).toHaveBeenCalledWith('disconnected', { state: 'reason' })
-        expect(mockLogger.info).toHaveBeenCalledWith('Disconnected')
+        expect(mockLogger.debug).toHaveBeenCalledWith('Disconnected')
     })
 
     it('onMessage', async () => {
@@ -160,7 +160,7 @@ describe('WebSocket tests', () => {
             revokedMessage: mockData.revokedMessage.rawData
         })
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Message revoke for everyone')
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message revoke for everyone')
     })
 
     it('onRevokeForMe', async () => {
@@ -174,7 +174,7 @@ describe('WebSocket tests', () => {
             message: mockData.message.rawData
         })
 
-        expect(mockLogger.info).toHaveBeenCalledWith('Message revoke for me')
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message revoke for me')
     })
 
     it('onGroupJoin', async () => {
