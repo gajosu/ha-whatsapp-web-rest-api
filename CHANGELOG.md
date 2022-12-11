@@ -2,6 +2,20 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.2.2 - 2022-12-11
+
+- Bump eslint from 8.28.0 to 8.29.0 (#23) by @dependabot
+- Bump supertest from 6.3.1 to 6.3.2 (#24) by @dependabot
+- Bump eslint-plugin-n from 15.5.1 to 15.6.0 (#25) by @dependabot
+- Bump @types/jest from 29.2.3 to 29.2.4 (#26) by @dependabot
+- Bump @types/node from 18.11.10 to 18.11.11 (#27) by @dependabot
+- Bump @typescript-eslint/eslint-plugin from 5.45.0 to 5.45.1 (#28) by @dependabot
+- Bump supertest from 6.3.2 to 6.3.3 (#29) by @dependabot
+- Bump typescript from 4.9.3 to 4.9.4 (#30) by @dependabot
+- Bump @typescript-eslint/eslint-plugin from 5.45.1 to 5.46.0   (#31) by @dependabot
+- Bump @types/node from 18.11.11 to 18.11.12 (#32) by @dependabot
+- Add Log level (#33)
+
 ## v2.2.1 - 2022-12-02
 
 - Update docs (#21)
