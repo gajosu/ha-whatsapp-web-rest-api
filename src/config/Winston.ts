@@ -2,6 +2,7 @@ import winston from 'winston'
 
 export function getLogger (): winston.Logger {
     return winston.createLogger({
+        level: process.env.LOG_LEVEL ?? 'info',
         transports: [
             new winston.transports.Console({
                 format: winston.format.combine(
