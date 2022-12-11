@@ -49,12 +49,12 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     private async onMessage (data: IMessageEvent): Promise<void> {
-        this.logger.info('onMessage', data.message.id)
+        this.logger.debug('onMessage', data.message.id)
         await this.sendToHomeAssistant('message_received', data.message.rawData)
     }
 
     private async onCreatedMessage (data: IMessageEvent): Promise<void> {
-        this.logger.info('onCreatedMessage', data.message.id)
+        this.logger.debug('onCreatedMessage', data.message.id)
         await this.sendToHomeAssistant('message_sent', data.message.rawData)
     }
 
@@ -64,12 +64,12 @@ export default class HomeAssistant implements IHomeAssistant {
             ack: data.ack
         }
 
-        this.logger.info('onMessageAck', event)
+        this.logger.debug('onMessageAck', event)
         await this.sendToHomeAssistant('message_ack', event)
     }
 
     private async onMessageRevokeForEveryone (data: IMessageRevokeForEveryoneEvent): Promise<void> {
-        this.logger.info('onMessageRevokeForEveryone', data.message.id)
+        this.logger.debug('onMessageRevokeForEveryone', data.message.id)
         await this.sendToHomeAssistant('message_revoke_for_everyone', {
             message: data.message.rawData,
             revokedMessage: data.revokedMessage.rawData
@@ -77,34 +77,34 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     private async onMessageRevokeForMe (data: IMessageRevokeForMeEvent): Promise<void> {
-        this.logger.info('onMessageRevokeForMe', data.message.id)
+        this.logger.debug('onMessageRevokeForMe', data.message.id)
         await this.sendToHomeAssistant('message_revoke_for_me', {
             message: data.message.rawData
         })
     }
 
     private async onGroupJoin (data: IGroupNotificationEvent): Promise<void> {
-        this.logger.info('onGroupJoin', data)
+        this.logger.debug('onGroupJoin', data)
         await this.sendToHomeAssistant('group_join', data)
     }
 
     private async onGroupLeave (data: IGroupNotificationEvent): Promise<void> {
-        this.logger.info('onGroupLeave', data)
+        this.logger.debug('onGroupLeave', data)
         await this.sendToHomeAssistant('group_leave', data)
     }
 
     private async onGroupUpdate (data: IGroupNotificationEvent): Promise<void> {
-        this.logger.info('onGroupUpdate', data)
+        this.logger.debug('onGroupUpdate', data)
         await this.sendToHomeAssistant('group_update', data)
     }
 
     private async onCall (data: ICallEvent): Promise<void> {
-        this.logger.info('onCall', data)
+        this.logger.debug('onCall', data)
         await this.sendToHomeAssistant('call', data)
     }
 
     private async onChangedState (data: IStateChangeEvent): Promise<void> {
-        this.logger.info('onChangedState', data)
+        this.logger.debug('onChangedState', data)
         await this.sendToHomeAssistant('state', data)
     }
 
