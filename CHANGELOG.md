@@ -2,6 +2,10 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.2.3 - 2022-12-11
+
+- fix logger timestamp (#35)
+
 ## v2.2.2 - 2022-12-11
 
 - Bump eslint from 8.28.0 to 8.29.0 (#23) by @dependabot
