@@ -71,7 +71,7 @@ describe('Home assistant', () => {
         const onMessage = findCallback(mockEventBus.register.mock, 'whatsapp.message')
         await onMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onMessage', 'id')
+        expect(mockLogger.debug).toHaveBeenCalledWith('onMessage', 'id')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_received', { id: 'id' })
     })
 
@@ -83,7 +83,7 @@ describe('Home assistant', () => {
         const onCreatedMessage = findCallback(mockEventBus.register.mock, 'whatsapp.message.create')
         await onCreatedMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onCreatedMessage', 'id')
+        expect(mockLogger.debug).toHaveBeenCalledWith('onCreatedMessage', 'id')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_sent', { id: 'id' })
     })
 
@@ -97,7 +97,7 @@ describe('Home assistant', () => {
 
         const event = { message: { id: 'id' }, ack: 1 }
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onMessageAck', event)
+        expect(mockLogger.debug).toHaveBeenCalledWith('onMessageAck', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_ack', event)
     })
 
@@ -113,7 +113,7 @@ describe('Home assistant', () => {
 
         const event = { message: message.rawData, revokedMessage: message.rawData }
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onMessageRevokeForEveryone', 'id')
+        expect(mockLogger.debug).toHaveBeenCalledWith('onMessageRevokeForEveryone', 'id')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_revoke_for_everyone', event)
     })
 
@@ -129,7 +129,7 @@ describe('Home assistant', () => {
 
         const event = { message: message.rawData }
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onMessageRevokeForMe', 'id')
+        expect(mockLogger.debug).toHaveBeenCalledWith('onMessageRevokeForMe', 'id')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_revoke_for_me', event)
     })
 
@@ -146,7 +146,7 @@ describe('Home assistant', () => {
 
         await onGroupJoin(event)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onGroupJoin', event)
+        expect(mockLogger.debug).toHaveBeenCalledWith('onGroupJoin', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_group_join', event)
     })
 
@@ -163,7 +163,7 @@ describe('Home assistant', () => {
 
         await onGroupLeave(event)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onGroupLeave', event)
+        expect(mockLogger.debug).toHaveBeenCalledWith('onGroupLeave', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_group_leave', event)
     })
 
@@ -180,7 +180,7 @@ describe('Home assistant', () => {
 
         await onGroupUpdate(event)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onGroupUpdate', event)
+        expect(mockLogger.debug).toHaveBeenCalledWith('onGroupUpdate', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_group_update', event)
     })
 
@@ -193,7 +193,7 @@ describe('Home assistant', () => {
         const onState = findCallback(mockEventBus.register.mock, 'whatsapp.state')
         await onState(event)
 
-        expect(mockLogger.info).toHaveBeenCalledWith('onChangedState', event)
+        expect(mockLogger.debug).toHaveBeenCalledWith('onChangedState', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_state', event)
     })
 })

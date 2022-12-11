@@ -12,9 +12,10 @@ services:
       - .wwebjs_auth:/data
       - .:/app
 
-    # environment:
-    #   - SUPERVISOR_TOKEN=token
-    #   - HA_BASE_URL=https://localhost:8123
+    environment:
+      # - SUPERVISOR_TOKEN=token
+      # - HA_BASE_URL=https://localhost:8123
+      - LOG_LEVEL=debug
 
   npm:
     image: whatsapp-ha:latest
