@@ -125,7 +125,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onQr (qr: string): void {
-        this.logger.info('QR Code Received', qr)
+        this.logger.debug('QR Code Received', qr)
         Qrcode.generate(qr, { small: true })
 
         const event: IQRCodeEvent = {
@@ -141,7 +141,7 @@ export default class Whatsapp implements IWhatsapp {
             return
         }
 
-        this.logger.info('Message received', message.id)
+        this.logger.debug('Message received', message.id)
 
         const event: IMessageEvent = {
             message
@@ -154,7 +154,7 @@ export default class Whatsapp implements IWhatsapp {
         if (!message.fromMe) {
             return
         }
-        this.logger.info('Message created', message.id)
+        this.logger.debug('Message created', message.id)
 
         const event: IMessageEvent = {
             message
@@ -164,7 +164,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onMessageAck (message: WAWebJS.Message, ack: WAWebJS.MessageAck): void {
-        this.logger.info('Message ack', message.id, ack)
+        this.logger.debug('Message ack', message.id, ack)
 
         const event: IMessageAckEvent = {
             message,
@@ -175,7 +175,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onMessageRevokeForEveryone (message: WAWebJS.Message, revokedMessage: WAWebJS.Message): void {
-        this.logger.info('Message revoke for everyone', message.id, revokedMessage.id)
+        this.logger.debug('Message revoke for everyone', message.id, revokedMessage.id)
 
         const event: IMessageRevokeForEveryoneEvent = {
             message,
@@ -186,7 +186,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onMessageRevokeForMe (message: WAWebJS.Message): void {
-        this.logger.info('Message revoke for me', message.id)
+        this.logger.debug('Message revoke for me', message.id)
 
         const event: IMessageRevokeForMeEvent = {
             message
@@ -196,7 +196,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onGroupJoin (notification: WAWebJS.GroupNotification): void {
-        this.logger.info('Group join', notification.id)
+        this.logger.debug('Group join', notification.id)
 
         const event: IGroupNotificationEvent = {
             notification
@@ -206,7 +206,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onGroupLeave (notification: WAWebJS.GroupNotification): void {
-        this.logger.info('Group leave', notification.id)
+        this.logger.debug('Group leave', notification.id)
 
         const event: IGroupNotificationEvent = {
             notification
@@ -216,7 +216,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onGroupUpdate (notification: WAWebJS.GroupNotification): void {
-        this.logger.info('Group update', notification.id)
+        this.logger.debug('Group update', notification.id)
 
         const event: IGroupNotificationEvent = {
             notification
@@ -226,7 +226,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onCall (call: WAWebJS.Call): void {
-        this.logger.info('Call', call.id)
+        this.logger.debug('Call', call.id)
 
         const event: ICallEvent = {
             call
@@ -236,7 +236,7 @@ export default class Whatsapp implements IWhatsapp {
     }
 
     private onChangeState (state: WAWebJS.WAState): void {
-        this.logger.info('State changed', state)
+        this.logger.debug('State changed', state)
 
         const event: IStateChangeEvent = {
             state

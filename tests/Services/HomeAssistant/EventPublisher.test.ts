@@ -32,7 +32,7 @@ describe('HA Event Publisher', () => {
         const publisher = new EventPublisher(mockLogger, supervisorToken)
         await publisher.publish('test_event', { test: 'test' })
 
-        expect(mockLogger.info).toBeCalledWith('Event test_event published to Home Assistant')
+        expect(mockLogger.debug).toBeCalledWith('Event test_event published to Home Assistant')
         assertSendEvent('test_event', { test: 'test' })
     })
 
@@ -45,7 +45,7 @@ describe('HA Event Publisher', () => {
         const publisher = new EventPublisher(mockLogger, supervisorToken, haBaseUrl)
         await publisher.publish('test_event', { test: 'test' })
 
-        expect(mockLogger.info).toBeCalledWith('Event test_event published to Home Assistant')
+        expect(mockLogger.debug).toBeCalledWith('Event test_event published to Home Assistant')
         assertSendEvent('test_event', { test: 'test' }, haBaseUrl)
     })
 

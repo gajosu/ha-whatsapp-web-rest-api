@@ -61,12 +61,12 @@ export default class WebSocket implements IWebSocket {
 
     private onMessage (data: IMessageEvent): void {
         this.io.emit('message', data.message.rawData)
-        this.logger.info('New message')
+        this.logger.debug('New message')
     }
 
     private onCreatedMessage (data: IMessageEvent): void {
         this.io.emit('message.create', data.message.rawData)
-        this.logger.info('New message create')
+        this.logger.debug('New message create')
     }
 
     private onMessageAck (data: IMessageAckEvent): void {
@@ -74,7 +74,7 @@ export default class WebSocket implements IWebSocket {
             message: data.message.rawData,
             ack: data.ack
         })
-        this.logger.info('New message ack')
+        this.logger.debug('New message ack')
     }
 
     private onMessageRevokeForEveryone (data: IMessageRevokeForEveryoneEvent): void {
@@ -82,7 +82,7 @@ export default class WebSocket implements IWebSocket {
             message: data.message.rawData,
             revokedMessage: data.revokedMessage.rawData
         })
-        this.logger.info('Message revoke for everyone')
+        this.logger.debug('Message revoke for everyone')
     }
 
     private onMessageRevokeForMe (data: IMessageRevokeForMeEvent): void {
@@ -90,46 +90,46 @@ export default class WebSocket implements IWebSocket {
             message: data.message.rawData
         })
 
-        this.logger.info('Message revoke for me')
+        this.logger.debug('Message revoke for me')
     }
 
     private onGroupJoin (data: IGroupNotificationEvent): void {
         this.io.emit('group.join', data)
-        this.logger.info('Group join')
+        this.logger.debug('Group join')
     }
 
     private onGroupLeave (data: IGroupNotificationEvent): void {
         this.io.emit('group.leave', data)
-        this.logger.info('Group leave')
+        this.logger.debug('Group leave')
     }
 
     private onGroupUpdate (data: IGroupNotificationEvent): void {
         this.io.emit('group.update', data)
-        this.logger.info('Group update')
+        this.logger.debug('Group update')
     }
 
     private onCall (data: ICallEvent): void {
         this.io.emit('call', data)
-        this.logger.info('Call')
+        this.logger.debug('Call')
     }
 
     private onChangedState (data: IStateChangeEvent): void {
         this.io.emit('state.change', data)
-        this.logger.info('New state change')
+        this.logger.debug('New state change')
     }
 
     private onAuthenticated (): void {
         this.io.emit('authenticated')
-        this.logger.info('Authenticated')
+        this.logger.debug('Authenticated')
     }
 
     private onAuthFailure (data: IAuthFailureEvent): void {
         this.io.emit('auth_failure', data)
-        this.logger.info('Auth failure')
+        this.logger.debug('Auth failure')
     }
 
     private onDisconnected (state: IStateChangeEvent): void {
         this.io.emit('disconnected', state)
-        this.logger.info('Disconnected')
+        this.logger.debug('Disconnected')
     }
 }
