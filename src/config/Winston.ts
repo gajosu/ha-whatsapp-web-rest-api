@@ -16,7 +16,13 @@ export function getLogger (): winston.Logger {
                             timestamp, level, message, ...args
                         } = info
 
-                        const ts = timestamp.slice(0, 19).replace('T', ' ')
+                        const ts = new Date(timestamp).toLocaleDateString(undefined, {
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            second: 'numeric',
+                            hour12: false
+                        })
+
                         const meta = (Object.keys(args).length > 0) ? JSON.stringify(args, null, 2) : ''
                         // put color on meta json
                         const metaColor = meta !== '' ? `\x1b[36m${meta}\x1b[0m` : ''

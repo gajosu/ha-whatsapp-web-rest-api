@@ -15,8 +15,8 @@ services:
     environment:
       # - SUPERVISOR_TOKEN=token
       # - HA_BASE_URL=https://localhost:8123
-      - LOG_LEVEL=debug
-
+      - LOG_LEVEL=info
+      - TZ=America/Guayaquil
   npm:
     image: whatsapp-ha:latest
     volumes:
