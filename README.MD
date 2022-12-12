@@ -115,7 +115,7 @@ Docker-compose example:
 whatsapp: 
     container_name: whatsapp 
     hostname: whatsapp 
-    image: ghcr.io/gajosu/whatsapp-web-rest-api:latest 
+    image: ghcr.io/gajosu/ha-whatsapp-web-rest-api:latest 
     environment: 
         - HA_BASE_URL=http://<ip>:8123 
         - SUPERVISOR_TOKEN=<long-lived-access-token>
