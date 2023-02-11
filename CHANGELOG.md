@@ -2,6 +2,10 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.2.6 - 2023-02-11
+
+- fix whatsapp web error (#84)
+
 ## v2.2.5 - 2023-01-18
 
 - Bump eslint-plugin-import from 2.27.0 to 2.27.4 (#55) by @dependabot
