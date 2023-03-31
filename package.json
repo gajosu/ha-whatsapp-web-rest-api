@@ -20,8 +20,8 @@
     "true-di": "^3.0.0",
     "ts-command-line-args": "^2.3.1",
     "typescript-logger": "^5.0.1",
-    "winston": "^3.8.2",
-    "whatsapp-web.js": "git+https://github.com/gajosu/whatsapp-web.js.git"
+    "whatsapp-web.js": "1.19.5",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.14",
