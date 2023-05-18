@@ -1,7 +1,6 @@
 import express from 'express'
 import { IServices } from '../container'
 import { ContextManager } from 'express-async-context/lib/types'
-import * as MessageController from '../http/controllers/MessageController'
 import * as ChatController from '../http/controllers/ChatController'
 import * as ChatMessageController from '../http/controllers/ChatMessageController'
 import * as GroupChatController from '../http/controllers/GroupChatController'
@@ -18,13 +17,6 @@ export default function (context: ContextManager<IServices>): express.Router {
     )
 
     router.use(context.consumer(WhatsappStatusChecker))
-
-    /**
-     * @deprecated Use /chats/:id/messages instead
-     */
-    router.route('/messages').post(
-        context.consumer(MessageController.store)
-    )
 
     router.route('/chats').get(
         context.consumer(ChatController.index)
