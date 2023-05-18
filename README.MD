@@ -35,6 +35,7 @@ _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
     - [Unstar Message](#unstar-message)
     - [React to Message](#react-to-message)
     - [Unreact to Message](#unreact-to-message)
+    - [Download Message Media](#download-message-media)
     - [Delete Message](#delete-message)
 
   - [Groups](#groups)
@@ -346,6 +347,12 @@ Response: `204` No Content
 `PUT` `/api/chats/{id}/messages/{messageId}/unreact`
 
 Response: `204` No Content
+
+### **Download Message Media**
+
+`GET` `/api/chats/{id}/messages/{messageId}/download-media`
+
+Response: `200` with the media file as attachment
 
 ### **Delete Message**
 Delete a message for everyone in the chat
