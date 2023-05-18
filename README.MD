@@ -147,9 +147,6 @@ So, if you want to send a message to a user with number `123456789` and country 
 <br>
 
 # Endpoints
-# IMPORTANT
-
-The `POST /api/messages` endpoint will be removed in future releases, please use `POST /api/chats/id:/messages`  instead
 
 
 ## Chats
