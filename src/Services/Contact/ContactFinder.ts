@@ -10,7 +10,7 @@ export default class ContactFinder implements IContactFinder {
     constructor (private readonly whatsapp: IWhatsapp) {}
 
     async find (contactId: string): Promise<Contact> {
-        const client = await this.whatsapp.getClient()
+        const client = this.whatsapp.getClient()
         const contact = await client.getContactById(contactId)
             .catch(() => {
                 throw new NotFoundError(`Contact (${contactId})`)

@@ -22,7 +22,7 @@ export const show = (request: Request, response: Response, next: Next) =>
 export const update = (request: Request, response: Response, next: Next) =>
     async ({ groupChatUpdater }: { groupChatUpdater: IGroupChatUpdater }) =>
         await GroupChatUpdaterValidator(request, response)
-            .then(async () => await groupChatUpdater.update(request.params.id, request.body.name, request.body.description))
+            .then(async () => { await groupChatUpdater.update(request.params.id, request.body.name, request.body.description) })
             .then(() => response.status(204).send(), next)
 
 export const getInvitationCode = (request: Request, response: Response, next: Next) =>
@@ -48,23 +48,23 @@ export const leave = (request: Request, response: Response, next: Next) =>
 export const addParticipants = (request: Request, response: Response, next: Next) =>
     async ({ groupChatParticipant }: { groupChatParticipant: IGroupParticipant }) =>
         await ParticipantsValidator(request, response)
-            .then(async () => await groupChatParticipant.add(request.params.id, request.body.participants))
+            .then(async () => { await groupChatParticipant.add(request.params.id, request.body.participants) })
             .then(() => response.status(204).send(), next)
 
 export const removeParticipants = (request: Request, response: Response, next: Next) =>
     async ({ groupChatParticipant }: { groupChatParticipant: IGroupParticipant }) =>
         await ParticipantsValidator(request, response)
-            .then(async () => await groupChatParticipant.remove(request.params.id, request.body.participants))
+            .then(async () => { await groupChatParticipant.remove(request.params.id, request.body.participants) })
             .then(() => response.status(204).send(), next)
 
 export const promoteParticipants = (request: Request, response: Response, next: Next) =>
     async ({ groupChatParticipant }: { groupChatParticipant: IGroupParticipant }) =>
         await ParticipantsValidator(request, response)
-            .then(async () => await groupChatParticipant.promote(request.params.id, request.body.participants))
+            .then(async () => { await groupChatParticipant.promote(request.params.id, request.body.participants) })
             .then(() => response.status(204).send(), next)
 
 export const demoteParticipants = (request: Request, response: Response, next: Next) =>
     async ({ groupChatParticipant }: { groupChatParticipant: IGroupParticipant }) =>
         await ParticipantsValidator(request, response)
-            .then(async () => await groupChatParticipant.demote(request.params.id, request.body.participants))
+            .then(async () => { await groupChatParticipant.demote(request.params.id, request.body.participants) })
             .then(() => response.status(204).send(), next)

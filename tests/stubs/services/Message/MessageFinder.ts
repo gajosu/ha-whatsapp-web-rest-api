@@ -19,7 +19,8 @@ const messageAttr = {
     isPSA: false,
     isStarred: false,
     isStatus: false,
-    isEphemeral: false
+    isEphemeral: false,
+    hasMedia: false
 }
 
 export const mockMessage = {
@@ -28,6 +29,7 @@ export const mockMessage = {
     unstar: jest.fn(),
     react: jest.fn(),
     delete: jest.fn(),
+    downloadMedia: jest.fn(),
     rawData: messageAttr
 }
 

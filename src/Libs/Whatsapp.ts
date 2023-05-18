@@ -76,7 +76,7 @@ export default class Whatsapp implements IWhatsapp {
         this.client.on('incoming_call', this.onCall.bind(this))
         this.client.on('change_state', this.onChangeState.bind(this))
 
-        return await this.client.initialize().then(() => {
+        await this.client.initialize().then(() => {
             this.logger.info('Client initialized')
         }).catch((err: Error) => {
             this.logger.error('Client fatal error', err)

@@ -9,6 +9,8 @@ import { Request, Response, NextFunction as Next } from 'express'
 import { ITextMessageCreator } from './../../Services/Message/TextMessageCreator'
 import { IMediaUrlMessageCreator } from './../../Services/Message/MediaUrlMessageCreator'
 import { Message } from 'whatsapp-web.js'
+import { IMessageMediaDownloader } from './../../Services/Message/MessageMediaDownloader'
+import { IBase64FileDownloader } from './../../Services/Response/Base64FIleDownloader'
 
 export const index = (request: Request, response: Response, next: Next) =>
     async ({ messageGetter }: { messageGetter: IMessageGetter }) =>
@@ -68,13 +70,29 @@ export const unstar = (request: Request, response: Response, next: Next) =>
 export const react = (request: Request, response: Response, next: Next) =>
     async ({ messageReact }: { messageReact: IMessageReact }) =>
         await ChatMessageValidator(request, response)
-            .then(async () => await messageReact.react(request.params.id, request.params.messageId, request.body.reaction))
+            .then(async () => { await messageReact.react(request.params.id, request.params.messageId, request.body.reaction) })
             .then(() => response.status(204).send(), next)
 
 export const unreact = (request: Request, response: Response, next: Next) =>
     async ({ messageReact }: { messageReact: IMessageReact }) =>
         await messageReact.react(request.params.id, request.params.messageId, '')
             .then(() => response.status(204).send(), next)
+
+export const downloadMedia = (request: Request, response: Response, next: Next) =>
+    async ({ messageMediaDownloader, base64FileDownloader }: { messageMediaDownloader: IMessageMediaDownloader, base64FileDownloader: IBase64FileDownloader }) => {
+        try {
+            const messageMedia = await messageMediaDownloader.download(request.params.id, request.params.messageId)
+
+            return await base64FileDownloader.download(
+                `${request.params.id}_${request.params.messageId}`,
+                messageMedia.mimetype,
+                messageMedia.data,
+                response
+            )
+        } catch (err) {
+            next(err)
+        }
+    }
 
 export const destroy = (request: Request, response: Response, next: Next) =>
     async ({ messageDeleter }: { messageDeleter: IMessageDeleter }) =>

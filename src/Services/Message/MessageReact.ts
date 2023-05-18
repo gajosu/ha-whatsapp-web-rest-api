@@ -11,6 +11,6 @@ export default class MessageReact implements IMessageReact {
 
     public async react (chatId: string, messageId: string, reaction: string): Promise<void> {
         const message = await this.messageFinder.find(chatId, messageId)
-        return await message.react(reaction)
+        await message.react(reaction)
     }
 }

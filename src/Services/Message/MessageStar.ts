@@ -12,11 +12,11 @@ export default class MessageStar implements IMessageStar {
 
     public async star (chatId: string, messageId: string): Promise<void> {
         const message = await this.messageFinder.find(chatId, messageId)
-        return await message.star()
+        await message.star()
     }
 
     public async unstar (chatId: string, messageId: string): Promise<void> {
         const message = await this.messageFinder.find(chatId, messageId)
-        return await message.unstar()
+        await message.unstar()
     }
 }

@@ -24,5 +24,5 @@ export const updateDisplayName = (request: Request, response: Response, next: Ne
 export const updateTextStatus = (request: Request, response: Response, next: Next) =>
     async ({ meTextStatusUpdater }: { meTextStatusUpdater: ITextStatusUpdater }) =>
         await TextStatusValidator(request, response)
-            .then(async () => await meTextStatusUpdater.update(request.body.status))
+            .then(async () => { await meTextStatusUpdater.update(request.body.status) })
             .then(() => response.status(204).send(), next)
