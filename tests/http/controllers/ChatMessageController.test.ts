@@ -1,6 +1,8 @@
 import { mockMessage } from './../../stubs/services/Message/MessageFinder'
 import request from 'supertest'
 import testServer from '../../utils/TestWebServer'
+import { MessageMedia } from 'whatsapp-web.js'
+
 const mockMessageGetter = {
     all: jest.fn()
 }
@@ -49,6 +51,16 @@ const mockReactMessage = {
 jest.mock('../../../src/Services/Message/MessageReact', () => {
     return jest.fn().mockImplementation(() => {
         return mockReactMessage
+    })
+})
+
+const mockMessaggMediaDownloader = {
+    download: jest.fn()
+}
+
+jest.mock('../../../src/Services/Message/MessageMediaDownloader', () => {
+    return jest.fn().mockImplementation(() => {
+        return mockMessaggMediaDownloader
     })
 })
 
@@ -194,6 +206,25 @@ describe('ChatMessageController', () => {
             .expect(204)
         expect(mockReactMessage.react).toBeCalledTimes(1)
         expect(mockReactMessage.react).toBeCalledWith('1234567890', '1234567891', '')
+    })
+
+    it('download media message', async () => {
+        const base64 = Buffer.from('test').toString('base64')
+        const contents = Buffer.from(base64, 'base64')
+
+        mockMessaggMediaDownloader.download.mockResolvedValue(
+            new MessageMedia('image/png', base64, 'filename')
+        )
+
+        await request(testServer.app)
+            .get('/api/chats/1234567890/messages/1234567891/download-media')
+            .expect(200)
+            .expect('Content-Type', 'image/png')
+            .expect('Content-Disposition', 'attachment; filename=1234567890_1234567891.png')
+            .expect(contents)
+
+        expect(mockMessaggMediaDownloader.download).toBeCalledTimes(1)
+        expect(mockMessaggMediaDownloader.download).toBeCalledWith('1234567890', '1234567891')
     })
 
     it('delete a message', async () => {

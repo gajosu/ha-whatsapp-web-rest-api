@@ -35,6 +35,8 @@ import ContactGetter, { IContactGetter } from './Services/Contact/ContactGetter'
 import DisplayNameUpdater, { IDisplayNameUpdater } from './Services/Me/DisplayNameUpdater'
 import StatusSender, { IStatusSender } from './Services/Me/StatusSender'
 import TextStatusUpdater, { ITextStatusUpdater } from './Services/Me/TextStatusUpdater'
+import MessageMediaDownloader, { IMessageMediaDownloader } from './Services/Message/MessageMediaDownloader'
+import Base64FileDownloader, { IBase64FileDownloader } from './Services/Response/Base64FIleDownloader'
 
 export interface IServices {
     app: IHttpServer
@@ -62,6 +64,7 @@ export interface IServices {
     messageDeleter: IMessageDeleter
     messageReact: IMessageReact
     messageStar: IMessageStar
+    messageMediaDownloader: IMessageMediaDownloader
     // Group Chat
     groupChatCreator: IGroupChatCreator
     groupChatFinder: IGroupChatFinder
@@ -76,6 +79,8 @@ export interface IServices {
     meDisplayNameUpdater: IDisplayNameUpdater
     meStatusSender: IStatusSender
     meTextStatusUpdater: ITextStatusUpdater
+    // Response helpers
+    base64FileDownloader: IBase64FileDownloader
 }
 
 const webConfig = getHttpServer()
@@ -153,6 +158,9 @@ export default diContainer<IServices>({
     messageStar: ({ messageFinder }) =>
         new MessageStar(messageFinder),
 
+    messageMediaDownloader: ({ messageFinder, logger }) =>
+        new MessageMediaDownloader(messageFinder, logger),
+
     groupChatCreator: ({ whatsapp }) =>
         new GroupChatCreator(whatsapp),
 
@@ -184,5 +192,8 @@ export default diContainer<IServices>({
         new StatusSender(whatsapp),
 
     meTextStatusUpdater: ({ whatsapp }) =>
-        new TextStatusUpdater(whatsapp)
+        new TextStatusUpdater(whatsapp),
+
+    base64FileDownloader: () =>
+        new Base64FileDownloader()
 })

@@ -98,6 +98,10 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatMessageController.destroy)
     )
 
+    router.route('/chats/:id/messages/:messageId/download-media').get(
+        context.consumer(ChatMessageController.downloadMedia)
+    )
+
     router.route('/chats/groups').post(
         context.consumer(GroupChatController.store)
     )

@@ -22,7 +22,7 @@ export default class GroupChatInvite implements IGroupChatInvite {
     public async revokeCode (groupId: string): Promise<void> {
         const chat = await this.groupFinder.find(groupId)
 
-        return await chat.revokeInvite()
+        await chat.revokeInvite()
     }
 
     /**
@@ -40,6 +40,6 @@ export default class GroupChatInvite implements IGroupChatInvite {
     public async leave (groupId: string): Promise<void> {
         const chat = await this.groupFinder.find(groupId)
 
-        return await chat.leave()
+        await chat.leave()
     }
 }

@@ -34,6 +34,8 @@ import { IDisplayNameUpdater } from '../src/Services/Me/DisplayNameUpdater'
 import { IStatusSender } from '../src/Services/Me/StatusSender'
 import { ITextStatusUpdater } from '../src/Services/Me/TextStatusUpdater'
 import { IGroupParticipant } from '../src/Services/GroupChat/GroupParticipant'
+import { IMessageMediaDownloader } from '../src/Services/Message/MessageMediaDownloader'
+import { IBase64FileDownloader } from '../src/Services/Response/Base64FIleDownloader'
 
 jest.mock('../src/config/HttpServer', () => {
     return {
@@ -89,6 +91,7 @@ describe('container', () => {
         expect(items.messageFinder).toBeDefined()
         expect(items.messageStar).toBeDefined()
         expect(items.messageReact).toBeDefined()
+        expect(items.messageMediaDownloader).toBeDefined()
         expect(items.messageDeleter).toBeDefined()
 
         // group chat
@@ -107,6 +110,9 @@ describe('container', () => {
         expect(items.meDisplayNameUpdater).toBeDefined()
         expect(items.meStatusSender).toBeDefined()
         expect(items.meTextStatusUpdater).toBeDefined()
+
+        // response
+        expect(items.base64FileDownloader).toBeDefined()
 
         const typecheck: AssertTypeEqual < typeof items, {
             app: IHttpServer
@@ -133,6 +139,7 @@ describe('container', () => {
             messageFinder: IMessageFinder
             messageStar: IMessageStar
             messageReact: IMessageReact
+            messageMediaDownloader: IMessageMediaDownloader
             messageDeleter: IMessageDeleter
 
             groupChatCreator: IGroupChatCreator
@@ -148,6 +155,8 @@ describe('container', () => {
             meDisplayNameUpdater: IDisplayNameUpdater
             meStatusSender: IStatusSender
             meTextStatusUpdater: ITextStatusUpdater
+
+            base64FileDownloader: IBase64FileDownloader
         } > = true
 
         expect(typecheck).toBe(true)
