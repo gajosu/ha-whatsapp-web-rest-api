@@ -2,6 +2,30 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## V2.3.0 - 2023-05-19
+
+### Breaking Changes
+
+- The deprecated POST endpoint `/api/messages` has been removed. Please use the updated endpoint `/api/chats/:id/messages` for sending messages to a specific chat.
+
+#### Migration Steps
+
+To migrate from the deprecated `/api/messages` endpoint to the new `/api/chats/:id/messages` endpoint, follow these steps:
+
+1. Update any client applications or scripts that make requests to the deprecated endpoint `/api/messages` to use the new endpoint `/api/chats/:id/messages` instead.
+2. Make sure to include the appropriate chat ID in the request URL for the new endpoint (`/api/chats/:id/messages`), replacing `:id` with the actual chat ID.
+3. Update any documentation or references that mention the deprecated endpoint `/api/messages` to reflect the use of the new endpoint `/api/chats/:id/messages`.
+
+Please note that using the deprecated `/api/messages` endpoint will result in a "404 Not Found" response.
+
+If you have any questions or need assistance with the migration process, please don't hesitate to reach out.
+
+### All Changes
+
+- Bump socket.io from 4.6.0 to 4.6.1 (#134) by @dependabot
+- Add media file download functionality for messages (#144) by @gajosu
+- Remove deprecated POST endpoint `/api/messages (#145)
+
 ## v2.2.6 - 2023-02-11
 
 - fix whatsapp web error (#84)
