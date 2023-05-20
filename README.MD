@@ -246,6 +246,10 @@ Response: `204` No Content
 
 `GET` `/api/chats/{id}/messages`
 
+Params:
+
+- `limit`: Number of messages to return (default: 100) [optional]
+
 Response: `200`
 ```json
 [

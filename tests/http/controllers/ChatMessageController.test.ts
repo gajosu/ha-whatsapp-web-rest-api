@@ -95,14 +95,24 @@ describe('ChatMessageController', () => {
         jest.clearAllMocks()
     })
 
-    it('get mesages from chat', async () => {
+    it('get mesages from chat without limit query string', async () => {
         mockMessageGetter.all.mockResolvedValue([mockMessage])
 
         await request(testServer.app)
             .get('/api/chats/1234567890/messages')
             .expect(200, JSON.stringify([mockMessage]))
 
-        expect(mockMessageGetter.all).toBeCalledWith('1234567890')
+        expect(mockMessageGetter.all).toBeCalledWith('1234567890', undefined)
+    })
+
+    it('get mesages from chat with limit query string', async () => {
+        mockMessageGetter.all.mockResolvedValue([mockMessage])
+
+        await request(testServer.app)
+            .get('/api/chats/1234567890/messages?limit=10')
+            .expect(200, JSON.stringify([mockMessage]))
+
+        expect(mockMessageGetter.all).toBeCalledWith('1234567890', 10)
     })
 
     it('send text message to chat', async () => {
