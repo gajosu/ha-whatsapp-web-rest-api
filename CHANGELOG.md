@@ -2,6 +2,11 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.3.3 - 2023-05-20
+
+- Fix docs for Send Message endpoint (6a2e212b751d17420a0a117893aa153d195ea100) by @gajosu
+- Add message limit to MessageGetter service (#148) by @gajosu
+
 ## v2.3.2 - 2023-05-20
 
 - Revert "Bump whatsapp-web.js from 1.19.5 to 1.20.0-alpha.0 (#147) by @gajosu
