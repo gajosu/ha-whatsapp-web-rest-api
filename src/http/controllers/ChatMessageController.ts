@@ -14,7 +14,7 @@ import { IBase64FileDownloader } from './../../Services/Response/Base64FIleDownl
 
 export const index = (request: Request, response: Response, next: Next) =>
     async ({ messageGetter }: { messageGetter: IMessageGetter }) =>
-        await messageGetter.all(request.params.id)
+        await messageGetter.all(request.params.id, request.query.limit === undefined ? undefined : Number(request.query.limit))
             .then(messages => response.json(messages), next)
 
 export const store = (request: Request, response: Response, next: Next) =>
