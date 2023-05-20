@@ -289,7 +289,7 @@ you can also send additional options, see the all options in the official docume
 
 #### **Send text message**
 
-`POST /api/chat/{id}/messages`
+`POST /api/chats/{id}/messages`
 
 Request Body:
 ```json
@@ -302,7 +302,7 @@ Request Body:
 
 You can send images, audios and documents.
 
-`POST /api/chat/{id}/messages`
+`POST /api/chats/{id}/messages`
 
 Request Body:
 ```json
