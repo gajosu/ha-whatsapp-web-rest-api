@@ -27,6 +27,10 @@ export interface IMessageAckEvent {
     ack: WAWebJS.MessageAck
 }
 
+export interface IMessageReactionEvent {
+    reaction: WAWebJS.Reaction
+}
+
 export interface IMessageRevokeForEveryoneEvent {
     message: WAWebJS.Message
     revokedMessage: WAWebJS.Message
@@ -68,6 +72,7 @@ export default class Whatsapp implements IWhatsapp {
         this.client.on('message', this.onMessage.bind(this))
         this.client.on('message_create', this.onMessageCreate.bind(this))
         this.client.on('message_ack', this.onMessageAck.bind(this))
+        this.client.on('message_reaction', this.onMessageReaction.bind(this))
         this.client.on('message_revoke_everyone', this.onMessageRevokeForEveryone.bind(this))
         this.client.on('message_revoke_me', this.onMessageRevokeForMe.bind(this))
         this.client.on('group_join', this.onGroupJoin.bind(this))
@@ -172,6 +177,16 @@ export default class Whatsapp implements IWhatsapp {
         }
 
         this.eventBus.dispatch('whatsapp.message.ack', event)
+    }
+
+    private onMessageReaction (reaction: WAWebJS.Reaction): void {
+        this.logger.debug('Message reaction', reaction)
+
+        const event: IMessageReactionEvent = {
+            reaction
+        }
+
+        this.eventBus.dispatch('whatsapp.message.reaction', event)
     }
 
     private onMessageRevokeForEveryone (message: WAWebJS.Message, revokedMessage: WAWebJS.Message): void {

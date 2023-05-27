@@ -1,7 +1,7 @@
 import { IEventPublisher } from './../Services/HomeAssistant/EventPublisher'
 import { IEventBus } from './EventBus'
 import { ILogger } from './Logger'
-import { IMessageAckEvent, IMessageEvent, IStateChangeEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent } from './Whatsapp'
+import { IMessageAckEvent, IMessageEvent, IStateChangeEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent, IMessageReactionEvent } from './Whatsapp'
 
 export interface IHomeAssistant {
     start: () => void
@@ -29,6 +29,7 @@ export default class HomeAssistant implements IHomeAssistant {
         this.eventBus.register('whatsapp.message', this.onMessage.bind(this))
         this.eventBus.register('whatsapp.message.create', this.onCreatedMessage.bind(this))
         this.eventBus.register('whatsapp.message.ack', this.onMessageAck.bind(this))
+        this.eventBus.register('whatsapp.message.reaction', this.onMessageReaction.bind(this))
         this.eventBus.register('whatsapp.message.revoke_for_everyone', this.onMessageRevokeForEveryone.bind(this))
         this.eventBus.register('whatsapp.message.revoke_for_me', this.onMessageRevokeForMe.bind(this))
         this.eventBus.register('whatsapp.group.join', this.onGroupJoin.bind(this))
@@ -66,6 +67,11 @@ export default class HomeAssistant implements IHomeAssistant {
 
         this.logger.debug('onMessageAck', event)
         await this.sendToHomeAssistant('message_ack', event)
+    }
+
+    private async onMessageReaction (data: IMessageReactionEvent): Promise<void> {
+        this.logger.debug('onMessageReaction', data.reaction)
+        await this.sendToHomeAssistant('message_reaction', data.reaction)
     }
 
     private async onMessageRevokeForEveryone (data: IMessageRevokeForEveryoneEvent): Promise<void> {
