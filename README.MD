@@ -213,13 +213,13 @@ Response: `204` No Content
 
 ### **Mark Chat as Read**
 
-`PUT` `/api/chats/{id}/read`
+`PUT` `/api/chats/{id}/mark-as-read`
 
 Response: `204` No Content
 
 ### **Mark Chat as Unread**
 
-`PUT` `/api/chats/{id}/unread`
+`PUT` `/api/chats/{id}/mark-as-unread`
 
 Response: `204` No Content
 
@@ -235,9 +235,9 @@ Response: `204` No Content
 
 Response: `204` No Content
 
-### **Clear typing or recording status**
+### **Clear typing or recording state**
 
-`PUT` `/api/chats/{id}/clear-status`
+`PUT` `/api/chats/{id}/clear-state`
 
 Response: `204` No Content
 
