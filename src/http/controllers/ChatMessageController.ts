@@ -2,6 +2,7 @@ import { IMessageReact } from './../../Services/Message/MessageReact'
 import { IMessageStar } from './../../Services/Message/MessageStar'
 import { IMessageDeleter } from './../../Services/Message/MessageDeleter'
 import { IMessageGetter } from './../../Services/Message/MessageGetter'
+import { IMessageFinder } from './../../Services/Message/MessageFinder'
 import ChatMessageValidator from '../../http/validators/MessageReactValidator'
 import MessageValidator from '../validators/MessageValidator'
 
@@ -16,6 +17,11 @@ export const index = (request: Request, response: Response, next: Next) =>
     async ({ messageGetter }: { messageGetter: IMessageGetter }) =>
         await messageGetter.all(request.params.id, request.query.limit === undefined ? undefined : Number(request.query.limit))
             .then(messages => response.json(messages), next)
+
+export const show = (request: Request, response: Response, next: Next) =>
+    async ({ messageFinder }: { messageFinder: IMessageFinder }) => 
+        await messageFinder.find(request.params.id, request.params.messageId)
+            .then(message => response.json(message.rawData), next)
 
 export const store = (request: Request, response: Response, next: Next) =>
     async ({ textMessageCreator, mediaUrlMessageCreator }: { textMessageCreator: ITextMessageCreator, mediaUrlMessageCreator: IMediaUrlMessageCreator }) => {

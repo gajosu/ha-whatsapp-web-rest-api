@@ -1,4 +1,4 @@
-import { mockMessage } from './../../stubs/services/Message/MessageFinder'
+import { mockMessage, mockMessageFinder } from './../../stubs/services/Message/MessageFinder'
 import request from 'supertest'
 import testServer from '../../utils/TestWebServer'
 import { MessageMedia } from 'whatsapp-web.js'
@@ -125,6 +125,16 @@ describe('ChatMessageController', () => {
 
         expect(mockTextSender).toBeCalledTimes(1)
         expect(mockTextSender).toBeCalledWith('1234567890@c.us', 'Test', expect.any(Object))
+    })
+
+    it('find message from chat', async () => {
+        mockMessageFinder.find.mockResolvedValue(mockMessage)
+
+        await request(testServer.app)
+            .get('/api/chats/1234567890/messages/12345')
+            .expect(200, JSON.stringify(mockMessage.rawData))
+
+        expect(mockMessageFinder.find).toBeCalledWith('1234567890', '12345')
     })
 
     it('send text message to chat with options', async () => {
