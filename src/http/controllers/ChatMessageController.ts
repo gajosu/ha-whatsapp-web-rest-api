@@ -19,7 +19,7 @@ export const index = (request: Request, response: Response, next: Next) =>
             .then(messages => response.json(messages), next)
 
 export const show = (request: Request, response: Response, next: Next) =>
-    async ({ messageFinder }: { messageFinder: IMessageFinder }) => 
+    async ({ messageFinder }: { messageFinder: IMessageFinder }) =>
         await messageFinder.find(request.params.id, request.params.messageId)
             .then(message => response.json(message.rawData), next)
 
