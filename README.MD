@@ -822,6 +822,7 @@ The add-on will send events to Home Assistant when a message is received.
 | `whatsapp_message_group_update` | Triggered when a group is updated, such as subject, description or picture. | { [GroupNotification Schema](#groupnotification-schema) } |
 | `whatsapp_message_call` | Triggered when a call is received. | { [Call Schema](#call-schema) } |
 | `whatsapp_state` | Triggered when the state of the connection changes. | { state : [WA State Schema Schema](#wa-state-schema-enum) } |
+| `whatsapp_message_reaction` | Triggered when a message is reacted to. | { [MessageReaction Schema](#messagereaction-schema) } |
 
 
 ## Schemas
@@ -909,6 +910,19 @@ For more information about the message schema, see the [Message class](https://d
 | `webClientShouldHandle` | `boolean` | Whether the call should be handled in waweb |
 | `participants` | `object` | The participants of the call. |
 
+### MessageReaction Schema
+<!-- Table -->
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | `object` | The id of the message. |
+| `orphan` | `number` | A number representing the orphan status of the reaction.. |
+| `orphanReason` | `string` | A string describing the reason for the orphan status |
+| `timestamp` | `number` | The timestamp of the reaction. |
+| `reaction` | `string` | The reaction. |
+| `read` | `boolean` | Whether the reaction has been read. |
+| `msgId` | `object` | The id of the message. |
+| `senderId` | `string` | The ContactId of the sender. |
+| `ack` | `number` | The ack status of the reaction. |
 
 
 ## More details
