@@ -70,6 +70,10 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatMessageController.store)
     )
 
+    router.route('/chats/:id/messages/:messageId').get(
+        context.consumer(ChatMessageController.show)
+    )
+
     router.route('/chats/:id/messages/:messageId/star').put(
         context.consumer(ChatMessageController.star)
     )

@@ -28,6 +28,7 @@ _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
 
   - [Messages](#messages)
     - [Get Messages](#get-messages)
+    - [Get Message by ID](#get-message-by-id)
     - [Send Message](#send-message)
       - [Send text message](#send-text-message)
       - [Send media message](#send-media-message)
@@ -284,6 +285,42 @@ Response: `200`
   ...
 ]
 ```
+
+### **Get Message by ID**
+`GET` `/api/chats/{id}/messages/{messageId}`
+
+Response: `200`
+```json
+{
+    "id": {
+      "fromMe": true,
+      "remote": "123456789@c.us",
+      "id": "132E527E5E536E",
+      "_serialized": "true_123456789@c.us_132E527E5E536E"
+    },
+    "ack": 3,
+    "hasMedia": false,
+    "body": "Hello",
+    "type": "chat",
+    "timestamp": 1669914773,
+    "from": "123456789@c.us",
+    "to": "987654321@c.us",
+    "deviceType": "web",
+    "isForwarded": false,
+    "forwardingScore": 0,
+    "isStatus": false,
+    "isStarred": false,
+    "fromMe": true,
+    "hasQuotedMsg": false,
+    "vCards": [],
+    "mentionedIds": [],
+    "isGif": false,
+    "isEphemeral": false,
+    "links": []
+  }
+```
+
+
 ### **Send Message**
 You can send a message to a user or a group
 

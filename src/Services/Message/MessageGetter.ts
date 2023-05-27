@@ -10,8 +10,8 @@ export default class MessageGetter implements IMessageGetter {
         private readonly chatFinder: IChatFinder
     ) {}
 
-    public async all (chatId: string, limit?: number): Promise<Message[]> {
+    public async all (chatId: string, limit?: number, _fromMe?: boolean): Promise<Message[]> {
         const chat = await this.chatFinder.find(chatId)
-        return await chat.fetchMessages({ limit: undefined === limit ? 100 : limit })
+        return await chat.fetchMessages({ limit: undefined === limit ? 100 : limit, fromMe: _fromMe })
     }
 }
