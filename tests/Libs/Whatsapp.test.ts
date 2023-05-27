@@ -3,7 +3,7 @@ import mockLogger from '../stubs/Logger'
 import mockEventBus from '../stubs/EventBus'
 import Whatsapp from '../../src/Libs/Whatsapp'
 import { Client } from 'whatsapp-web.js'
-import { findCallback } from '../utils/Utils'
+import { findCallback, findAsyncCallback } from '../utils/Utils'
 
 // mock resolve a promise
 const mockInitialize = jest.fn().mockResolvedValue(true)
@@ -32,6 +32,29 @@ const mockMessage = {
     mentionedIds: [
         'ID'
     ]
+}
+
+const mockMessageReaction = {
+    id: {
+        fromMe: false,
+        remote: '554199999999@c.us',
+        id: '1',
+        _serialized: 'false_1_1'
+    },
+
+    orphan: 1,
+    orphanReason: 'reason',
+    timestamp: 1591482682,
+    reaction: '👍',
+    read: false,
+    msgId: {
+        fromMe: false,
+        remote: '554199999999@c.us',
+        id: '1',
+        _serialized: 'false_1_1'
+    },
+    senderId: 'ID',
+    ack: -1
 }
 
 const mockGroupNotification = {
@@ -101,6 +124,7 @@ describe('Whatsapp tests', () => {
         expect(mockOn).toHaveBeenCalledWith('message', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_create', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_ack', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('message_reaction', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_revoke_everyone', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_revoke_me', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('group_join', expect.any(Function))
@@ -167,7 +191,7 @@ describe('Whatsapp tests', () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onDisconnected = findCallback(mockOn.mock, 'disconnected')
+        const onDisconnected = findAsyncCallback(mockOn.mock, 'disconnected')
         await onDisconnected('reason')
 
         expect(mockLogger.info).toHaveBeenCalledWith('Client is disconnected', 'reason')
@@ -249,6 +273,19 @@ describe('Whatsapp tests', () => {
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.ack', {
             message: mockMessage,
             ack: 1
+        })
+    })
+
+    it('onMessageReaction', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onMessageReaction = findCallback(mockOn.mock, 'message_reaction')
+
+        onMessageReaction(mockMessageReaction, 'reaction')
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message reaction', mockMessageReaction)
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.reaction', {
+            reaction: mockMessageReaction
         })
     })
 

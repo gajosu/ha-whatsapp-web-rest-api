@@ -45,6 +45,7 @@ describe('WebSocket tests', () => {
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.create', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.ack', expect.any(Function))
+        expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.reaction', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.revoke_for_everyone', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.revoke_for_me', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.group.join', expect.any(Function))
@@ -146,6 +147,27 @@ describe('WebSocket tests', () => {
         const onMessageAck = findCallback(mockEventBus.register.mock, 'whatsapp.message.ack')
         onMessageAck(mockMessage)
         expect(mockEmit).toHaveBeenCalledWith('message.ack', { message: mockMessage.message.rawData, ack: mockMessage.ack })
+    })
+
+    it('onMessageReaction', async () => {
+        mockStartWebSocket()
+
+        const event = {
+            reaction: {
+                id: {
+                    fromMe: false,
+                    remote: '554199999999@c.us'
+                },
+                reaction: '👍',
+                senderId: 'ID',
+                ack: -1
+            }
+        }
+
+        const onMessageReaction = findCallback(mockEventBus.register.mock, 'whatsapp.message.reaction')
+        onMessageReaction(event)
+        expect(mockEmit).toHaveBeenCalledWith('message.reaction', event.reaction)
+        expect(mockLogger.debug).toHaveBeenCalledWith('New message reaction')
     })
 
     it('onRevokeForEveryone', async () => {
