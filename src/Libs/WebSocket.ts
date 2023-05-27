@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io'
 import http from 'http'
 import { ILogger } from './Logger'
 import { IEventBus } from './EventBus'
-import { IQRCodeEvent, IMessageEvent, IMessageAckEvent, IStateChangeEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent, IAuthFailureEvent } from './Whatsapp'
+import { IQRCodeEvent, IMessageEvent, IMessageAckEvent, IStateChangeEvent, IMessageRevokeForEveryoneEvent, IMessageRevokeForMeEvent, IGroupNotificationEvent, ICallEvent, IAuthFailureEvent, IMessageReactionEvent } from './Whatsapp'
 import qrCode from 'qrcode'
 
 export interface IWebSocket {
@@ -27,6 +27,7 @@ export default class WebSocket implements IWebSocket {
         this.eventBus.register('whatsapp.message', this.onMessage.bind(this))
         this.eventBus.register('whatsapp.message.create', this.onCreatedMessage.bind(this))
         this.eventBus.register('whatsapp.message.ack', this.onMessageAck.bind(this))
+        this.eventBus.register('whatsapp.message.reaction', this.onMessageReaction.bind(this))
         this.eventBus.register('whatsapp.revoke_for_everyone', this.onMessageRevokeForEveryone.bind(this))
         this.eventBus.register('whatsapp.revoke_for_me', this.onMessageRevokeForMe.bind(this))
         this.eventBus.register('whatsapp.group.join', this.onGroupJoin.bind(this))
@@ -75,6 +76,11 @@ export default class WebSocket implements IWebSocket {
             ack: data.ack
         })
         this.logger.debug('New message ack')
+    }
+
+    private onMessageReaction (data: IMessageReactionEvent): void {
+        this.io.emit('message.reaction', data.reaction)
+        this.logger.debug('New message reaction')
     }
 
     private onMessageRevokeForEveryone (data: IMessageRevokeForEveryoneEvent): void {

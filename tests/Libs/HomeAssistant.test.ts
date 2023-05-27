@@ -31,6 +31,7 @@ describe('Home assistant', () => {
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.create', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.ack', expect.any(Function))
+        expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.reaction', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.revoke_for_everyone', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.message.revoke_for_me', expect.any(Function))
         expect(mockEventBus.register).toHaveBeenCalledWith('whatsapp.group.join', expect.any(Function))
@@ -45,7 +46,7 @@ describe('Home assistant', () => {
         mockStartHomeAssistant()
 
         const onAuthenticated = findCallback(mockEventBus.register.mock, 'whatsapp.authenticated')
-        await onAuthenticated('message')
+        onAuthenticated('message')
 
         expect(mockLogger.info).toHaveBeenCalledWith('onAuthenticated')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_authenticated', {})
@@ -57,7 +58,7 @@ describe('Home assistant', () => {
         mockStartHomeAssistant()
 
         const onDisconnected = findCallback(mockEventBus.register.mock, 'whatsapp.disconnected')
-        await onDisconnected()
+        onDisconnected()
 
         expect(mockLogger.info).toHaveBeenCalledWith('onDisconnected')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_disconnected', {})
@@ -69,7 +70,7 @@ describe('Home assistant', () => {
         mockStartHomeAssistant()
 
         const onMessage = findCallback(mockEventBus.register.mock, 'whatsapp.message')
-        await onMessage({ message: { id: 'id', rawData: { id: 'id' } } })
+        onMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
         expect(mockLogger.debug).toHaveBeenCalledWith('onMessage', 'id')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_received', { id: 'id' })
@@ -81,7 +82,7 @@ describe('Home assistant', () => {
         mockStartHomeAssistant()
 
         const onCreatedMessage = findCallback(mockEventBus.register.mock, 'whatsapp.message.create')
-        await onCreatedMessage({ message: { id: 'id', rawData: { id: 'id' } } })
+        onCreatedMessage({ message: { id: 'id', rawData: { id: 'id' } } })
 
         expect(mockLogger.debug).toHaveBeenCalledWith('onCreatedMessage', 'id')
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_sent', { id: 'id' })
@@ -93,12 +94,36 @@ describe('Home assistant', () => {
         mockStartHomeAssistant()
 
         const onMessageAck = findCallback(mockEventBus.register.mock, 'whatsapp.message.ack')
-        await onMessageAck({ message: { id: 'id', rawData: { id: 'id' } }, ack: 1 })
+        onMessageAck({ message: { id: 'id', rawData: { id: 'id' } }, ack: 1 })
 
         const event = { message: { id: 'id' }, ack: 1 }
 
         expect(mockLogger.debug).toHaveBeenCalledWith('onMessageAck', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_ack', event)
+    })
+
+    it('onMessageReaction', async () => {
+        process.env.SUPERVISOR_TOKEN = 'token'
+
+        mockStartHomeAssistant()
+
+        const event = {
+            reaction: {
+                id: {
+                    fromMe: false,
+                    remote: '554199999999@c.us'
+                },
+                reaction: '👍',
+                senderId: 'ID',
+                ack: -1
+            }
+        }
+
+        const onMessageReaction = findCallback(mockEventBus.register.mock, 'whatsapp.message.reaction')
+        onMessageReaction(event)
+
+        expect(mockLogger.debug).toHaveBeenCalledWith('onMessageReaction', event.reaction)
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_reaction', event.reaction)
     })
 
     it('onMessageRevokeForEveryone', async () => {
@@ -109,7 +134,7 @@ describe('Home assistant', () => {
         const message = { id: 'id', rawData: { id: 'id' } }
 
         const onMessageRevokeForEveryone = findCallback(mockEventBus.register.mock, 'whatsapp.message.revoke_for_everyone')
-        await onMessageRevokeForEveryone({ message, revokedMessage: message })
+        onMessageRevokeForEveryone({ message, revokedMessage: message })
 
         const event = { message: message.rawData, revokedMessage: message.rawData }
 
@@ -125,7 +150,7 @@ describe('Home assistant', () => {
         const message = { id: 'id', rawData: { id: 'id' } }
 
         const onMessageRevokeForMe = findCallback(mockEventBus.register.mock, 'whatsapp.message.revoke_for_me')
-        await onMessageRevokeForMe({ message })
+        onMessageRevokeForMe({ message })
 
         const event = { message: message.rawData }
 
@@ -144,7 +169,7 @@ describe('Home assistant', () => {
             group: {}
         }
 
-        await onGroupJoin(event)
+        onGroupJoin(event)
 
         expect(mockLogger.debug).toHaveBeenCalledWith('onGroupJoin', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_group_join', event)
@@ -161,7 +186,7 @@ describe('Home assistant', () => {
             group: {}
         }
 
-        await onGroupLeave(event)
+        onGroupLeave(event)
 
         expect(mockLogger.debug).toHaveBeenCalledWith('onGroupLeave', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_group_leave', event)
@@ -178,7 +203,7 @@ describe('Home assistant', () => {
             group: {}
         }
 
-        await onGroupUpdate(event)
+        onGroupUpdate(event)
 
         expect(mockLogger.debug).toHaveBeenCalledWith('onGroupUpdate', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_group_update', event)
@@ -191,7 +216,7 @@ describe('Home assistant', () => {
 
         const event = { state: 'state' }
         const onState = findCallback(mockEventBus.register.mock, 'whatsapp.state')
-        await onState(event)
+        onState(event)
 
         expect(mockLogger.debug).toHaveBeenCalledWith('onChangedState', event)
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_state', event)

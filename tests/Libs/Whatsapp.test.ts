@@ -34,6 +34,29 @@ const mockMessage = {
     ]
 }
 
+const mockMessageReaction = {
+    id: {
+        fromMe: false,
+        remote: '554199999999@c.us',
+        id: '1',
+        _serialized: 'false_1_1'
+    },
+
+    orphan: 1,
+    orphanReason: 'reason',
+    timestamp: 1591482682,
+    reaction: '👍',
+    read: false,
+    msgId: {
+        fromMe: false,
+        remote: '554199999999@c.us',
+        id: '1',
+        _serialized: 'false_1_1'
+    },
+    senderId: 'ID',
+    ack: -1
+}
+
 const mockGroupNotification = {
     id: {
         fromMe: false,
@@ -101,6 +124,7 @@ describe('Whatsapp tests', () => {
         expect(mockOn).toHaveBeenCalledWith('message', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_create', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_ack', expect.any(Function))
+        expect(mockOn).toHaveBeenCalledWith('message_reaction', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_revoke_everyone', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('message_revoke_me', expect.any(Function))
         expect(mockOn).toHaveBeenCalledWith('group_join', expect.any(Function))
@@ -249,6 +273,19 @@ describe('Whatsapp tests', () => {
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.ack', {
             message: mockMessage,
             ack: 1
+        })
+    })
+
+    it('onMessageReaction', async () => {
+        const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
+        await whatsapp.start()
+
+        const onMessageReaction = findCallback(mockOn.mock, 'message_reaction')
+
+        onMessageReaction(mockMessageReaction, 'reaction')
+        expect(mockLogger.debug).toHaveBeenCalledWith('Message reaction', mockMessageReaction)
+        expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.message.reaction', {
+            reaction: mockMessageReaction
         })
     })
 
