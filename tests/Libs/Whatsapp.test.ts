@@ -192,7 +192,7 @@ describe('Whatsapp tests', () => {
         await whatsapp.start()
 
         const onDisconnected = findCallback(mockOn.mock, 'disconnected')
-        await onDisconnected('reason')
+        onDisconnected('reason')
 
         expect(mockLogger.info).toHaveBeenCalledWith('Client is disconnected', 'reason')
         expect(mockEventBus.dispatch).toHaveBeenCalledWith('whatsapp.disconnected', { state: 'reason' })
