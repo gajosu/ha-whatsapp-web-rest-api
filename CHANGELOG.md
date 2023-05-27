@@ -2,6 +2,12 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.3.4 - 2023-05-27
+
+- Add message reaction event (#149) by @gajosu
+- Add new endpoint to get a message by ID (#150)  by @gajosu
+- Fix docs (49c7d6837d4c4d2080a9bfec5a08228a7925ed3b) by @gajosu
+
 ## v2.3.3 - 2023-05-20
 
 - Fix docs for Send Message endpoint (6a2e212b751d17420a0a117893aa153d195ea100) by @gajosu
