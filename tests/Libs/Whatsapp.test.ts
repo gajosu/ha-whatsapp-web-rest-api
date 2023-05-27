@@ -3,7 +3,7 @@ import mockLogger from '../stubs/Logger'
 import mockEventBus from '../stubs/EventBus'
 import Whatsapp from '../../src/Libs/Whatsapp'
 import { Client } from 'whatsapp-web.js'
-import { findCallback } from '../utils/Utils'
+import { findCallback, findAsyncCallback } from '../utils/Utils'
 
 // mock resolve a promise
 const mockInitialize = jest.fn().mockResolvedValue(true)
@@ -191,7 +191,7 @@ describe('Whatsapp tests', () => {
         const whatsapp = new Whatsapp(new Client({}), mockLogger, mockEventBus)
         await whatsapp.start()
 
-        const onDisconnected = findCallback(mockOn.mock, 'disconnected')
+        const onDisconnected = findAsyncCallback(mockOn.mock, 'disconnected')
         await onDisconnected('reason')
 
         expect(mockLogger.info).toHaveBeenCalledWith('Client is disconnected', 'reason')
