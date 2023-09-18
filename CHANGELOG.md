@@ -2,6 +2,10 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.3.7 - 2023-09-18
+
+- fix Client.js in order to detect login in new WhatsAppWeb
+
 ## V2.3.7 - 2023-09-18
 
 - fix Client.js in order to detect login in new WhatsAppWeb
