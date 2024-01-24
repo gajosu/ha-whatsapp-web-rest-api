@@ -2,6 +2,11 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.3.8 - 2024-01-24
+
+- fix ts syntax 703e0d2218297a7f2a811cdd91c1074fb3a49e5c
+- Bump whatsapp-web.js to 1.23.0 c96eba94b2b963c0227b250e0f0ee123ebc670a2
+
 ## v2.3.7 - 2023-09-18
 
 - fix Client.js in order to detect login in new WhatsAppWeb
