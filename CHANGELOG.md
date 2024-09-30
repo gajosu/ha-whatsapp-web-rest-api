@@ -2,6 +2,10 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.0 - 2024-09-30
+
+- bump whatsapp-web.js (570e5fc47e212a61435b6c3a55daef4ad23a46be) by @gajosu
+
 ## v2.3.9 - 2024-04-16
 
 - fix whatsapp-web.js client instance 62deab46a1228b79292981f9e3fe39979e5d262e by @gajosu
