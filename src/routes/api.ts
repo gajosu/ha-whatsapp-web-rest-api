@@ -50,6 +50,10 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatController.markChatAsUnread)
     )
 
+    router.route('/chats/:id/isRegisteredUser').get(
+        context.consumer(ChatController.isRegisteredUser)
+    )
+
     router.route('/chats/:id/send-typing').put(
         context.consumer(ChatController.sendTypingState)
     )
