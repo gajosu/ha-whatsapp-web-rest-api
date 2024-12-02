@@ -2,6 +2,11 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.1 - 2024-12-02
+
+- Adds a NumberValidator (#184) by @Tsjippy.
+- Fix puppeteer config (dcca48a9ea72f2924f46b68f86c6a4580754305f) by @gajosu.
+
 ## v2.4.0 - 2024-09-30
 
 - bump whatsapp-web.js (570e5fc47e212a61435b6c3a55daef4ad23a46be) by @gajosu
