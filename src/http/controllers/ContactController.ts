@@ -1,6 +1,7 @@
 import { IContactBlock } from './../../Services/Contact/ContactBlock'
 import { IContactFinder } from './../../Services/Contact/ContactFinder'
 import { IContactGetter } from './../../Services/Contact/ContactGetter'
+import { IContactGetter } from './../../Services/Contact/NumberValidator'
 import { Request, Response, NextFunction as Next } from 'express'
 
 export const index = (request: Request, response: Response, next: Next) =>
@@ -28,3 +29,8 @@ export const commonGroups = (request: Request, response: Response, next: Next) =
         await contactFinder.find(request.params.id)
             .then(async contact => await contact.getCommonGroups())
             .then(groups => response.status(200).json(groups).send(), next)
+
+export const isRegisteredUser = (request: Request, response: Response, next: Next) =>
+    async ({ contactFinder }: { numberValidator: INumberValidator }) =>
+        await numberValidator.numberValidator(request.params.id)
+            .then((result) => response.status(200).json(result).send(), next)
