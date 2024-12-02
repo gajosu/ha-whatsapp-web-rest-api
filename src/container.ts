@@ -37,6 +37,7 @@ import StatusSender, { IStatusSender } from './Services/Me/StatusSender'
 import TextStatusUpdater, { ITextStatusUpdater } from './Services/Me/TextStatusUpdater'
 import MessageMediaDownloader, { IMessageMediaDownloader } from './Services/Message/MessageMediaDownloader'
 import Base64FileDownloader, { IBase64FileDownloader } from './Services/Response/Base64FIleDownloader'
+import NumberValidator, { INumberValidator } from './Services/Contact/NumberValidator'
 
 export interface IServices {
     app: IHttpServer
@@ -75,6 +76,7 @@ export interface IServices {
     contactFinder: IContactFinder
     contactGetter: IContactGetter
     contactBlock: IContactBlock
+    numberValidator: INumberValidator
     // Me
     meDisplayNameUpdater: IDisplayNameUpdater
     meStatusSender: IStatusSender
@@ -195,5 +197,8 @@ export default diContainer<IServices>({
         new TextStatusUpdater(whatsapp),
 
     base64FileDownloader: () =>
-        new Base64FileDownloader()
+        new Base64FileDownloader(),
+
+    numberValidator: ({ whatsapp }) =>
+        new NumberValidator(whatsapp)
 })

@@ -77,6 +77,16 @@ jest.mock('../../../src/Services/Chat/ChatDeleter', () => {
     })
 })
 
+const mockNumberValidator = {
+    validate: jest.fn().mockResolvedValue(true)
+}
+
+jest.mock('../../../src/Services/Contact/NumberValidator', () => {
+    return jest.fn().mockImplementation(() => {
+        return mockNumberValidator
+    })
+})
+
 describe('Chat controller tests', () => {
     afterAll(() => {
         jest.clearAllMocks()
@@ -179,5 +189,16 @@ describe('Chat controller tests', () => {
             .delete('/api/chats/1234')
             .expect(204)
         expect(mockDeleter.delete).toBeCalledTimes(1)
+    })
+
+    it('check if a contact is registered', async () => {
+        mockNumberValidator.validate = jest.fn().mockResolvedValue(true)
+
+        await request(testServer.app)
+            .get('/api/chats/1/is-registered-user')
+            .expect(200, { isRegistered: true })
+
+        expect(mockNumberValidator.validate).toBeCalledTimes(1)
+        expect(mockNumberValidator.validate).toBeCalledWith('1')
     })
 })
