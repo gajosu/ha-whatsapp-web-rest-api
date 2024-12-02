@@ -51,7 +51,7 @@ export default function (context: ContextManager<IServices>): express.Router {
     )
 
     router.route('/chats/:id/is-registered-user').get(
-        context.consumer(ChatController.isRegisteredUser)
+        context.consumer(ContactController.isRegisteredUser)
     )
 
     router.route('/chats/:id/send-typing').put(
