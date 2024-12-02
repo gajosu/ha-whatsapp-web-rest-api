@@ -6,7 +6,6 @@ export function getClient (): Client {
             dataPath: '/data'
         }),
         puppeteer: {
-            executablePath: '/usr/bin/chromium',
             headless: true,
             args: [
                 '--no-sandbox',
