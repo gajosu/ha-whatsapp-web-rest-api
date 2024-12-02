@@ -30,6 +30,7 @@ import { IGroupChatUpdater } from '../src/Services/GroupChat/GroupChatUpdater'
 import { IContactFinder } from '../src/Services/Contact/ContactFinder'
 import { IContactGetter } from '../src/Services/Contact/ContactGetter'
 import { IContactBlock } from '../src/Services/Contact/ContactBlock'
+import { INumberValidator } from '../src/Services/Contact/NumberValidator'
 import { IDisplayNameUpdater } from '../src/Services/Me/DisplayNameUpdater'
 import { IStatusSender } from '../src/Services/Me/StatusSender'
 import { ITextStatusUpdater } from '../src/Services/Me/TextStatusUpdater'
@@ -105,6 +106,7 @@ describe('container', () => {
         expect(items.contactFinder).toBeDefined()
         expect(items.contactGetter).toBeDefined()
         expect(items.contactBlock).toBeDefined()
+        expect(items.numberValidator).toBeDefined()
 
         // me
         expect(items.meDisplayNameUpdater).toBeDefined()
@@ -134,6 +136,7 @@ describe('container', () => {
             chatReader: IChatReader
             chatStateSender: IChatStateSender
             chatDeleter: IChatDeleter
+            numberValidator: INumberValidator
 
             messageGetter: IMessageGetter
             messageFinder: IMessageFinder
