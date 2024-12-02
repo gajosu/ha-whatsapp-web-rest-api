@@ -50,7 +50,7 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatController.markChatAsUnread)
     )
 
-    router.route('/chats/:id/isRegisteredUser').get(
+    router.route('/chats/:id/is-registered-user').get(
         context.consumer(ChatController.isRegisteredUser)
     )
 
