@@ -16,7 +16,7 @@ export function getLogger (): winston.Logger {
                             timestamp, level, message, ...args
                         } = info
 
-                        const ts = new Date(timestamp).toLocaleDateString(undefined, {
+                        const ts = new Date(timestamp as string).toLocaleDateString(undefined, {
                             hour: 'numeric',
                             minute: 'numeric',
                             second: 'numeric',
