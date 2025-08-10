@@ -2,6 +2,12 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.2 - 2025-08-10
+
+Commits on Aug 10, 2025
+
+- feat: Upgrade whatsapp-web.js to v1.32.0 and fix build issues (#188) by @MLAN1O
+
 ## v2.4.1 - 2024-12-02
 
 - Adds a NumberValidator (#184) by @Tsjippy.
