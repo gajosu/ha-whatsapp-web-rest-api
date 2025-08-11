@@ -1,4 +1,4 @@
-FROM node:20.15.0-buster-slim
+FROM node:20.15.0-bookworm-slim
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
