@@ -2,6 +2,10 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.3 - 2025-09-22
+
+- Update Dockerfile to use Node.js 20.15.0, upgrade whatsapp-web.js to v1.34.1, and configure Puppeteer to use a specified browser path (2c68bb7)
+
 ## v2.4.2 - 2025-08-10
 
 Commits on Aug 10, 2025
