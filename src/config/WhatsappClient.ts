@@ -7,6 +7,7 @@ export function getClient (): Client {
         }),
         puppeteer: {
             headless: true,
+            executablePath: process.env.BROWSER_PATH ?? '/usr/bin/chromium',
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',

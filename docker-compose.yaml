@@ -17,6 +17,7 @@ services:
       # - HA_BASE_URL=https://localhost:8123
       - LOG_LEVEL=debug
       - TZ=America/Guayaquil
+      - BROWSER_PATH=/usr/bin/chromium
 
   npm:
     image: whatsapp-ha:latest
