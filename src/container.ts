@@ -112,8 +112,8 @@ export default diContainer<IServices>({
     textMessageCreator: ({ whatsapp }) =>
         new TextMessageCreator(whatsapp),
 
-    mediaUrlMessageCreator: ({ whatsapp }) =>
-        new MediaUrlMessageCreator(whatsapp),
+    mediaUrlMessageCreator: ({ whatsapp, logger }) =>
+        new MediaUrlMessageCreator(whatsapp, logger),
 
     haEventPublisher: ({ logger }) =>
         new EventPublisher(logger, haToken, haBaseUrl),

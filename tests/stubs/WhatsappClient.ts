@@ -24,7 +24,8 @@ export const mockWhatsappClient = {
 }
 
 export const mockMessageMedia = {
-    fromUrl: jest.fn().mockReturnValue(true)
+    fromUrl: jest.fn().mockReturnValue(true),
+    fromFilePath: jest.fn().mockReturnValue(true)
 }
 
 jest.mock('whatsapp-web.js', () => {

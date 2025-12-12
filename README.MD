@@ -110,6 +110,8 @@ You need define the following environment variables:
 
 - `HA_BASE_URL`: The base url of your Home Assistant instance
 - `SUPERVISOR_TOKEN`: Long lived access token of your Home Assistant instance (Instructions [here](https://developers.home-assistant.io/docs/en/auth_api.html#long-lived-access-token))
+- `MEDIA_URL_MAX_CONTENT_LENGTH`: Maximum content length in bytes for media downloads from URLs. Default: `52428800` (50 MB). **It is recommended not to exceed 60 MB** (`62914560` bytes) to avoid performance issues.
+- `MEDIA_URL_DOWNLOAD_TIMEOUT`: Timeout in milliseconds for media downloads from URLs. Default: `15000` (15 seconds).
 
 Docker-compose example:
 
@@ -121,6 +123,9 @@ whatsapp:
     environment: 
         - HA_BASE_URL=http://<ip>:8123 
         - SUPERVISOR_TOKEN=<long-lived-access-token>
+        # Optional: Media download configuration
+        # - MEDIA_URL_MAX_CONTENT_LENGTH=62914560  # 60 MB (recommended max)
+        # - MEDIA_URL_DOWNLOAD_TIMEOUT=15000  # 15 seconds
     restart: always 
     volumes: 
         # define volume for the session file
@@ -742,6 +747,21 @@ Response: `200`
   },
 ]
 ```
+
+### **Check if number is registered**
+
+Check if a WhatsApp number is registered (exists in WhatsApp).
+
+`GET` `/api/chats/{id}/is-registered-user`
+
+Response: `200`
+```json
+{
+  "isRegistered": true
+}
+```
+
+If the number is not found, returns `404` with error message.
 
 ## User
 
