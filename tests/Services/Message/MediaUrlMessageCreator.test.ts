@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Readable, PassThrough } from 'stream'
+import { PassThrough } from 'stream'
 import { mockWhatsappClient, mockMessageMedia } from '../../stubs/WhatsappClient'
 import { mockWhatsapp } from '../../stubs/Whatsapp'
 import mockLogger from '../../stubs/Logger'
