@@ -7,6 +7,14 @@ _A WhatsApp Http API Rest for NodeJS and integrated with Home Assistant_
 ![Supports armv7 Architecture][armv7-shield]
 ![Supports i386 Architecture][i386-shield]
 
+## ☕ Support the Project
+
+If this project has been useful to you, consider supporting my work with a coffee! Your support helps me maintain and improve this project.
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/gajosu)
+
+---
+
 ## Content Table
 - [What is this app?](#what-is-this-app)
 - [Installation for Supervisor users](#installation-for-supervisor-users)
