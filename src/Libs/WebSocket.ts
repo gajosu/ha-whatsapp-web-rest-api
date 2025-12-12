@@ -39,7 +39,7 @@ export default class WebSocket implements IWebSocket {
 
     public stop (): void {
         this.logger.info('Stopping WebSocket')
-        this.io.close()
+        void this.io.close()
     }
 
     private onConnection (socket: Socket): void {
