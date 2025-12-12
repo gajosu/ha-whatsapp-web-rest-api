@@ -6,20 +6,6 @@ import mockLogger from '../../stubs/Logger'
 import MediaUrlMessageCreator from '../../../src/Services/Message/MediaUrlMessageCreator'
 
 jest.mock('axios')
-jest.mock('os', () => ({
-    tmpdir: jest.fn(async () => '/tmp')
-}))
-
-jest.mock('fs', () => {
-    const actualFs = jest.requireActual('fs')
-    return {
-        ...actualFs,
-        promises: {
-            ...actualFs.promises,
-            mkdtemp: jest.fn(async (prefix: string) => await Promise.resolve(`${prefix}test-dir-${Date.now()}`))
-        }
-    }
-})
 
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
@@ -39,13 +25,7 @@ describe('Media url message creator', () => {
 
     it('downloads media stream and sends message', async () => {
         const data = Buffer.from('data')
-        // Create a readable stream that will emit data and close automatically
-        const stream = new Readable({
-            read () {
-                this.push(data)
-                this.push(null) // End the stream
-            }
-        })
+        const stream = new PassThrough()
 
         mockedAxios.get.mockResolvedValue({
             data: stream,
@@ -53,7 +33,14 @@ describe('Media url message creator', () => {
         })
 
         const creator = new MediaUrlMessageCreator(mockWhatsapp, mockLogger)
-        await creator.create('123456789', 'https://www.google.com', { caption: 'test' })
+        const promise = creator.create('123456789', 'https://www.google.com', { caption: 'test' })
+
+        // Wait a bit for the pipeline to start, then write data
+        await new Promise(resolve => setImmediate(resolve))
+        stream.write(data)
+        stream.end()
+
+        await promise
 
         expect(mockMessageMedia.fromFilePath).toBeCalled()
         expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', true, { caption: 'test' })

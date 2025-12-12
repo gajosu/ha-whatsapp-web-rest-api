@@ -54,7 +54,11 @@ export default class MediaUrlMessageCreator implements IMediaUrlMessageCreator {
 
         const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'media-url-'))
         const pathname = new URL(url).pathname
-        const filename = pathname !== '' ? path.basename(pathname) : 'media'
+        let filename = pathname !== '' && pathname !== '/' ? path.basename(pathname) : 'media'
+        // Ensure filename is not empty and doesn't start with /
+        if (filename === '' || filename === '/') {
+            filename = 'media'
+        }
         const tempFilePath = path.join(tempDir, filename)
 
         let downloadedBytes = 0
