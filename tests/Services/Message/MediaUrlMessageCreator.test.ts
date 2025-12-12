@@ -1,11 +1,25 @@
 import axios from 'axios'
-import { PassThrough } from 'stream'
+import { Readable, PassThrough } from 'stream'
 import { mockWhatsappClient, mockMessageMedia } from '../../stubs/WhatsappClient'
 import { mockWhatsapp } from '../../stubs/Whatsapp'
 import mockLogger from '../../stubs/Logger'
 import MediaUrlMessageCreator from '../../../src/Services/Message/MediaUrlMessageCreator'
 
 jest.mock('axios')
+jest.mock('os', () => ({
+    tmpdir: jest.fn(async () => '/tmp')
+}))
+
+jest.mock('fs', () => {
+    const actualFs = jest.requireActual('fs')
+    return {
+        ...actualFs,
+        promises: {
+            ...actualFs.promises,
+            mkdtemp: jest.fn(async (prefix: string) => await Promise.resolve(`${prefix}test-dir-${Date.now()}`))
+        }
+    }
+})
 
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
@@ -24,25 +38,30 @@ describe('Media url message creator', () => {
     })
 
     it('downloads media stream and sends message', async () => {
-        const stream = new PassThrough()
+        const data = Buffer.from('data')
+        // Create a readable stream that will emit data and close automatically
+        const stream = new Readable({
+            read () {
+                this.push(data)
+                this.push(null) // End the stream
+            }
+        })
+
         mockedAxios.get.mockResolvedValue({
             data: stream,
-            headers: { 'content-length': '4' }
+            headers: { 'content-length': String(data.length) }
         })
 
         const creator = new MediaUrlMessageCreator(mockWhatsapp, mockLogger)
-        const createPromise = creator.create('123456789', 'https://www.google.com', { caption: 'test' })
-
-        stream.end(Buffer.from('data'))
-
-        await createPromise
+        await creator.create('123456789', 'https://www.google.com', { caption: 'test' })
 
         expect(mockMessageMedia.fromFilePath).toBeCalled()
         expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', true, { caption: 'test' })
     })
 
     it('throws http error when content length header exceeds limit', async () => {
-        const maxContentLength = Number(process.env.MEDIA_URL_MAX_CONTENT_LENGTH ?? 10 * 1024 * 1024)
+        // Use the same default as the code (50 MB)
+        const maxContentLength = Number(process.env.MEDIA_URL_MAX_CONTENT_LENGTH ?? 50 * 1024 * 1024)
 
         mockedAxios.get.mockResolvedValue({
             data: new PassThrough(),
