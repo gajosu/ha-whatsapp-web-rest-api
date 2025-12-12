@@ -2,6 +2,10 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.5 - 2025-12-12
+
+- feat: Improve media URL download handling with streaming and size validation (#192) by @gajosu
+
 ## v2.4.4 - 2025-12-05
 
 - Upgrade whatsapp-web.js to version 1.34.2 in package.json and package-lock.json (5f92d1a4b322ed9cc98512579a292de683e68646)
