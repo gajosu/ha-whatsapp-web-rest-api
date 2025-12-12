@@ -1,14 +1,60 @@
+import axios from 'axios'
+import { PassThrough } from 'stream'
 import { mockWhatsappClient, mockMessageMedia } from '../../stubs/WhatsappClient'
 import { mockWhatsapp } from '../../stubs/Whatsapp'
-
+import mockLogger from '../../stubs/Logger'
 import MediaUrlMessageCreator from '../../../src/Services/Message/MediaUrlMessageCreator'
+import HttpError from '../../../src/Exceptions/HttpError'
 
-describe('Text message creator test', () => {
-    it('create text message', async () => {
-        const creator = new MediaUrlMessageCreator(mockWhatsapp)
-        await creator.create('123456789', 'https://www.google.com')
+jest.mock('axios')
 
-        expect(mockMessageMedia.fromUrl).toBeCalledWith('https://www.google.com', { unsafeMime: true })
-        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', true, undefined)
+const mockedAxios = axios as jest.Mocked<typeof axios>
+
+mockedAxios.isAxiosError = jest.fn((error: any): error is any => error?.isAxiosError === true)
+
+describe('Media url message creator', () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it('downloads media stream and sends message', async () => {
+        const stream = new PassThrough()
+        mockedAxios.get.mockResolvedValue({
+            data: stream,
+            headers: { 'content-length': '4' }
+        })
+
+        const creator = new MediaUrlMessageCreator(mockWhatsapp, mockLogger)
+        const createPromise = creator.create('123456789', 'https://www.google.com', { caption: 'test' })
+
+        stream.end(Buffer.from('data'))
+
+        await createPromise
+
+        expect(mockMessageMedia.fromFilePath).toBeCalled()
+        expect(mockWhatsappClient.sendMessage).toBeCalledWith('123456789', true, { caption: 'test' })
+    })
+
+    it('throws http error when content length header exceeds limit', async () => {
+        const maxContentLength = Number(process.env.MEDIA_URL_MAX_CONTENT_LENGTH ?? 10 * 1024 * 1024)
+
+        mockedAxios.get.mockResolvedValue({
+            data: new PassThrough(),
+            headers: { 'content-length': String(maxContentLength + 1) }
+        })
+
+        const creator = new MediaUrlMessageCreator(mockWhatsapp, mockLogger)
+
+        await expect(creator.create('123456789', 'https://www.google.com'))
+            .rejects.toMatchObject({ status: 413, message: `Media size exceeds limit of ${maxContentLength} bytes` })
+    })
+
+    it('translates axios timeout into http error', async () => {
+        mockedAxios.get.mockRejectedValue({ isAxiosError: true, code: 'ECONNABORTED' })
+
+        const creator = new MediaUrlMessageCreator(mockWhatsapp, mockLogger)
+
+        await expect(creator.create('123456789', 'https://www.google.com'))
+            .rejects.toMatchObject({ status: 408, message: 'Media download from https://www.google.com timed out after 15000ms' })
     })
 })

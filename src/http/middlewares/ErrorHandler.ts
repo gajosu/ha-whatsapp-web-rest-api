@@ -2,6 +2,7 @@ import { ValidationError } from './../../Exceptions/ValidationError'
 import { ILogger } from './../../Libs/Logger'
 import Express from 'express'
 import { NotFoundError } from '../../Exceptions/NotFoundError'
+import HttpError from '../../Exceptions/HttpError'
 
 const handleErrors = (
     err: Error,
@@ -18,6 +19,12 @@ const handleErrors = (
     if (err instanceof NotFoundError) {
         logger.warn(err.message)
         res.status(404).json({ error: err.message })
+        return
+    }
+
+    if (err instanceof HttpError) {
+        logger.warn(err.message)
+        res.status(err.status).json({ error: err.message })
         return
     }
 
