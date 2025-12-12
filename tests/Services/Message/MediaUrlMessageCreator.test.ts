@@ -4,13 +4,19 @@ import { mockWhatsappClient, mockMessageMedia } from '../../stubs/WhatsappClient
 import { mockWhatsapp } from '../../stubs/Whatsapp'
 import mockLogger from '../../stubs/Logger'
 import MediaUrlMessageCreator from '../../../src/Services/Message/MediaUrlMessageCreator'
-import HttpError from '../../../src/Exceptions/HttpError'
 
 jest.mock('axios')
 
 const mockedAxios = axios as jest.Mocked<typeof axios>
 
-mockedAxios.isAxiosError = jest.fn((error: any): error is any => error?.isAxiosError === true)
+// Mock isAxiosError as a type guard function
+Object.defineProperty(mockedAxios, 'isAxiosError', {
+    value: (error: any): error is import('axios').AxiosError => {
+        return error?.isAxiosError === true
+    },
+    writable: true,
+    configurable: true
+})
 
 describe('Media url message creator', () => {
     beforeEach(() => {
