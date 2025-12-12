@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -29,7 +29,7 @@ export default class MediaUrlMessageCreator implements IMediaUrlMessageCreator {
 
         try {
             tempFilePath = await this.downloadToTempFile(url)
-            const message = await MessageMedia.fromFilePath(tempFilePath)
+            const message = MessageMedia.fromFilePath(tempFilePath)
             this.logger.debug(`Downloaded media from ${url} to temporary file ${tempFilePath}`)
 
             return await this.whatsapp.getClient().sendMessage(to, message, options)
@@ -53,7 +53,8 @@ export default class MediaUrlMessageCreator implements IMediaUrlMessageCreator {
         this.validateContentLengthHeader(response.headers['content-length'])
 
         const tempDir = await fs.promises.mkdtemp(path.join(os.tmpdir(), 'media-url-'))
-        const filename = path.basename(new URL(url).pathname) || 'media'
+        const pathname = new URL(url).pathname
+        const filename = pathname !== '' ? path.basename(pathname) : 'media'
         const tempFilePath = path.join(tempDir, filename)
 
         let downloadedBytes = 0
@@ -61,7 +62,7 @@ export default class MediaUrlMessageCreator implements IMediaUrlMessageCreator {
         await pipeline(
             response.data,
             new Transform({
-                transform: (chunk, encoding, callback) => {
+                transform: (chunk: Buffer, encoding, callback) => {
                     downloadedBytes += chunk.length
                     if (downloadedBytes > this.maxContentLength) {
                         callback(new HttpError(413, `Media size exceeds limit of ${this.maxContentLength} bytes`))
@@ -82,7 +83,7 @@ export default class MediaUrlMessageCreator implements IMediaUrlMessageCreator {
         return tempFilePath
     }
 
-    private async fetchStream (url: string) {
+    private async fetchStream (url: string): Promise<AxiosResponse> {
         try {
             return await axios.get(url, {
                 responseType: 'stream',
@@ -119,7 +120,9 @@ export default class MediaUrlMessageCreator implements IMediaUrlMessageCreator {
     private async removeTempFile (tempFilePath: string): Promise<void> {
         try {
             await fs.promises.unlink(tempFilePath)
-            await fs.promises.rmdir(path.dirname(tempFilePath)).catch(async () => {})
+            await fs.promises.rmdir(path.dirname(tempFilePath)).catch(async () => {
+                // Ignore error if directory is not empty or doesn't exist
+            })
         } catch (err) {
             this.logger.warn(`Failed to remove temporary file ${tempFilePath}`, err)
         }
