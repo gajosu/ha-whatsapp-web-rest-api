@@ -21,7 +21,7 @@
     "true-di": "^3.0.0",
     "ts-command-line-args": "^2.3.1",
     "typescript-logger": "^5.0.1",
-    "whatsapp-web.js": "1.34.2",
+    "whatsapp-web.js": "1.34.4",
     "winston": "^3.8.2"
   },
   "devDependencies": {
