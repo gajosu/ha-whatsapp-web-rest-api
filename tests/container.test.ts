@@ -1,5 +1,6 @@
 import { IMessageDeleter } from './../src/Services/Message/MessageDeleter'
 import { IChatDeleter } from './../src/Services/Chat/ChatDeleter'
+import { IChatSyncHistory } from './../src/Services/Chat/ChatSyncHistory'
 import { IChatStateSender } from './../src/Services/Chat/ChatStateSender'
 import { IChatReader } from './../src/Services/Chat/ChatReader'
 import { IChatPin } from './../src/Services/Chat/ChatPin'
@@ -136,6 +137,7 @@ describe('container', () => {
             chatReader: IChatReader
             chatStateSender: IChatStateSender
             chatDeleter: IChatDeleter
+            chatSyncHistory: IChatSyncHistory
             numberValidator: INumberValidator
 
             messageGetter: IMessageGetter
