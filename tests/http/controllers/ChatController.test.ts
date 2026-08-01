@@ -77,6 +77,16 @@ jest.mock('../../../src/Services/Chat/ChatDeleter', () => {
     })
 })
 
+const mockSyncHistory = {
+    sync: jest.fn()
+}
+
+jest.mock('../../../src/Services/Chat/ChatSyncHistory', () => {
+    return jest.fn().mockImplementation(() => {
+        return mockSyncHistory
+    })
+})
+
 const mockNumberValidator = {
     validate: jest.fn().mockResolvedValue(true)
 }
@@ -189,6 +199,17 @@ describe('Chat controller tests', () => {
             .delete('/api/chats/1234')
             .expect(204)
         expect(mockDeleter.delete).toBeCalledTimes(1)
+    })
+
+    it('sync chat history', async () => {
+        mockSyncHistory.sync.mockResolvedValue(true)
+
+        await request(testServer.app)
+            .post('/api/chats/1234/sync-history')
+            .expect(200, { success: true })
+
+        expect(mockSyncHistory.sync).toBeCalledTimes(1)
+        expect(mockSyncHistory.sync).toBeCalledWith('1234')
     })
 
     it('check if a contact is registered', async () => {
