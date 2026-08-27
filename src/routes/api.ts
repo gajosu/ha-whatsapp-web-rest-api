@@ -66,6 +66,10 @@ export default function (context: ContextManager<IServices>): express.Router {
         context.consumer(ChatController.sendClearState)
     )
 
+    router.route('/chats/:id/sync-history').post(
+        context.consumer(ChatController.syncHistory)
+    )
+
     router.route('/chats/:id/messages').get(
         context.consumer(ChatMessageController.index)
     )

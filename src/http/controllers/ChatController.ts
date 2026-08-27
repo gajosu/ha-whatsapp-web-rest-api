@@ -5,6 +5,7 @@ import { IChatArchive } from '../../Services/Chat/ChatArchive'
 import { IChatPin } from '../../Services/Chat/ChatPin'
 import { IChatReader } from '../../Services/Chat/ChatReader'
 import { IChatStateSender } from '../../Services/Chat/ChatStateSender'
+import { IChatSyncHistory } from '../../Services/Chat/ChatSyncHistory'
 
 export const index = (request: Request, response: Response, next: Next) =>
     async ({ chatGetter }: { chatGetter: IChatGetter }) =>
@@ -60,3 +61,8 @@ export const deleteChat = (request: Request, response: Response, next: Next) =>
     async ({ chatDeleter }: { chatDeleter: IChatDeleter }) =>
         await chatDeleter.delete(request.params.id)
             .then(() => response.status(204).send(), next)
+
+export const syncHistory = (request: Request, response: Response, next: Next) =>
+    async ({ chatSyncHistory }: { chatSyncHistory: IChatSyncHistory }) =>
+        await chatSyncHistory.sync(request.params.id)
+            .then((result) => response.json({ success: result }), next)

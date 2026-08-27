@@ -28,6 +28,7 @@ import ChatDeleter, { IChatDeleter } from './Services/Chat/ChatDeleter'
 import ChatFinder, { IChatFinder } from './Services/Chat/ChatFinder'
 import ChatGetter, { IChatGetter } from './Services/Chat/ChatGetter'
 import ChatArchive, { IChatArchive } from './Services/Chat/ChatArchive'
+import ChatSyncHistory, { IChatSyncHistory } from './Services/Chat/ChatSyncHistory'
 import MessageFinder, { IMessageFinder } from './Services/Message/MessageFinder'
 import GroupChatFinder, { IGroupChatFinder } from './Services/GroupChat/GroupChatFinder'
 import GroupChatInvite, { IGroupChatInvite } from './Services/GroupChat/GroupChatInvite'
@@ -59,6 +60,7 @@ export interface IServices {
     chatReader: IChatReader
     chatStateSender: IChatStateSender
     chatDeleter: IChatDeleter
+    chatSyncHistory: IChatSyncHistory
     // message
     messageGetter: IMessageGetter
     messageFinder: IMessageFinder
@@ -144,6 +146,9 @@ export default diContainer<IServices>({
 
     chatDeleter: ({ chatFinder }) =>
         new ChatDeleter(chatFinder),
+
+    chatSyncHistory: ({ whatsapp }) =>
+        new ChatSyncHistory(whatsapp),
 
     messageGetter: ({ chatFinder }) =>
         new MessageGetter(chatFinder),
