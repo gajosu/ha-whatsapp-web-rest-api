@@ -2,6 +2,11 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.8 - 2026-10-13
+
+- chore: upgrade whatsapp-web.js to version 1.34.7 (6bad7e4) by @arpitjindal97
+- feat: add POST /api/chats/:id/sync-history endpoint for manual chat history sync (#202) by @arpitjindal97
+
 ## v2.4.7 - 2026-02-02
 
 - chore: upgrade whatsapp-web.js to version 1.34.6 (d7168a0ee75fdba28391b4ca56b298572cad79d5) by @gajosu .
