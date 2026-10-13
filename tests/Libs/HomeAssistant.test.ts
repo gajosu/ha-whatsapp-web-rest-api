@@ -132,7 +132,7 @@ describe('Home assistant', () => {
         mockStartHomeAssistant()
 
         const onCreatedMessage = findCallback(mockEventBus.register.mock, 'whatsapp.message.create')
-        await onCreatedMessage({ message: undefined })
+        onCreatedMessage({ message: undefined })
 
         expect(mockEventPublisher.publish).not.toHaveBeenCalled()
     })
