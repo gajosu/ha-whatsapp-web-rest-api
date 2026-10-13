@@ -30,7 +30,7 @@ export const store = (request: Request, response: Response, next: Next) =>
 
             const { msg, url, to }: { msg: string, url: string, to: string | undefined } = request.body
             let chat: string = to ?? request.params.id
-            let message: Message | null = null
+            let message: Message | null | undefined = null
 
             if (!chat.includes('@')) {
                 chat = chat + '@c.us'
@@ -55,6 +55,12 @@ export const store = (request: Request, response: Response, next: Next) =>
                 message = await mediaUrlMessageCreator.create(chat, url, options)
             } else {
                 message = await textMessageCreator.create(chat, msg, options)
+            }
+
+            // whatsapp-web.js can resolve sendMessage with undefined even though
+            // the message was delivered (e.g. group chats), see #203
+            if (message === undefined || message === null) {
+                return response.json({ sent: true })
             }
 
             return response.json(message.rawData)

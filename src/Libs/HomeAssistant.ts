@@ -50,18 +50,20 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     private async onMessage (data: IMessageEvent): Promise<void> {
+        if (data.message === undefined || data.message === null) return
         this.logger.debug('onMessage', data.message.id)
         await this.sendToHomeAssistant('message_received', data.message.rawData)
     }
 
     private async onCreatedMessage (data: IMessageEvent): Promise<void> {
+        if (data.message === undefined || data.message === null) return
         this.logger.debug('onCreatedMessage', data.message.id)
         await this.sendToHomeAssistant('message_sent', data.message.rawData)
     }
 
     private async onMessageAck (data: IMessageAckEvent): Promise<void> {
         const event = {
-            message: data.message.rawData,
+            message: data.message?.rawData,
             ack: data.ack
         }
 
@@ -75,17 +77,17 @@ export default class HomeAssistant implements IHomeAssistant {
     }
 
     private async onMessageRevokeForEveryone (data: IMessageRevokeForEveryoneEvent): Promise<void> {
-        this.logger.debug('onMessageRevokeForEveryone', data.message.id)
+        this.logger.debug('onMessageRevokeForEveryone', data.message?.id)
         await this.sendToHomeAssistant('message_revoke_for_everyone', {
-            message: data.message.rawData,
-            revokedMessage: data.revokedMessage.rawData
+            message: data.message?.rawData,
+            revokedMessage: data.revokedMessage?.rawData
         })
     }
 
     private async onMessageRevokeForMe (data: IMessageRevokeForMeEvent): Promise<void> {
-        this.logger.debug('onMessageRevokeForMe', data.message.id)
+        this.logger.debug('onMessageRevokeForMe', data.message?.id)
         await this.sendToHomeAssistant('message_revoke_for_me', {
-            message: data.message.rawData
+            message: data.message?.rawData
         })
     }
 

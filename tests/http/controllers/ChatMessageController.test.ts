@@ -127,6 +127,17 @@ describe('ChatMessageController', () => {
         expect(mockTextSender).toBeCalledWith('1234567890@c.us', 'Test', expect.any(Object))
     })
 
+    it('send text message to group chat when whatsapp returns undefined message', async () => {
+        mockTextSender.mockResolvedValue(undefined)
+
+        await request(testServer.app)
+            .post('/api/chats/123456789@g.us/messages')
+            .send({ msg: 'Test' })
+            .expect(200, { sent: true })
+
+        expect(mockTextSender).toBeCalledWith('123456789@g.us', 'Test', expect.any(Object))
+    })
+
     it('find message from chat', async () => {
         mockMessageFinder.find.mockResolvedValue(mockMessage)
 

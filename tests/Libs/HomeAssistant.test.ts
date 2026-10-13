@@ -126,6 +126,30 @@ describe('Home assistant', () => {
         expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_reaction', event.reaction)
     })
 
+    it('onCreatedMessage ignores undefined message', async () => {
+        process.env.SUPERVISOR_TOKEN = 'token'
+
+        mockStartHomeAssistant()
+
+        const onCreatedMessage = findCallback(mockEventBus.register.mock, 'whatsapp.message.create')
+        onCreatedMessage({ message: undefined })
+
+        expect(mockEventPublisher.publish).not.toHaveBeenCalled()
+    })
+
+    it('onMessageRevokeForEveryone without revoked message', async () => {
+        process.env.SUPERVISOR_TOKEN = 'token'
+
+        mockStartHomeAssistant()
+
+        const message = { id: 'id', rawData: { id: 'id' } }
+
+        const onMessageRevokeForEveryone = findCallback(mockEventBus.register.mock, 'whatsapp.message.revoke_for_everyone')
+        onMessageRevokeForEveryone({ message, revokedMessage: null })
+
+        expect(mockEventPublisher.publish).toHaveBeenCalledWith('whatsapp_message_revoke_for_everyone', { message: message.rawData, revokedMessage: undefined })
+    })
+
     it('onMessageRevokeForEveryone', async () => {
         process.env.SUPERVISOR_TOKEN = 'token'
 
