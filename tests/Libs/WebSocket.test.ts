@@ -140,6 +140,14 @@ describe('WebSocket tests', () => {
         expect(mockEmit).toHaveBeenCalledWith('message.create', mockData.message.rawData)
     })
 
+    it('onCreatedMessage ignores undefined message', async () => {
+        mockStartWebSocket()
+
+        const onCreatedMessage = findCallback(mockEventBus.register.mock, 'whatsapp.message.create')
+        onCreatedMessage({ message: undefined })
+        expect(mockEmit).not.toHaveBeenCalledWith('message.create', expect.anything())
+    })
+
     it('onMessageAck', async () => {
         mockStartWebSocket()
 

@@ -61,18 +61,20 @@ export default class WebSocket implements IWebSocket {
     }
 
     private onMessage (data: IMessageEvent): void {
+        if (data.message === undefined || data.message === null) return
         this.io.emit('message', data.message.rawData)
         this.logger.debug('New message')
     }
 
     private onCreatedMessage (data: IMessageEvent): void {
+        if (data.message === undefined || data.message === null) return
         this.io.emit('message.create', data.message.rawData)
         this.logger.debug('New message create')
     }
 
     private onMessageAck (data: IMessageAckEvent): void {
         this.io.emit('message.ack', {
-            message: data.message.rawData,
+            message: data.message?.rawData,
             ack: data.ack
         })
         this.logger.debug('New message ack')
@@ -85,15 +87,15 @@ export default class WebSocket implements IWebSocket {
 
     private onMessageRevokeForEveryone (data: IMessageRevokeForEveryoneEvent): void {
         this.io.emit('message.revoke_for_everyone', {
-            message: data.message.rawData,
-            revokedMessage: data.revokedMessage.rawData
+            message: data.message?.rawData,
+            revokedMessage: data.revokedMessage?.rawData
         })
         this.logger.debug('Message revoke for everyone')
     }
 
     private onMessageRevokeForMe (data: IMessageRevokeForMeEvent): void {
         this.io.emit('message.revoke_for_me', {
-            message: data.message.rawData
+            message: data.message?.rawData
         })
 
         this.logger.debug('Message revoke for me')

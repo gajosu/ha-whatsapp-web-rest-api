@@ -1,6 +1,7 @@
 import { MessageMedia } from 'whatsapp-web.js'
 import { IMessageFinder } from './MessageFinder'
 import { ValidationError } from '../../../src/Exceptions/ValidationError'
+import { NotFoundError } from '../../../src/Exceptions/NotFoundError'
 import { ILogger } from '../../../src/Libs/Logger'
 
 export interface IMessageMediaDownloader {
@@ -21,6 +22,10 @@ export default class MessageMediaDownloader implements IMessageMediaDownloader {
         }
 
         const media = await message.downloadMedia()
+
+        if (media === undefined || media === null) {
+            throw new NotFoundError('media')
+        }
 
         this.logger.debug(`Downloaded media from message ${messageId}`)
 
