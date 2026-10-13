@@ -8,14 +8,17 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 14
-      - run: npm install # or yarn install
-      - uses: sibiraj-s/action-eslint@v2
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci --ignore-scripts
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+      - uses: actions/cache@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }} # Optional
-          eslint-args: '--ignore-path=.gitignore --quiet'
-          extensions: 'ts,tsx'
-          annotations: true
+          path: .eslintcache
+          key: eslint-${{ hashFiles('package-lock.json', '.eslintrc.js', 'tsconfig.json') }}-${{ github.sha }}
+          restore-keys: eslint-${{ hashFiles('package-lock.json', '.eslintrc.js', 'tsconfig.json') }}-
+      - run: npx eslint -c .eslintrc.js --ignore-path=.gitignore --quiet --cache --cache-location .eslintcache --ext .ts,.tsx .
