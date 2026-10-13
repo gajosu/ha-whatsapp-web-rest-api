@@ -3,4 +3,4 @@ dist/
 .wwebjs_auth/
 logs/
 jest/
-coverage/
+coverage/.eslintcache
