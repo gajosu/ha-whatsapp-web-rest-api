@@ -2,6 +2,13 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.9 - 2026-10-13
+
+- fix: bump whatsapp-web.js to upstream main (064a3d5) to handle WhatsApp Web id._serialized → id.$1 rename; fixes GET /api/chats 500 and group send 500 "rawData" (#203) (#205) by @gajosu
+- fix: group creation failing with CreateGroupError by preloading the lazy-loaded group create module (#205) by @gajosu
+- fix: return 502 instead of 201 when group creation fails (#205) by @gajosu
+- fix: handle undefined message in send endpoint and Home Assistant/WebSocket handlers (#203) (#205) by @gajosu
+
 ## v2.4.8 - 2026-10-13
 
 - chore: upgrade whatsapp-web.js to version 1.34.7 (6bad7e4) by @arpitjindal97
