@@ -2,6 +2,12 @@
 
 All notable changes to `gajosu/whatsapp-web-rest-api` will be documented in this file.
 
+## v2.4.10 - 2026-11-24
+
+- fix: bump whatsapp-web.js to the official npm release 1.34.8 (previously pinned to upstream main 064a3d5) by @gajosu
+- ci: speed up eslint workflow (Node 20, npm cache, npm ci, eslint --cache) (#206) by @gajosu
+
+
 ## v2.4.9 - 2026-10-13
 
 - fix: bump whatsapp-web.js to upstream main (064a3d5) to handle WhatsApp Web id._serialized → id.$1 rename; fixes GET /api/chats 500 and group send 500 "rawData" (#203) (#205) by @gajosu
